@@ -5,121 +5,13 @@ using UnityEngine;
 
 public class playerScript : MonoBehaviour
 {
-
     public WorldManager worldManager;
 
-    private float playerDefaultMovementSpeed = 5;
-    public float playerMovementSpeed;
-    public float movementModifier;
+    [SerializeField] private float movementSpeed = 0.5f;
+    public bool playerIsMoving { get; private set; } = false;
+    private Coroutine movementCoroutine;
 
-
-
-    public bool playerIsMoving = false;
-    public bool movementModifierChanged = false;
-    public bool playerSpeedChanged = false;
-    
-    
-    
-    private Vector2 targetPositionOnClick;
-    private Rigidbody2D playerRb;
-
-
-
-
-
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        playerRb = GetComponent<Rigidbody2D>();
-        playerMovementSpeed = playerDefaultMovementSpeed;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        MovePlayer();
-        ModifyPlayerMovementSpeed();
-        
-    }
-
-    private void ModifyPlayerMovementSpeed()
-    {
-        if (movementModifierChanged == true && playerSpeedChanged == false)
-        {
-            playerMovementSpeed = playerMovementSpeed * movementModifier;
-            playerSpeedChanged = true;
-        }
-    }
-
-    public void MovePlayerFixed()
-    {
-        if (playerIsMoving)
-        {
-            //calculate distance between player current location and target location
-            float distance = Vector2.Distance(playerRb.position, targetPositionOnClick);
-            
-            if (distance <= 0.1f) //stop player when it reaches destination
-            {
-                playerRb.velocity = Vector2.zero;
-                playerIsMoving = false;
-                Debug.Log("Player has stopped moving");
-            }
-            else
-            {
-                //find out which direction the player needs to move towards
-                Vector2 direction = (targetPositionOnClick - playerRb.position).normalized;
-
-                 //move player to destination with playerMovementSpeed             
-                playerRb.MovePosition(playerRb.position + direction * playerMovementSpeed * Time.fixedDeltaTime);
-            }
-        }
-    }
-
-    private void FixedUpdate()
-    {
-
-        MovePlayerFixed();
-       
-    }
-
-    public void MovePlayer()
-    {
-        //player clicked and where did they click
-        if (!playerIsMoving && Input.GetMouseButtonDown(0))
-        {
-            targetPositionOnClick = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-            //check if there is a collider at the clicked position
-            Collider2D[] colliders = Physics2D.OverlapPointAll(targetPositionOnClick);
-            foreach (Collider2D collider in colliders)
-            {
-                //checks if the collider is player's collider, if it is not player's collider or NotWalkable tagged collider player moves
-                if (collider.gameObject != gameObject && !collider.CompareTag("NotWalkable"))
-                {
-                    playerIsMoving = true;
-                    Debug.Log("Player is now moving");
-                }
-                else
-                {
-                    Debug.Log("No collider at clicked position, cannot move!");
-                }
-
-                
-            }
-
-        }
-            //stop player when they press space
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            playerIsMoving = false;
-            playerRb.velocity = Vector2.zero;
-            Debug.Log("Player has stopped moving");
-        }
-    }
-
-
-
+    /*
     private void OnTriggerEnter2D(Collider2D other) 
     {
         //WHERE IS PLAYER
@@ -145,13 +37,13 @@ public class playerScript : MonoBehaviour
         if (other.gameObject.CompareTag("Mountain"))
         {
             movementModifier = 0.3f;
-            Debug.Log("Player movement speed: " + playerMovementSpeed);
+            Debug.Log("Player movement speed: " + movementSpeed);
             movementModifierChanged = true;
         }
         if (other.gameObject.CompareTag("Forest"))
         {
             movementModifier = 0.5f;
-            Debug.Log("Player movement speed: " + playerMovementSpeed);
+            Debug.Log("Player movement speed: " + movementSpeed);
             movementModifierChanged = true;
         }
 
@@ -171,15 +63,33 @@ public class playerScript : MonoBehaviour
         if (other.gameObject.CompareTag("Mountain") || other.gameObject.CompareTag("Forest"))
         {
             movementModifier = 1.0f;
-            playerMovementSpeed = playerDefaultMovementSpeed;
+            movementSpeed = playerDefaultMovementSpeed;
             movementModifierChanged = false;
             playerSpeedChanged = false;
         }
+    }
+    */
 
+    public void SetPlayerDestination(Vector3 destination)
+    {
+        if (playerIsMoving) return;
 
-
-
+        if (movementCoroutine != null) StopCoroutine(movementCoroutine);
+        movementCoroutine = StartCoroutine(MovePlayerCoroutine(destination));
     }
 
+    private IEnumerator MovePlayerCoroutine(Vector3 destination)
+    {
+        playerIsMoving = true;
+        destination.z = transform.position.z;
 
+        while(Vector2.Distance(transform.position, destination) > 0.1f)
+        {
+            transform.position = Vector2.MoveTowards(transform.position, destination, movementSpeed * Time.deltaTime);
+            yield return null;
+        }
+
+        transform.position = destination;
+        playerIsMoving = false;
+    }
 }

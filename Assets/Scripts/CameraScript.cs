@@ -1,79 +1,56 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class CameraScript : MonoBehaviour
 {
+    [SerializeField] private InputActionProperty mousePosition;
+    [SerializeField] private InputActionProperty rightMouseButton;
+    [SerializeField] private InputActionProperty mouseScroll;
 
-    [SerializeField]
-    private Camera cam;
-
-    private Vector3 dragOrigin;
-
-    [SerializeField]
-    private SpriteRenderer mapRenderer;
-
-    [SerializeField]
-    private float maxZoom = 4.12f;
-
-    [SerializeField]
-    private float minZoom = 1.0f;
+    [SerializeField] private Camera cam;
+    [SerializeField] private SpriteRenderer mapRenderer;
+    [SerializeField] private float maxZoom = 4.12f;
+    [SerializeField] private float minZoom = 1.0f;
 
     private float mapMinX, mapMaxX, mapMinY, mapMaxY;
+    private Vector3 dragOrigin;
 
+    private Coroutine panCoroutine;
+    private bool isPanning;
 
     private void Awake()
     {
-        
-
         mapMinX = mapRenderer.transform.position.x - mapRenderer.bounds.size.x / 2f;
         mapMaxX = mapRenderer.transform.position.x + mapRenderer.bounds.size.x / 2f;
 
         mapMinY = mapRenderer.transform.position.y - mapRenderer.bounds.size.y /2f;
         mapMaxY = mapRenderer.transform.position.y + mapRenderer.bounds.size.y /2f;
-
-    }
-    void Start()
-    {
-        
     }
 
-    void Update()
+    private void Start()
     {
-        PanCamera();
-        ZoomCamera();
+        cam.orthographicSize = Mathf.Clamp(cam.orthographicSize, minZoom, maxZoom);
+
+        rightMouseButton.action.performed += i => BeginPanCamera();
+        rightMouseButton.action.canceled += i => isPanning = false;
+        mouseScroll.action.performed += i => ZoomCamera(i.ReadValue<Vector2>().y);
     }
 
-    void PanCamera()
+    private void OnDestroy()
     {
-        //save position of the mouse in world space when drag starts (first time clicked)
-        if(Input.GetMouseButtonDown(1))
-            dragOrigin = cam.ScreenToWorldPoint(Input.mousePosition);
-
-        //calculate distance between drag origin and new position if the mouse is still held down
-
-        if(Input.GetMouseButton(1))
-        {
-            Vector3 difference = dragOrigin - cam.ScreenToWorldPoint(Input.mousePosition);
-
-            //move the camera by that distance
-            cam.transform.position = ClampCamera(cam.transform.position + difference);
-        }
-
-        
+        rightMouseButton.action.performed -= i => BeginPanCamera();
+        rightMouseButton.action.canceled -= i => isPanning = false;
+        mouseScroll.action.performed -= i => ZoomCamera(i.ReadValue<Vector2>().y);
     }
 
-
-    void ZoomCamera()
+    void ZoomCamera(float zoom)
     {
-        float zoom = -Input.GetAxis("Mouse ScrollWheel"); // invert the direction of zoom
-        cam.orthographicSize += zoom;
+        cam.orthographicSize -= zoom * Time.deltaTime;
         cam.orthographicSize = Mathf.Clamp(cam.orthographicSize, minZoom, maxZoom);
 
         cam.transform.position = ClampCamera(cam.transform.position);
     }
-
 
     private Vector3 ClampCamera(Vector3 targetPosition)
     {
@@ -89,5 +66,23 @@ public class CameraScript : MonoBehaviour
         float newY = Mathf.Clamp(targetPosition.y, minY, maxY);
 
         return new Vector3 (newX, newY, targetPosition.z);
+    }
+
+    private void BeginPanCamera()
+    {
+        dragOrigin = cam.ScreenToWorldPoint(mousePosition.action.ReadValue<Vector2>());
+        if (panCoroutine != null) StopCoroutine(panCoroutine);
+        panCoroutine = StartCoroutine(PanCamera());
+    }
+
+    private IEnumerator PanCamera()
+    {
+        isPanning = true;
+        while (isPanning)
+        {
+            Vector3 difference = dragOrigin - cam.ScreenToWorldPoint(mousePosition.action.ReadValue<Vector2>());
+            transform.position = ClampCamera(transform.position + difference);
+            yield return null;
+        }
     }
 }
