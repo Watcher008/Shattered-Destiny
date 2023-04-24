@@ -17,6 +17,7 @@ namespace SD.Pathfinding
         public Pathfinding(int width, int height, float cellSize)
         {
             instance = this;
+
             var origin = Vector3.zero;
             origin.x -= width / 2f * cellSize;
             origin.y -= height / 2f * cellSize;
@@ -24,15 +25,6 @@ namespace SD.Pathfinding
 
             var go = new GameObject("Origin");
             go.transform.position = origin;
-
-            for (int x = 0; x < width; x++)
-            {
-                for (int y = 0; y < height; y++)
-                {
-                    //var node = GetNode(x, y);
-                    //var pos = grid.get
-                }
-            }
         }
 
         //Converts a list of nodes into a list of Vector3's
@@ -196,7 +188,6 @@ namespace SD.Pathfinding
             int yDistance = Mathf.Abs(a.y - b.y);
             int remaining = Mathf.Abs(xDistance - yDistance);
             return MOVE_DIAGONAL_COST * Mathf.Min(xDistance, yDistance) + MOVE_STRAIGHT_COST * remaining;
-            //return remaining;
         }
 
         private PathNode GetLowestFCostNode(List<PathNode> pathNodeList)

@@ -48,14 +48,14 @@ namespace SD.Pathfinding
 
         public void SetMoveCost(int cost)
         {
-            movementCost = Mathf.Clamp(cost, 0, int.MaxValue);
+            movementCost = Mathf.Clamp(cost, 1, int.MaxValue);
             grid.TriggerGridObjectChanged(x, y);
         }
 
         public void SetTerrain(TerrainType terrain)
         {
             this.terrain = terrain;
-            movementCost = Mathf.Clamp(terrain.MovementPenalty, 0, int.MaxValue);
+            movementCost = Mathf.Clamp(1 + terrain.MovementPenalty, 1, int.MaxValue);
             grid.TriggerGridObjectChanged(x, y);
         }
     }

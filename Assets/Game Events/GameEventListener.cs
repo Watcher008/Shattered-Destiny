@@ -10,10 +10,12 @@ namespace SD.EventSystem
         [SerializeField] private UnityEvent callbackEvent;
 
 #if UNITY_EDITOR
+#pragma warning disable 0414
         // Display notes field in the inspector.
         [Multiline, SerializeField]
         [FormerlySerializedAs("DeveloperNotes")]
         private string developerNotes = "";
+#pragma warning restore 0414
 #endif
 
         // Register and deregister events
