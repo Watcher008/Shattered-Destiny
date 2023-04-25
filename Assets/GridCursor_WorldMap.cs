@@ -1,10 +1,11 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace SD.Pathfinding
+namespace SD.PathingSystem
 {
     public class GridCursor_WorldMap : MonoBehaviour
     {
+        [SerializeField] private PlayerTravelData playerTravelData;
         [SerializeField] private InputActionProperty mousePosition;
         private float roundedValue;
         private Vector2 mousePos;
@@ -41,6 +42,7 @@ namespace SD.Pathfinding
         private void CheckNode()
         {
             var node = Pathfinding.instance.GetNode(transform.position);
+            playerTravelData.HoverNode = node;
             if (node == null) return;
 
             //Else, create another scriptable object to hold hovered node information

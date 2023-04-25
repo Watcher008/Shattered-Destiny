@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace SD.Pathfinding
+namespace SD.PathingSystem
 {
     [CreateAssetMenu(fileName = "New Terrain", menuName = "Scriptable Objects/Terrain Type")]
     public class TerrainType : ScriptableObject

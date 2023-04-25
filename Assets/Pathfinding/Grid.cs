@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace SD.Pathfinding
+namespace SD.PathingSystem
 {
     public class Grid<TGridObject>
     {

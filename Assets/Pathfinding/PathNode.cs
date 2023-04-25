@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace SD.Pathfinding
+namespace SD.PathingSystem
 {
     public class PathNode
     {

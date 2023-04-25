@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-namespace SD.Pathfinding
+namespace SD.PathingSystem
 {
     public class GridManager : MonoBehaviour
     {

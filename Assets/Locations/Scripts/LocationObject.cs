@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using SD.PathingSystem;
 
 namespace SD.LocationSystem
 {
@@ -10,6 +11,8 @@ namespace SD.LocationSystem
 
         private void Start()
         {
+            var node = Pathfinding.instance.GetNode(transform.position);
+
 
         }
     }

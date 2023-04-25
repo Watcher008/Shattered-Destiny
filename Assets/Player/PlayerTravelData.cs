@@ -1,5 +1,5 @@
 using UnityEngine;
-using SD.Pathfinding;
+using SD.PathingSystem;
 using SD.EventSystem;
 
 [CreateAssetMenu(fileName = "Player Travel Data", menuName = "Player/Player Travel Data")]
@@ -18,6 +18,7 @@ public class PlayerTravelData : ScriptableObject
     public bool PlayerIsMoving { get; private set; }
 
     public PathNode CurrentPlayerNode { get; private set; }
+    public PathNode HoverNode { get; set; }
 
     public float PlayerTimeToMove => playerTimeToMove;
     public int PlayerTravelSpeed => playerTravelSpeed;

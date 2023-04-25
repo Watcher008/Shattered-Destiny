@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using SD.Pathfinding;
+using SD.PathingSystem;
 
 public class PlayerLocomotion : MonoBehaviour
 {
@@ -41,6 +41,7 @@ public class PlayerLocomotion : MonoBehaviour
     {
         var currentNode = pathfinding.GetNode(transform.position);
         transform.position = pathfinding.GetNodePosition(currentNode.x, currentNode.y);
+        playerTravelData.OnPlayerEnterNode(currentNode);
     }
 
     private void OnLeftClick()
