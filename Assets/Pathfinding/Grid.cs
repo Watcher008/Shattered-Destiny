@@ -108,4 +108,3 @@ namespace SD.Pathfinding
         }
     }
 }
-

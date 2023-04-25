@@ -235,5 +235,10 @@ namespace SD.Pathfinding
             var node = GetNode(worldPosition);
             if (node != null) node.SetTerrain(terrain);
         }
+
+        public float GetCellSize()
+        {
+            return grid.GetCellSize();
+        }
     }
 }
