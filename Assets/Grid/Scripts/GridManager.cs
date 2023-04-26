@@ -16,7 +16,6 @@ namespace SD.PathingSystem
 
         private void CreateNodeGrid()
         {
-
             tileMaps[0].CompressBounds();
             var bounds = tileMaps[0].cellBounds;
 
@@ -25,13 +24,15 @@ namespace SD.PathingSystem
 
             var cellSize = tileMaps[0].layoutGrid.cellSize.x;
 
-            pathfinding = new Pathfinding(width, height, cellSize);
+            pathfinding = new Pathfinding(transform.position, width, height, cellSize);
         }
 
         private void SetTerrainMaps()
         {
             for (int i = 0; i < tileMaps.Length; i++)
             {
+                if (!tileMaps[i].isActiveAndEnabled) continue;
+
                 tileMaps[i].CompressBounds();
                 foreach (var pos in tileMaps[i].cellBounds.allPositionsWithin)
                 {
@@ -58,6 +59,7 @@ namespace SD.PathingSystem
                     return true;
                 }
             }
+            Debug.LogWarning("type not found for " + tile.name);
             return false;
         }
 

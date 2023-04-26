@@ -17,8 +17,8 @@ public class PlayerTravelData : ScriptableObject
     [SerializeField] private int playerTravelSpeed = 1;
     public bool PlayerIsMoving { get; private set; }
 
-    public PathNode CurrentPlayerNode { get; private set; }
-    public PathNode HoverNode { get; set; }
+    public WorldMapNode CurrentPlayerNode { get; private set; }
+    public WorldMapNode HoverNode { get; set; }
 
     public float PlayerTimeToMove => playerTimeToMove;
     public int PlayerTravelSpeed => playerTravelSpeed;
@@ -39,7 +39,7 @@ public class PlayerTravelData : ScriptableObject
         PlayerIsMoving = false;
     }
 
-    public void OnPlayerEnterNode(PathNode newNode)
+    public void OnPlayerEnterNode(WorldMapNode newNode)
     {
         CurrentPlayerNode = newNode;
         playerEnterNodeEvent?.Invoke();

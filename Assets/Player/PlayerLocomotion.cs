@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using SD.PathingSystem;
+using SD.EventSystem;
 
 public class PlayerLocomotion : MonoBehaviour
 {
@@ -11,11 +12,22 @@ public class PlayerLocomotion : MonoBehaviour
     private Vector2 mousePos;
 
     [SerializeField] private PlayerTravelData playerTravelData;
-
+    [SerializeField] private GameEvent playerActionTakenEvent;
     [Space]
 
+    //This is kind of ugly...
     [SerializeField] private InputActionProperty mousePosition;
     [SerializeField] private InputActionProperty leftMouseButton;
+    [Space]
+    [SerializeField] private InputActionProperty moveSouthWest;
+    [SerializeField] private InputActionProperty moveSouth;
+    [SerializeField] private InputActionProperty moveSouthEast;
+    [SerializeField] private InputActionProperty moveWest;
+    [SerializeField] private InputActionProperty moveEast;
+    [SerializeField] private InputActionProperty wait;
+    [SerializeField] private InputActionProperty moveNorthWest;
+    [SerializeField] private InputActionProperty moveNorth;
+    [SerializeField] private InputActionProperty moveNorthEast;
 
     public bool playerCanMove { get; private set; } = true;
     private Coroutine movementCoroutine;
@@ -24,24 +36,121 @@ public class PlayerLocomotion : MonoBehaviour
     {
         cam = Camera.main;
         pathfinding = Pathfinding.instance;
-        leftMouseButton.action.performed += i => OnLeftClick();
-        mousePosition.action.performed += i => mousePos = i.ReadValue<Vector2>();
         playerTravelData.Init();
+        SubscribeToInput();
 
         OccupyStartingNode();
+        GetComponent<Entity>().onTurnStart += OnPlayerTurnStart;
+        GetComponent<Entity>().onTurnEnd += OnPlayerTurnEnd;
     }
 
     private void OnDestroy()
     {
+        UnsubscribeFromInput();
+        GetComponent<Entity>().onTurnStart -= OnPlayerTurnStart;
+        GetComponent<Entity>().onTurnEnd -= OnPlayerTurnEnd;
+    }
+
+    private void SubscribeToInput()
+    {
+        leftMouseButton.action.performed += i => OnLeftClick();
+        mousePosition.action.performed += i => mousePos = i.ReadValue<Vector2>();
+
+        moveSouthWest.action.performed += i => Move(1);
+        moveSouth.action.performed += i => Move(2);
+        moveSouthEast.action.performed += i => Move(3);
+
+        moveWest.action.performed += i => Move(4);
+        moveEast.action.performed += i => Move(6);
+
+        moveNorthWest.action.performed += i => Move(7);
+        moveNorth.action.performed += i => Move(8);
+        moveNorthEast.action.performed += i => Move(9);
+
+    }
+
+    private void UnsubscribeFromInput()
+    {
         leftMouseButton.action.performed -= i => OnLeftClick();
         mousePosition.action.performed -= i => mousePos = i.ReadValue<Vector2>();
+
+        moveSouthWest.action.performed -= i => Move(1);
+        moveSouth.action.performed -= i => Move(2);
+        moveSouthEast.action.performed -= i => Move(3);
+
+        moveWest.action.performed -= i => Move(4);
+        moveEast.action.performed -= i => Move(6);
+
+        moveNorthWest.action.performed -= i => Move(7);
+        moveNorth.action.performed -= i => Move(8);
+        moveNorthEast.action.performed -= i => Move(9);
     }
 
     private void OccupyStartingNode()
     {
         var currentNode = pathfinding.GetNode(transform.position);
-        transform.position = pathfinding.GetNodePosition(currentNode.x, currentNode.y);
+        transform.position = currentNode.globalPosition;
         playerTravelData.OnPlayerEnterNode(currentNode);
+    }
+
+    public void OnPlayerTurnStart()
+    {
+        playerCanMove = true;
+    }
+
+    public void OnPlayerTurnEnd()
+    {
+        playerCanMove = false;
+    }
+
+    private void Move(int direction)
+    {
+        if (playerTravelData.PlayerIsMoving || !playerCanMove) return;
+
+        int x = playerTravelData.CurrentPlayerNode.x;
+        int y = playerTravelData.CurrentPlayerNode.y;
+        switch (direction)
+        {
+            case 1:
+                x--;
+                y--;
+                break;
+            case 2:
+                y--;
+                break;
+            case 3:
+                x++;
+                y--;
+                break;
+            case 4:
+                x--;
+                break;
+            case 6:
+                x++;
+                break;
+            case 7:
+                x--;
+                y++;
+                break;
+            case 8:
+                y++;
+                break;
+            case 9:
+                x++;
+                y++;
+                break;
+        }
+
+        var newNode = pathfinding.GetNode(x, y);
+        if (newNode != null)
+        {
+            playerTravelData.OnPlayerStartMovement();
+            transform.position = newNode.globalPosition;
+            playerTravelData.OnPlayerEnterNode(pathfinding.GetNode(transform.position));
+            playerTravelData.OnPlayerEndMovement();
+        }
+
+        playerActionTakenEvent?.Invoke();
     }
 
     private void OnLeftClick()

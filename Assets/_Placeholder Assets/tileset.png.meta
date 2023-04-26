@@ -4874,7 +4874,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: tileset_239
+      name: location_cave
       rect:
         serializedVersion: 2
         x: 80
@@ -5667,7 +5667,6 @@ TextureImporter:
       tileset_151: -176081842
       tileset_168: 1194616522
       tileset_115: -1539968516
-      tileset_239: 676017638
       tileset_23: 1695132894
       tileset_234: 297515657
       tileset_161: 651519420
@@ -5809,9 +5808,9 @@ TextureImporter:
       tileset_181: -187695088
       tileset_256: 1584816741
       tileset_247: -550874129
-      tileset_197: -813380595
       location_village: -176299490
       terrain_desert_00: -768615523
+      tileset_197: -813380595
       tileset_198: 660554094
       tileset_211: -61172485
       tileset_174: 1456054253
@@ -5914,6 +5913,7 @@ TextureImporter:
       tileset_65: 1824484418
       location_cave_desert: -1976454504
       tileset_210: 1613238300
+      location_cave: 676017638
       tileset_67: -210500793
       terrain_desert_12: -1795954741
       tileset_146: -1044971396
