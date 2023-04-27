@@ -1,9 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
-using System;
-
 
 public class TimeManager : MonoBehaviour
 {
@@ -14,7 +9,6 @@ public class TimeManager : MonoBehaviour
     //private const int SECONDS_IN_MINUTE = 60;
 
     [SerializeField] private TimeData timeData;
-    [SerializeField] private PlayerTravelData playerTravelData;
 
     [Space]
 
@@ -25,8 +19,6 @@ public class TimeManager : MonoBehaviour
     private int year;
     private float hour;
 
-    private Coroutine travelClockCoroutine;
-
     private void Start()
     {
         if (resetOnStart) timeData.ResetTime();
@@ -35,22 +27,6 @@ public class TimeManager : MonoBehaviour
         month = timeData.Months;
         day = timeData.Days;
         hour = timeData.Hours;
-    }
-
-    //Called from GameEventListener
-    public void StartTravelClock()
-    {
-        if (travelClockCoroutine != null) StopCoroutine(travelClockCoroutine);
-        travelClockCoroutine = StartCoroutine(RunTravelClock());
-    }
-
-    private IEnumerator RunTravelClock()
-    {
-        while (playerTravelData.PlayerIsMoving)
-        {
-            HandleHours();
-            yield return null;
-        }
     }
 
     private void HandleHours()

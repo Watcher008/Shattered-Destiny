@@ -6,11 +6,11 @@ public class WorldManager : MonoBehaviour
     public float playerInfluence;
     public float playerGems;
 
-    public PlayerLocomotion player { get; set; }
+    public GameObject player { get; private set; }
     public TimeManager timeManager;
 
     private void Start()
     {
-        player = FindObjectOfType<PlayerLocomotion>();
+        player = GameObject.FindGameObjectWithTag("Player");
     }
 }

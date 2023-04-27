@@ -2,47 +2,97 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Entity : MonoBehaviour
+namespace SD.ECS
 {
-    public delegate void OnTurnChangeCallback();
-    public OnTurnChangeCallback onTurnStart;
-    public OnTurnChangeCallback onTurnEnd;
-
-    [SerializeField] private bool isSentient = false;
-
-    public bool IsSentient => isSentient;
-
-    private bool isTurn = false;
-    
-    public bool IsTurn
+    public class Entity : MonoBehaviour
     {
-        get => isTurn;
-        set
+        public delegate void OnTurnChangeCallback(bool isTurn);
+        public OnTurnChangeCallback onTurnChange;
+
+        [field: SerializeField] public bool IsSentient { get; private set; }
+        [field: SerializeField] public bool BlocksMovement { get; private set; }
+
+        private bool isTurn = false;
+
+        public bool IsTurn
         {
-            SetTurn(value);
+            get => isTurn;
+            set
+            {
+                SetTurn(value);
+            }
+        }
+
+        [SerializeField] private int actionPoints;
+
+        public int ActionPoints
+        {
+            get => actionPoints;
+            set
+            {
+                actionPoints = Mathf.Clamp(value, 0, int.MaxValue);
+            }
+        }
+
+        public List<IComponent> components = new List<IComponent>();
+
+        private void Start()
+        {
+            if (gameObject.CompareTag("Player"))
+            {
+                GameManager.instance.InsertEntity(this, 0);
+                IsTurn = true;
+            }
+            else GameManager.instance.AddEntity(this);
+
+            GetExistingComponents();
+        }
+
+        private void OnDestroy()
+        {
+            GameManager.instance.RemoveEntity(this);
+        }
+
+        private void GetExistingComponents()
+        {
+            var components = GetComponents<IComponent>();
+            for (int i = 0; i < components.Length; i++)
+            {
+                components[i].AddComponent(this);
+            }
+        }
+
+        private void SetTurn(bool isTurn)
+        {
+            if (this.isTurn == isTurn) return;
+
+            this.isTurn = isTurn;
+            onTurnChange?.Invoke(isTurn);
+        }
+
+        public void SpendEnergy(int points)
+        {
+            ActionPoints += points;
+            Debug.Log(gameObject.name + " spending energy: " + points);
+        }
+
+        public void RegainEnergy(int points)
+        {
+            ActionPoints -= points;
+            Debug.Log(gameObject.name + " regaining energy: " + points);
+        }
+
+        public void Move(Vector2Int direction)
+        {
+            Vector3 newPos = (Vector3Int)direction;
+            transform.position += newPos * SD.PathingSystem.Pathfinding.instance.GetCellSize();
         }
     }
 
-    public void Start()
+    public interface IComponent
     {
-        if (GetComponent<PlayerLocomotion>())
-        {
+        void AddComponent(Entity entity);
 
-        }
-    }
-
-    private void SetTurn(bool isTurn)
-    {
-        if (this.isTurn == isTurn) return;
-
-        this.isTurn = isTurn;
-
-        if (isTurn) onTurnStart?.Invoke();
-        else onTurnEnd?.Invoke();
-    }
-
-    public void Move(Vector2 direction)
-    {
-        transform.position += (Vector3)direction;
+        void RemoveComponent(Entity entity);
     }
 }

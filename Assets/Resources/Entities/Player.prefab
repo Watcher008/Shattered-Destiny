@@ -11,9 +11,11 @@ GameObject:
   - component: {fileID: 3173282860167188145}
   - component: {fileID: 3173282860167188146}
   - component: {fileID: 3173282860167188152}
-  - component: {fileID: 3173282860167188155}
+  - component: {fileID: 6876224137215524744}
+  - component: {fileID: 2625785712953777859}
+  - component: {fileID: 1853358733505580783}
   m_Layer: 0
-  m_Name: Player
+  m_Name: player
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -98,8 +100,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eee28df03cd9f324498e9a0a8580376b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isSentient: 1
---- !u!114 &3173282860167188155
+  <IsSentient>k__BackingField: 1
+  <BlocksMovement>k__BackingField: 1
+--- !u!114 &6876224137215524744
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -108,140 +111,33 @@ MonoBehaviour:
   m_GameObject: {fileID: 3173282860167188147}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 94b5833949e473f4faa8826deeb7cf75, type: 3}
+  m_Script: {fileID: 11500000, guid: a264a2a53585df94481b248f7237c02e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerTravelData: {fileID: 11400000, guid: 35bafb1661ad6da4a8ea1fe9ad3e9062, type: 2}
-  playerActionTakenEvent: {fileID: 11400000, guid: f9b89fc2bf0879d49975ba053e8d6277, type: 2}
-  mousePosition:
-    m_UseReference: 1
-    m_Action:
-      m_Name: Mouse Position
-      m_Type: 0
-      m_ExpectedControlType: 
-      m_Id: 45a01a3f-4d7b-4ea4-a10b-df27228dc029
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings: []
-      m_Flags: 0
-    m_Reference: {fileID: 7417561922924955985, guid: f052c175b053db445b06f33fbbc95c5f, type: 3}
-  leftMouseButton:
-    m_UseReference: 1
-    m_Action:
-      m_Name: Left Mouse Button
-      m_Type: 0
-      m_ExpectedControlType: 
-      m_Id: a24b55d6-cf4d-48af-95e5-6e38a0491a8c
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings: []
-      m_Flags: 0
-    m_Reference: {fileID: 5637452800024792273, guid: f052c175b053db445b06f33fbbc95c5f, type: 3}
-  moveSouthWest:
-    m_UseReference: 1
-    m_Action:
-      m_Name: Move South West
-      m_Type: 0
-      m_ExpectedControlType: 
-      m_Id: e952b94a-9647-47e9-a2f2-b5b1acca37e7
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings: []
-      m_Flags: 0
-    m_Reference: {fileID: 3531520212383993415, guid: f052c175b053db445b06f33fbbc95c5f, type: 3}
-  moveSouth:
-    m_UseReference: 1
-    m_Action:
-      m_Name: Move South
-      m_Type: 0
-      m_ExpectedControlType: 
-      m_Id: 8a176f07-2429-4b84-b3c8-772b0b8ecc0e
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings: []
-      m_Flags: 0
-    m_Reference: {fileID: -2720295090022948312, guid: f052c175b053db445b06f33fbbc95c5f, type: 3}
-  moveSouthEast:
-    m_UseReference: 1
-    m_Action:
-      m_Name: Move South East
-      m_Type: 0
-      m_ExpectedControlType: 
-      m_Id: 3fd3a5f1-6a44-4e06-be66-685b95ab4b5f
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings: []
-      m_Flags: 0
-    m_Reference: {fileID: -3544034360542898941, guid: f052c175b053db445b06f33fbbc95c5f, type: 3}
-  moveWest:
-    m_UseReference: 1
-    m_Action:
-      m_Name: Move West
-      m_Type: 0
-      m_ExpectedControlType: 
-      m_Id: f7837a0f-3502-4a0b-9732-f658c89eecd0
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings: []
-      m_Flags: 0
-    m_Reference: {fileID: 1664281369679762144, guid: f052c175b053db445b06f33fbbc95c5f, type: 3}
-  moveEast:
-    m_UseReference: 1
-    m_Action:
-      m_Name: Move East
-      m_Type: 0
-      m_ExpectedControlType: 
-      m_Id: 54102307-0f86-4396-8ead-6750b97578df
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings: []
-      m_Flags: 0
-    m_Reference: {fileID: 654254902460144957, guid: f052c175b053db445b06f33fbbc95c5f, type: 3}
-  wait:
-    m_UseReference: 1
-    m_Action:
-      m_Name: Wait
-      m_Type: 0
-      m_ExpectedControlType: 
-      m_Id: 2cf72af6-78f5-43a9-83f3-62644fcdb0f3
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings: []
-      m_Flags: 0
-    m_Reference: {fileID: 7511280127189636898, guid: f052c175b053db445b06f33fbbc95c5f, type: 3}
-  moveNorthWest:
-    m_UseReference: 1
-    m_Action:
-      m_Name: Move North West
-      m_Type: 0
-      m_ExpectedControlType: 
-      m_Id: f09416fa-9ac3-4f8a-8cff-9290c779c2b3
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings: []
-      m_Flags: 0
-    m_Reference: {fileID: 4133381714301260522, guid: f052c175b053db445b06f33fbbc95c5f, type: 3}
-  moveNorth:
-    m_UseReference: 1
-    m_Action:
-      m_Name: Move North
-      m_Type: 0
-      m_ExpectedControlType: 
-      m_Id: 34d32de8-2444-4aed-b037-50c7aaf72849
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings: []
-      m_Flags: 0
-    m_Reference: {fileID: -885840462100062414, guid: f052c175b053db445b06f33fbbc95c5f, type: 3}
-  moveNorthEast:
-    m_UseReference: 1
-    m_Action:
-      m_Name: Move North East
-      m_Type: 0
-      m_ExpectedControlType: 
-      m_Id: eda11412-a1dc-40a2-98dc-d439579b0ad5
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings: []
-      m_Flags: 0
-    m_Reference: {fileID: -4900205368787136753, guid: f052c175b053db445b06f33fbbc95c5f, type: 3}
+  x: 0
+  y: 0
+--- !u!114 &2625785712953777859
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3173282860167188147}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72cf86fd1e2b61e48be778d04189b6b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 0
+--- !u!114 &1853358733505580783
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3173282860167188147}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0770c67ac49ca744d95a8cc1e457e05a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -9,7 +9,7 @@ namespace SD.PathingSystem
         [SerializeField] private TerrainType[] terrainTypes;
 
         private Pathfinding pathfinding;
-
+        private Vector3 offset = Vector2.zero; //the offset between the tilemap and the 
         private void Awake() => CreateNodeGrid();
 
         private void Start() => SetTerrainMaps();
@@ -21,10 +21,12 @@ namespace SD.PathingSystem
 
             var width = bounds.xMax - bounds.xMin;
             var height = bounds.yMax - bounds.yMin;
-
+            Debug.Log(width + ", " + height);
             var cellSize = tileMaps[0].layoutGrid.cellSize.x;
 
-            pathfinding = new Pathfinding(transform.position, width, height, cellSize);
+            offset = new Vector3(cellSize / 2, cellSize / 2);
+
+            pathfinding = new Pathfinding(width, height, cellSize);
         }
 
         private void SetTerrainMaps()
@@ -40,9 +42,10 @@ namespace SD.PathingSystem
                     Vector3 place = tileMaps[i].CellToWorld(localPlace);
                     if (!tileMaps[i].HasTile(localPlace)) continue;
 
+                    var modifiedPlace = place + offset;
                     if (CompareTile(tileMaps[i].GetTile(localPlace), out TerrainType type))
                     {
-                        pathfinding.SetNodeTerrain(place, type);
+                        pathfinding.SetNodeTerrain(modifiedPlace, type);
                     }
                 }
             }

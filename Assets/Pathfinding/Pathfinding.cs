@@ -14,18 +14,23 @@ namespace SD.PathingSystem
         private List<WorldMapNode> openList; //nodes to search
         private List<WorldMapNode> closedList; //already searched
 
-        public Pathfinding(Vector3 offset, int width, int height, float cellSize)
+        public Pathfinding(int width, int height, float cellSize)
         {
             instance = this;
 
-            var origin = offset;
+            var origin = Vector2.zero;
             origin.x -= width / 2f * cellSize;
             origin.y -= height / 2f * cellSize;
             grid = new Grid<WorldMapNode>(width, height, cellSize, origin, (Grid<WorldMapNode> g, int x, int y) 
-                => new WorldMapNode(g, x, y, (Vector2)origin + new Vector2(x * cellSize, y * cellSize)));
+                => new WorldMapNode(g, x, y, NodeGlobal(origin, cellSize,x,y)));
 
             var go = new GameObject("Origin");
             go.transform.position = origin;
+        }
+
+        private Vector2 NodeGlobal(Vector3 origin, float cellSize, int x, int y)
+        {
+            return (Vector2)origin + new Vector2(x * cellSize, y * cellSize);
         }
 
         //Converts a list of nodes into a list of Vector3's
@@ -214,7 +219,7 @@ namespace SD.PathingSystem
             return grid.GetGridObject(worldPosition);
         }
 
-        public Vector3 GetNodePosition(int x, int y)
+        public Vector3 GetNodeCenter(int x, int y)
         {
             return grid.GetNodePosition(x, y);
         }
@@ -241,6 +246,26 @@ namespace SD.PathingSystem
         public float GetCellSize()
         {
             return grid.GetCellSize();
+        }
+
+        public static bool PositionIsValid(int x, int y)
+        {
+            return instance.NodeIsValid(x, y);
+        }
+
+        private bool NodeIsValid(int x, int y)
+        {
+            return grid.GetGridObject(x, y) != null;
+        }
+
+        public static bool PositionIsValid(Vector3 worldPosition)
+        {
+            return instance.NodeIsValid(worldPosition);
+        }
+
+        private bool NodeIsValid(Vector3 worldPosition)
+        {
+            return grid.GetGridObject(worldPosition) != null;
         }
     }
 }

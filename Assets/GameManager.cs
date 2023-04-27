@@ -2,21 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using SD.EventSystem;
+using SD.ECS;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
     [SerializeField] private float turnDelay = 0.1f;
-    [SerializeField] private bool isPlayerTurn = true;
 
-    public bool IsPlayerTurn => isPlayerTurn;
-
-    [SerializeField] private int entityNum = 0;
     [SerializeField] private List<Entity> entities = new List<Entity>();
-
-    [SerializeField] private GameEvent playerTurnStart;
-    [SerializeField] private GameEvent playerTurnEnd;
+    [SerializeField] private Entity entityToAct;
 
     private void Awake()
     {
@@ -28,50 +23,86 @@ public class GameManager : MonoBehaviour
         instance = this;
     }
 
-    private void StartTurn()
+    #region - Turn Cycle -
+    private void TurnTransition()
     {
-        if (entities[entityNum].GetComponent<PlayerLocomotion>()) isPlayerTurn = true;
-        else if (entities[entityNum].IsSentient) Action.SkipAction(entities[entityNum]); //this will change once AI logic is in place
+        FindLowest();
+        ReplenishEnergy();
+        StartTurn();
     }
 
-    //currently not a huge fan of calling getcomponent on every pass
-    //I can just have a bool on each entity to toggle that
-    //then for the player specifically, set up an event
+    private void FindLowest()
+    {
+        int value = int.MaxValue;
+        Entity nextEntity = null;
+
+        for (int i = 0; i < entities.Count; i++)
+        {
+            if (entities[i].ActionPoints < value)
+            {
+                value = entities[i].ActionPoints;
+                nextEntity = entities[i];
+            }
+        }
+
+        entityToAct = nextEntity;
+    }
+
+    private void ReplenishEnergy()
+    {
+        for (int i = 0; i < entities.Count; i++)
+        {
+            entities[i].RegainEnergy(entityToAct.ActionPoints);
+        }
+    }
+
+    private void StartTurn()
+    {
+        entityToAct.IsTurn = true;
+
+        if (entityToAct.CompareTag("Player"))
+        {
+            //Do nothing, player doesn't get special treatment
+        }
+        else if (entityToAct.IsSentient)
+        {
+            //this will change once AI logic is in place
+            Debug.Log("Passing turn.");
+            Action.SkipAction(entityToAct); 
+        }
+    }
+
     public void EndTurn()
     {
-        if (entities[entityNum].GetComponent<PlayerLocomotion>())
-        {
-            isPlayerTurn = false;
-            playerTurnEnd?.Invoke();
-        }
-
-        if (entityNum == entities.Count - 1)
-        {
-            //Start of new round
-            entityNum = 0;
-        }
-        else
-        {
-            //start next turn
-            entityNum++;
-        }
-
+        entityToAct.IsTurn = false;
         StartCoroutine(WaitForTurn());
     }
 
     private IEnumerator WaitForTurn()
     {
         yield return new WaitForSeconds(turnDelay);
-        StartTurn();
+        TurnTransition();
     }
+    #endregion
 
     public void InsertEntity(Entity entity, int index)
     {
         entities.Insert(index, entity);
+
+        if (entityToAct == null)
+        {
+            entityToAct = entity;
+            StartTurn();
+        }
     }
 
     public void AddEntity(Entity entity)
     {
         entities.Add(entity);
+    }
+
+    public void RemoveEntity(Entity entity)
+    {
+        entities.Remove(entity);
     }
 }

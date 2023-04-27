@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7934700374611231145}
   - component: {fileID: 2562790632944536433}
   m_Layer: 0
-  m_Name: Entity
+  m_Name: entity
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -97,4 +97,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eee28df03cd9f324498e9a0a8580376b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isSentient: 1
+  <IsSentient>k__BackingField: 1
+  <BlocksMovement>k__BackingField: 1

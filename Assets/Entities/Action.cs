@@ -1,20 +1,55 @@
 using UnityEngine;
 
-public static class Action
+namespace SD.ECS
 {
-    public static void EscapeAction()
+    public static class Action
     {
-        Debug.Log("Quit");
-    }
+        public static void GetItem(Entity actor, Entity item)
+        {
+            if (!actor.IsTurn) return;
+            //Pick up item in same node as actor
+            GameManager.instance.EndTurn();
+        }
 
-    public static void MovementAction(Entity entity, Vector2 direction)
-    {
-        entity.Move(direction);
-        GameManager.instance.EndTurn();
-    }
+        public static void EquipItem(Entity entity)
+        {
+            if (!entity.IsTurn) return;
+            //Equip item from inventory - likely a mostly player action
+            GameManager.instance.EndTurn();
+        }
 
-    public static void SkipAction(Entity entity)
-    {
-        GameManager.instance.EndTurn();
+        public static void EquipFromGround(Entity actor, Entity item)
+        {
+            if (!actor.IsTurn) return;
+            //Pick up item in same node as actor and equip it
+            GameManager.instance.EndTurn();
+        }
+
+        public static void DropItem(Entity entity)
+        {
+            if (!entity.IsTurn) return;
+            //Drop item from inventory into same node being occupied
+            GameManager.instance.EndTurn();
+        }
+
+        public static void Unequip(Entity entity)
+        {
+            if (!entity.IsTurn) return;
+            //Unequip item
+            GameManager.instance.EndTurn();
+        }
+
+        public static void MovementAction(Locomotion locomotion, Vector2Int direction)
+        {
+            locomotion.MoveEntity(direction);
+            GameManager.instance.EndTurn();
+        }
+
+        public static void SkipAction(Entity entity)
+        {
+            if (!entity.IsTurn) return;
+            entity.SpendEnergy(100);
+            GameManager.instance.EndTurn();
+        }
     }
 }
