@@ -695,7 +695,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: tileset_28
+      name: fogOfWar
       rect:
         serializedVersion: 2
         x: 208
@@ -5834,6 +5834,7 @@ TextureImporter:
       terrain_desert_03: 1173131047
       tileset_10: 433245448
       tileset_215: 148527078
+      fogOfWar: -711835115
       tileset_147: -1704965755
       tileset_121: -984685084
       tileset_230: -623768846
@@ -5862,7 +5863,6 @@ TextureImporter:
       tileset_226: -986842750
       tileset_254: -629971259
       tileset_237: 730928280
-      tileset_28: -711835115
       terrain_desert_07: 438286793
       terrain_desert_05: -1579818863
       tileset_71: 726927687

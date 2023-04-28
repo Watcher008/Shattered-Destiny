@@ -10,8 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 8226798875102493408}
   - component: {fileID: 8226798875102493409}
-  - component: {fileID: 8226798875102493422}
   - component: {fileID: 8226798875102493423}
+  - component: {fileID: 8226798875102493422}
+  - component: {fileID: -3351145247460145225}
+  - component: {fileID: -5709424103328719697}
   m_Layer: 0
   m_Name: caravan
   m_TagString: Untagged
@@ -32,7 +34,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &8226798875102493409
 SpriteRenderer:
@@ -86,6 +88,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &8226798875102493423
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8226798875102493410}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 977405f29ec253a44a569fcda53a7616, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &8226798875102493422
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -100,7 +114,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <IsSentient>k__BackingField: 1
   <BlocksMovement>k__BackingField: 0
---- !u!114 &8226798875102493423
+  actionPoints: 0
+  HasMovementBehavior: 0
+--- !u!114 &-3351145247460145225
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -109,6 +125,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 8226798875102493410}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 977405f29ec253a44a569fcda53a7616, type: 3}
+  m_Script: {fileID: 11500000, guid: a264a2a53585df94481b248f7237c02e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  x: 0
+  y: 0
+--- !u!114 &-5709424103328719697
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8226798875102493410}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72cf86fd1e2b61e48be778d04189b6b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  movementCost: 100

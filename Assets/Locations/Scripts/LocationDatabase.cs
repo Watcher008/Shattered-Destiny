@@ -8,25 +8,18 @@ namespace SD.LocationSystem
     {
         [SerializeField] private LocationXMLReader presetLocations;
 
-        private Dictionary<string, Location> locationsByName;
+        private Dictionary<string, LocationData> locationsByName;
 
         public void Init() => LoadPresetLocations();
 
         private void LoadPresetLocations()
         {
-            locationsByName = new Dictionary<string, Location>();
-
-            var presets = presetLocations.LoadXMLFile();
-
-            for (int i = 0; i < presets.Length; i++)
-            {
-                locationsByName.Add(presets[i].name, presets[i]);
-            }
+            locationsByName = new Dictionary<string, LocationData>();
 
             //later on also get all new locations from saved data
         }
 
-        public Location GetLocation(string name)
+        public LocationData GetLocation(string name)
         {
             if (locationsByName.ContainsKey(name))
             {
@@ -35,9 +28,9 @@ namespace SD.LocationSystem
             return null;
         }
 
-        public List<Location> GetAllLocations()
+        public List<LocationData> GetAllLocations()
         {
-            var locations = new List<Location>();
+            var locations = new List<LocationData>();
 
             foreach (var location in locationsByName)
             {

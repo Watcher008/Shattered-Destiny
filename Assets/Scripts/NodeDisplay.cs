@@ -39,6 +39,6 @@ public class NodeDisplay : MonoBehaviour
         hoverNodePanel.SetActive(node != null);
         if (node == null) return;
 
-        hoverNodeText.text = "Look: " + node.terrain.name + " : " + node.x + "," + node.y + " : " + node.globalPosition;
+        hoverNodeText.text = "Look: " + node.terrain.name + " : " + node.x + "," + node.y + " : " + node.worldPosition;
     }
 }

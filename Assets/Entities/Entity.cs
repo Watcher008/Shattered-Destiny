@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,93 +5,38 @@ namespace SD.ECS
 {
     public class Entity : MonoBehaviour
     {
-        public delegate void OnTurnChangeCallback(bool isTurn);
-        public OnTurnChangeCallback onTurnChange;
-
         [field: SerializeField] public bool IsSentient { get; private set; }
         [field: SerializeField] public bool BlocksMovement { get; private set; }
+        public bool HasBehavior { get; set; }
 
-        private bool isTurn = false;
+        private List<ComponentBase> _components;
 
-        public bool IsTurn
-        {
-            get => isTurn;
-            set
-            {
-                SetTurn(value);
-            }
-        }
-
-        [SerializeField] private int actionPoints;
-
-        public int ActionPoints
-        {
-            get => actionPoints;
-            set
-            {
-                actionPoints = Mathf.Clamp(value, 0, int.MaxValue);
-            }
-        }
-
-        public List<IComponent> components = new List<IComponent>();
-
-        private void Start()
-        {
-            if (gameObject.CompareTag("Player"))
-            {
-                GameManager.instance.InsertEntity(this, 0);
-                IsTurn = true;
-            }
-            else GameManager.instance.AddEntity(this);
-
-            GetExistingComponents();
-        }
-
-        private void OnDestroy()
-        {
-            GameManager.instance.RemoveEntity(this);
-        }
+        private void Awake() => GetExistingComponents();
 
         private void GetExistingComponents()
         {
-            var components = GetComponents<IComponent>();
-            for (int i = 0; i < components.Length; i++)
+            _components = new List<ComponentBase>();
+            var comps = GetComponents<ComponentBase>();
+            _components.AddRange(comps);
+
+            for (int i = 0; i < _components.Count; i++)
             {
-                components[i].AddComponent(this);
+                _components[i].Register(this);
             }
         }
 
-        private void SetTurn(bool isTurn)
+        public T GetComponentBase<T>() where T : ComponentBase
         {
-            if (this.isTurn == isTurn) return;
-
-            this.isTurn = isTurn;
-            onTurnChange?.Invoke(isTurn);
+            for (int i = 0; i < _components.Count; i++)
+            {
+                if (_components[i].GetType().Equals(typeof(T))) return (T)_components[i];
+            }
+            return null;
         }
 
-        public void SpendEnergy(int points)
+        public void RemoveComponentBase(ComponentBase component)
         {
-            ActionPoints += points;
-            Debug.Log(gameObject.name + " spending energy: " + points);
+            _components.Remove(component);
         }
-
-        public void RegainEnergy(int points)
-        {
-            ActionPoints -= points;
-            Debug.Log(gameObject.name + " regaining energy: " + points);
-        }
-
-        public void Move(Vector2Int direction)
-        {
-            Vector3 newPos = (Vector3Int)direction;
-            transform.position += newPos * SD.PathingSystem.Pathfinding.instance.GetCellSize();
-        }
-    }
-
-    public interface IComponent
-    {
-        void AddComponent(Entity entity);
-
-        void RemoveComponent(Entity entity);
     }
 }

@@ -11,9 +11,11 @@ GameObject:
   - component: {fileID: 7720405639861310886}
   - component: {fileID: 7934700374611231145}
   - component: {fileID: 2562790632944536433}
+  - component: {fileID: 6387185444900400469}
+  - component: {fileID: -8181844160941313549}
   m_Layer: 0
   m_Name: entity
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -99,3 +101,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <IsSentient>k__BackingField: 1
   <BlocksMovement>k__BackingField: 1
+  actionPoints: 0
+  HasMovementBehavior: 0
+--- !u!114 &6387185444900400469
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 256999358178774886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a264a2a53585df94481b248f7237c02e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  x: 0
+  y: 0
+--- !u!114 &-8181844160941313549
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 256999358178774886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72cf86fd1e2b61e48be778d04189b6b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  movementCost: 100

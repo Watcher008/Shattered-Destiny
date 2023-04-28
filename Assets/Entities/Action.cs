@@ -4,52 +4,52 @@ namespace SD.ECS
 {
     public static class Action
     {
-        public static void GetItem(Entity actor, Entity item)
+        public static void GetItem(Actor actor, Entity item)
         {
             if (!actor.IsTurn) return;
             //Pick up item in same node as actor
-            GameManager.instance.EndTurn();
+            GameManager.EndTurn();
         }
 
-        public static void EquipItem(Entity entity)
+        public static void EquipItem(Actor actor)
         {
-            if (!entity.IsTurn) return;
+            if (!actor.IsTurn) return;
             //Equip item from inventory - likely a mostly player action
-            GameManager.instance.EndTurn();
+            GameManager.EndTurn();
         }
 
-        public static void EquipFromGround(Entity actor, Entity item)
+        public static void EquipFromGround(Actor actor, Entity item)
         {
             if (!actor.IsTurn) return;
             //Pick up item in same node as actor and equip it
-            GameManager.instance.EndTurn();
+            GameManager.EndTurn();
         }
 
-        public static void DropItem(Entity entity)
+        public static void DropItem(Actor actor)
         {
-            if (!entity.IsTurn) return;
+            if (!actor.IsTurn) return;
             //Drop item from inventory into same node being occupied
-            GameManager.instance.EndTurn();
+            GameManager.EndTurn();
         }
 
-        public static void Unequip(Entity entity)
+        public static void Unequip(Actor actor)
         {
-            if (!entity.IsTurn) return;
+            if (!actor.IsTurn) return;
             //Unequip item
-            GameManager.instance.EndTurn();
+            GameManager.EndTurn();
         }
 
         public static void MovementAction(Locomotion locomotion, Vector2Int direction)
         {
             locomotion.MoveEntity(direction);
-            GameManager.instance.EndTurn();
+            GameManager.EndTurn();
         }
 
-        public static void SkipAction(Entity entity)
+        public static void SkipAction(Actor actor)
         {
-            if (!entity.IsTurn) return;
-            entity.SpendEnergy(100);
-            GameManager.instance.EndTurn();
+            if (!actor.IsTurn) return;
+            actor.SpendEnergy(100);
+            GameManager.EndTurn();
         }
     }
 }

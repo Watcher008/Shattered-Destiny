@@ -10,9 +10,9 @@ namespace SD.PathingSystem
 
         public static Pathfinding instance { get; private set; }
 
-        private Grid<WorldMapNode> grid;
-        private List<WorldMapNode> openList; //nodes to search
-        private List<WorldMapNode> closedList; //already searched
+        private Grid<WorldNode> grid;
+        private List<WorldNode> openList; //nodes to search
+        private List<WorldNode> closedList; //already searched
 
         public Pathfinding(int width, int height, float cellSize)
         {
@@ -21,8 +21,8 @@ namespace SD.PathingSystem
             var origin = Vector2.zero;
             origin.x -= width / 2f * cellSize;
             origin.y -= height / 2f * cellSize;
-            grid = new Grid<WorldMapNode>(width, height, cellSize, origin, (Grid<WorldMapNode> g, int x, int y) 
-                => new WorldMapNode(g, x, y, NodeGlobal(origin, cellSize,x,y)));
+            grid = new Grid<WorldNode>(width, height, cellSize, origin, (Grid<WorldNode> g, int x, int y) 
+                => new WorldNode(g, x, y, NodeGlobal(origin, cellSize,x,y)));
 
             var go = new GameObject("Origin");
             go.transform.position = origin;
@@ -39,12 +39,12 @@ namespace SD.PathingSystem
             grid.GetXY(startWorldPosition, out int startX, out int startY);
             grid.GetXY(endWorldPosition, out int endX, out int endY);
 
-            List<WorldMapNode> path = FindNodePath(startX, startY, endX, endY, ignoreEndNode);
+            List<WorldNode> path = FindNodePath(startX, startY, endX, endY, ignoreEndNode);
             if (path == null) return null;
             else
             {
                 List<Vector3> vectorPath = new List<Vector3>();
-                foreach (WorldMapNode node in path)
+                foreach (WorldNode node in path)
                 {
                     vectorPath.Add(grid.GetNodePosition(node.x, node.y));
                 }
@@ -53,21 +53,21 @@ namespace SD.PathingSystem
         }
 
         //Returns a list of nodes that can be travelled to reach a target destination
-        public List<WorldMapNode> FindNodePath(int startX, int startY, int endX, int endY, bool ignoreEndNode = false)
+        public List<WorldNode> FindNodePath(int startX, int startY, int endX, int endY, bool ignoreEndNode = false)
         {
-            WorldMapNode startNode = grid.GetGridObject(startX, startY);
+            WorldNode startNode = grid.GetGridObject(startX, startY);
             //Debug.Log("Start: " + startNode.x + "," + startNode.y);
-            WorldMapNode endNode = grid.GetGridObject(endX, endY);
+            WorldNode endNode = grid.GetGridObject(endX, endY);
             //Debug.Log("End: " + endNode.x + "," + endNode.y);
 
-            openList = new List<WorldMapNode> { startNode };
-            closedList = new List<WorldMapNode>();
+            openList = new List<WorldNode> { startNode };
+            closedList = new List<WorldNode>();
 
             for (int x = 0; x < grid.GetWidth(); x++)
             {
                 for (int y = 0; y < grid.GetHeight(); y++)
                 {
-                    WorldMapNode pathNode = grid.GetGridObject(x, y);
+                    WorldNode pathNode = grid.GetGridObject(x, y);
                     pathNode.gCost = int.MaxValue;
                     pathNode.CalculateFCost();
                     pathNode.cameFromNode = null;
@@ -80,7 +80,7 @@ namespace SD.PathingSystem
 
             while (openList.Count > 0)
             {
-                WorldMapNode currentNode = GetLowestFCostNode(openList);
+                WorldNode currentNode = GetLowestFCostNode(openList);
 
                 if (currentNode == endNode)
                 {
@@ -91,7 +91,7 @@ namespace SD.PathingSystem
                 openList.Remove(currentNode);
                 closedList.Add(currentNode);
 
-                foreach (WorldMapNode neighbour in GetNeighbourList(currentNode))
+                foreach (WorldNode neighbour in GetNeighbourList(currentNode))
                 {
                     if (closedList.Contains(neighbour)) continue;
 
@@ -130,10 +130,10 @@ namespace SD.PathingSystem
         }
 
         //Return a list of all neighbors, up/down/left/right
-        private List<WorldMapNode> GetNeighbourList(WorldMapNode currentNode)
+        private List<WorldNode> GetNeighbourList(WorldNode currentNode)
         {
             //I could also just cache this...
-            List<WorldMapNode> neighborList = new List<WorldMapNode>();
+            List<WorldNode> neighborList = new List<WorldNode>();
 
             //North
             if (currentNode.y + 1 < grid.GetHeight()) neighborList.Add(GetNode(currentNode.x, currentNode.y + 1));
@@ -162,11 +162,11 @@ namespace SD.PathingSystem
             return neighborList;
         }
 
-        private List<WorldMapNode> CalculatePath(WorldMapNode endNode)
+        private List<WorldNode> CalculatePath(WorldNode endNode)
         {
-            List<WorldMapNode> path = new List<WorldMapNode>();
+            List<WorldNode> path = new List<WorldNode>();
             path.Add(endNode);
-            WorldMapNode currentNode = endNode;
+            WorldNode currentNode = endNode;
             while (currentNode.cameFromNode != null)
             {
                 //Start at the end and work backwards
@@ -177,7 +177,7 @@ namespace SD.PathingSystem
             return path;
         }
 
-        private int CalculatePathMoveCost(List<WorldMapNode> nodes)
+        private int CalculatePathMoveCost(List<WorldNode> nodes)
         {
             int cost = 0;
             //Skip the first node in the list, this is where the character is
@@ -188,7 +188,7 @@ namespace SD.PathingSystem
             return cost;
         }
 
-        private int CalculateDistanceCost(WorldMapNode a, WorldMapNode b)
+        private int CalculateDistanceCost(WorldNode a, WorldNode b)
         {
             int xDistance = Mathf.Abs(a.x - b.x);
             int yDistance = Mathf.Abs(a.y - b.y);
@@ -196,9 +196,9 @@ namespace SD.PathingSystem
             return MOVE_DIAGONAL_COST * Mathf.Min(xDistance, yDistance) + MOVE_STRAIGHT_COST * remaining;
         }
 
-        private WorldMapNode GetLowestFCostNode(List<WorldMapNode> pathNodeList)
+        private WorldNode GetLowestFCostNode(List<WorldNode> pathNodeList)
         {
-            WorldMapNode lowestFCostNode = pathNodeList[0];
+            WorldNode lowestFCostNode = pathNodeList[0];
 
             for (int i = 0; i < pathNodeList.Count; i++)
             {
@@ -209,12 +209,12 @@ namespace SD.PathingSystem
             return lowestFCostNode;
         }
 
-        public WorldMapNode GetNode(int x, int y)
+        public WorldNode GetNode(int x, int y)
         {
             return grid.GetGridObject(x, y);
         }
 
-        public WorldMapNode GetNode(Vector3 worldPosition)
+        public WorldNode GetNode(Vector3 worldPosition)
         {
             return grid.GetGridObject(worldPosition);
         }
@@ -266,6 +266,67 @@ namespace SD.PathingSystem
         private bool NodeIsValid(Vector3 worldPosition)
         {
             return grid.GetGridObject(worldPosition) != null;
+        }
+
+        public int GetNodeDistance_Path(WorldNode fromNode, WorldNode toNode)
+        {
+            int x = Mathf.Abs(fromNode.x - toNode.x);
+            int y = Mathf.Abs(fromNode.y - toNode.y);
+            return x + y;
+        }
+
+        public float GetNodeDistance_Straight(WorldNode fromNode, WorldNode toNode)
+        {
+
+            return Mathf.Sqrt(Mathf.Pow(fromNode.x - toNode.x, 2) + Mathf.Pow(fromNode.y - toNode.y, 2));
+        }
+
+        public List<WorldNode> GetNodesInRange_Circle(int x, int y, int range)
+        {
+            var fromNode = grid.GetGridObject(x, y);
+            return GetNodesInRange_Circle(fromNode, range);
+        }
+
+        public List<WorldNode> GetNodesInRange_Circle(WorldNode fromNode, int range)
+        {
+            var nodes = new List<WorldNode>();
+
+            for (int x = fromNode.x - range; x < fromNode.x + range + 1; x++)
+            {
+                for (int y = fromNode.y - range; y < fromNode.y + range + 1; y++)
+                {
+                    if (x < 0 || x > grid.GetWidth() - 1) continue;
+                    if (y < 0 || y > grid.GetHeight() - 1) continue;
+
+                    var toNode = grid.GetGridObject(x, y);
+                    if (GetNodeDistance_Straight(fromNode, toNode) <= range) nodes.Add(toNode);
+                }
+            }
+            return nodes;
+        }
+
+        public List<WorldNode> GetNodesInRange_Square(int x, int y, int range)
+        {
+            var fromNode = grid.GetGridObject(x, y);
+            return GetNodesInRange_Square(fromNode, range);
+        }
+
+        public List<WorldNode> GetNodesInRange_Square(WorldNode fromNode, int range)
+        {
+            var nodes = new List<WorldNode>();
+
+            for (int x = fromNode.x - range; x < fromNode.x + range + 1; x++)
+            {
+                for (int y = fromNode.y - range; y < fromNode.y + range + 1; y++)
+                {
+                    if (x < 0 || x > grid.GetWidth() - 1) continue;
+                    if (y < 0 || y > grid.GetHeight() - 1) continue;
+
+                    var toNode = grid.GetGridObject(x, y);
+                    nodes.Add(toNode);
+                }
+            }
+            return nodes;
         }
     }
 }
