@@ -10,7 +10,7 @@ namespace SD.ECS
         private Pathfinding pathfinding;
 
         private Actor actor;
-        private Position position;
+        private GridPosition position;
         private Locomotion locomotion;
 
         private Coroutine movementCoroutine;
@@ -23,7 +23,7 @@ namespace SD.ECS
             pathfinding = Pathfinding.instance;
             
             actor = entity.GetComponentBase<Actor>();
-            position = entity.GetComponentBase<Position>();
+            position = entity.GetComponentBase<GridPosition>();
             locomotion = entity.GetComponentBase<Locomotion>();
         }
 

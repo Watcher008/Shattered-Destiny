@@ -7,7 +7,7 @@ namespace SD.ECS
         [SerializeField] private int maxWanderDistance = 3;
 
         private Actor actor;
-        private Position position;
+        private GridPosition position;
         private Locomotion locomotion;
         private int startX, startY;
 
@@ -17,7 +17,7 @@ namespace SD.ECS
             entity.HasBehavior = true;
 
             actor = entity.GetComponentBase<Actor>();
-            position = entity.GetComponentBase<Position>();
+            position = entity.GetComponentBase<GridPosition>();
             locomotion = entity.GetComponentBase<Locomotion>();
 
             startX = position.x;

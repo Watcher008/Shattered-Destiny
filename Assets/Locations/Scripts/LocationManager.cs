@@ -26,7 +26,7 @@ namespace SD.LocationSystem
             foreach(var preset in presetLocations)
             {
                 var entity = FindEntity(preset.name);
-                entity.GetComponentBase<Position>().SetPosition(preset.X, preset.Y);
+                entity.GetComponentBase<GridPosition>().SetPosition(preset.X, preset.Y);
                 entity.GetComponentBase<EntityRenderer>().SetSprite(preset.Type.sprite);
             }
         }
@@ -54,7 +54,7 @@ namespace SD.LocationSystem
 
             var entity = location.GetComponent<Entity>();
             entity.GetComponentBase<EntityRenderer>().SetSprite(type.sprite);
-            entity.GetComponentBase<Position>().SetPosition(x, y);
+            entity.GetComponentBase<GridPosition>().SetPosition(x, y);
 
         }
         private void foo()

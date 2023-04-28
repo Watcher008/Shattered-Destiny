@@ -9,12 +9,12 @@ namespace SD.ECS
         [SerializeField] private int movementCost;
 
         private Actor actor;
-        private Position position;
+        private GridPosition position;
 
         public override void Register(Entity entity)
         {
             base.Register(entity);
-            position = entity.GetComponentBase<Position>();
+            position = entity.GetComponentBase<GridPosition>();
             actor = entity.GetComponentBase<Actor>();
         }
 

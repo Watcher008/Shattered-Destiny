@@ -8,7 +8,7 @@ namespace SD.ECS
     {
         [SerializeField] private int sightDistance = 5;
 
-        private Position position;
+        private GridPosition position;
 
         private List<WorldNode> visibleNodes;
 
@@ -16,7 +16,7 @@ namespace SD.ECS
         {
             base.Register(entity);
 
-            position = entity.GetComponentBase<Position>();
+            position = entity.GetComponentBase<GridPosition>();
             position.onPositionChange += UpdateFieldOfView;
 
             UpdateFieldOfView();

@@ -2,7 +2,7 @@ using SD.PathingSystem;
 
 namespace SD.ECS
 {
-    public class Position : ComponentBase
+    public class GridPosition : ComponentBase
     {
         public delegate void OnPositionChangeCallback();
         public OnPositionChangeCallback onPositionChange;

@@ -6,7 +6,7 @@ using SD.ECS;
 public class NodeDisplay : MonoBehaviour
 {
     private Pathfinding pathfinding;
-    private Position playerPosition;
+    private GridPosition playerPosition;
 
     [SerializeField] private WorldNodeReference playerTravelData;
 
@@ -17,7 +17,7 @@ public class NodeDisplay : MonoBehaviour
     private void Start()
     {
         pathfinding = Pathfinding.instance;
-        playerPosition = GameObject.FindGameObjectWithTag("Player").GetComponent<Position>();
+        playerPosition = GameObject.FindGameObjectWithTag("Player").GetComponent<GridPosition>();
     }
 
     private void Update()
