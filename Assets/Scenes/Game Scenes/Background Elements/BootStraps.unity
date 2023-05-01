@@ -632,6 +632,10 @@ GameObject:
   - component: {fileID: 1968315952}
   - component: {fileID: 1968315954}
   - component: {fileID: 1968315953}
+  - component: {fileID: 1968315956}
+  - component: {fileID: 1968315955}
+  - component: {fileID: 1968315958}
+  - component: {fileID: 1968315957}
   m_Layer: 0
   m_Name: SceneManager
   m_TagString: Untagged
@@ -727,3 +731,119 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   developerNotes: Load New Game from Main Menu
+--- !u!114 &1968315955
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1968315951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ac9f04020a014a498cb993706bb29b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameEvent: {fileID: 11400000, guid: 0bcadf74134856c4e98389d2e6aa7650, type: 2}
+  callbackEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1668286213}
+        m_TargetAssemblyTypeName: SD.SceneManagement.BootStraps, Assembly-CSharp
+        m_MethodName: UnloadScene
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 11400000, guid: 55ece7720223960488e9f8585592d5a1, type: 2}
+          m_ObjectArgumentAssemblyTypeName: SD.SceneManagement.ScenePicker, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  developerNotes: Unloads scene with Encounter Menu
+--- !u!114 &1968315956
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1968315951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ac9f04020a014a498cb993706bb29b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameEvent: {fileID: 11400000, guid: 09c561a823f532344b5363457a86e8e0, type: 2}
+  callbackEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1668286213}
+        m_TargetAssemblyTypeName: SD.SceneManagement.BootStraps, Assembly-CSharp
+        m_MethodName: LoadSceneAdditiveWithoutSplashScreen
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 11400000, guid: 55ece7720223960488e9f8585592d5a1, type: 2}
+          m_ObjectArgumentAssemblyTypeName: SD.SceneManagement.ScenePicker, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  developerNotes: Loads scene with Encounter Menu
+--- !u!114 &1968315957
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1968315951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ac9f04020a014a498cb993706bb29b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameEvent: {fileID: 11400000, guid: 4638fd2f302c4dc4a9df74b3f94101f7, type: 2}
+  callbackEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1668286213}
+        m_TargetAssemblyTypeName: SD.SceneManagement.BootStraps, Assembly-CSharp
+        m_MethodName: UnloadScene
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 11400000, guid: 55ece7720223960488e9f8585592d5a1, type: 2}
+          m_ObjectArgumentAssemblyTypeName: SD.SceneManagement.ScenePicker, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  developerNotes: 
+--- !u!114 &1968315958
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1968315951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ac9f04020a014a498cb993706bb29b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameEvent: {fileID: 11400000, guid: 8062246088f0c4c45843b92d271dbc14, type: 2}
+  callbackEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1668286213}
+        m_TargetAssemblyTypeName: SD.SceneManagement.BootStraps, Assembly-CSharp
+        m_MethodName: LoadSceneAdditiveWithoutSplashScreen
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 11400000, guid: 55ece7720223960488e9f8585592d5a1, type: 2}
+          m_ObjectArgumentAssemblyTypeName: SD.SceneManagement.ScenePicker, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  developerNotes: 

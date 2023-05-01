@@ -29,9 +29,9 @@ public class TimeManager : MonoBehaviour
         hour = timeData.Hours;
     }
 
-    private void HandleHours()
+    public void OnTenthWorldRoundPass()
     {
-        hour += timeData.HoursPerSecond * Time.deltaTime;
+        hour += 2;
         if (hour >= HOURS_IN_DAY)
         {
             hour -= HOURS_IN_DAY;
@@ -39,6 +39,7 @@ public class TimeManager : MonoBehaviour
         }
         timeData.Hours = hour;
     }
+
     private void OnNewHour()
     {
         hour++;

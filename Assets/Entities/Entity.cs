@@ -37,6 +37,7 @@ namespace SD.ECS
         public void RemoveComponentBase(ComponentBase component)
         {
             _components.Remove(component);
+            component.Unregister();
         }
     }
 }

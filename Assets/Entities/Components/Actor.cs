@@ -8,7 +8,8 @@ namespace SD.ECS
         public OnTurnChangeCallback onTurnChange;
 
         private bool isTurn = false;
-        private int actionPoints;
+        [SerializeField] private int actionPoints;
+        [SerializeField] private int speed = 100;
 
         public bool IsTurn
         {
@@ -27,6 +28,8 @@ namespace SD.ECS
                 actionPoints = Mathf.Clamp(value, 0, int.MaxValue);
             }
         }
+
+        public int Speed => speed;
 
         public override void Register(Entity entity)
         {
@@ -48,16 +51,14 @@ namespace SD.ECS
             onTurnChange?.Invoke(isTurn);
         }
 
-        public void SpendEnergy(int points)
-        {
-            ActionPoints += points;
-            //Debug.Log(gameObject.name + " spending energy: " + points);
-        }
-
-        public void RegainEnergy(int points)
+        public void SpendActionPoints(int points)
         {
             ActionPoints -= points;
-            //Debug.Log(gameObject.name + " regaining energy: " + points);
+        }
+
+        public void RegainActionPoints()
+        {
+            ActionPoints += speed;
         }
     }
 }

@@ -48,7 +48,7 @@ namespace SD.ECS
         public static void SkipAction(Actor actor)
         {
             if (!actor.IsTurn) return;
-            actor.SpendEnergy(100);
+            actor.SpendActionPoints(GameManager.pointsToAct);
             GameManager.EndTurn();
         }
     }

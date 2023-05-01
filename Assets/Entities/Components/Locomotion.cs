@@ -5,8 +5,8 @@ namespace SD.ECS
 {
     public class Locomotion : ComponentBase
     {
-        [SerializeField] private int speed;
-        [SerializeField] private int movementCost;
+        //0 on foot, 100 on horseback?
+        [SerializeField] private int travelSpeed = 0;
 
         private Actor actor;
         private GridPosition position;
@@ -40,8 +40,8 @@ namespace SD.ECS
             direction.y += position.y;
 
             //cost is equal to base movement cost plus the cost of the node being moved into
-            int cost = movementCost + Pathfinding.instance.GetNode(direction.x, direction.y).movementCost - speed;
-            actor.SpendEnergy(cost);
+            int cost = GameManager.pointsToAct + Pathfinding.instance.GetNode(direction.x, direction.y).movementCost - travelSpeed;
+            actor.SpendActionPoints(cost);
 
             position.SetPosition(direction.x, direction.y);
         }

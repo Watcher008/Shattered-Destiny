@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 7453147360310085725}
   - component: {fileID: 7088549478985324473}
   - component: {fileID: 3188036483993282901}
+  - component: {fileID: 5644536376989899376}
   m_Layer: 0
   m_Name: location
   m_TagString: Untagged
@@ -138,3 +139,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63eaeceeff886a1489a584c331b80ffe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5644536376989899376
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3588309262549098535}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ee2c704aee5156448111cf54d5f22b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerLocationEncounterEvent: {fileID: 11400000, guid: 8062246088f0c4c45843b92d271dbc14, type: 2}

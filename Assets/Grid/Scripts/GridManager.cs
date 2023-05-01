@@ -21,7 +21,8 @@ namespace SD.PathingSystem
 
             var width = bounds.xMax - bounds.xMin;
             var height = bounds.yMax - bounds.yMin;
-            Debug.Log(width + ", " + height);
+            //Debug.Log(width + ", " + height);
+            
             var cellSize = tileMaps[0].layoutGrid.cellSize.x;
 
             offset = new Vector3(cellSize / 2, cellSize / 2);

@@ -7,6 +7,7 @@ namespace SD.EventSystem
     /// </summary>
     public class EventLogger : MonoBehaviour
     {
+        [SerializeField] private bool logEvents;
         /// <summary>
         /// Debugging tool - Raise an assertion alert if event is triggered.
         /// </summary>
@@ -32,16 +33,18 @@ namespace SD.EventSystem
         /// <summary>
         /// Log event to console.
         /// </summary>
-        /// <param name="e">GameEvent to log.</param>
-        private void LogEvent(GameEvent e)
+        /// <param name="gameEvent">GameEvent to log.</param>
+        private void LogEvent(GameEvent gameEvent)
         {
-            if (watchForEvent != null && e.name.Equals(watchForEvent.name))
+            if (!logEvents) return;
+
+            if (watchForEvent != null && gameEvent.name.Equals(watchForEvent.name))
             {
-                Debug.LogAssertion(e.name);
+                Debug.LogAssertion(gameEvent.name);
                 return;
             }
 
-            Debug.Log(e.name);
+            Debug.Log(gameEvent.name);
         }
     }
 }
