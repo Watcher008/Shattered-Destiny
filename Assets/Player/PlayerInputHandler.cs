@@ -22,6 +22,11 @@ public class PlayerInputHandler : MonoBehaviour
         UnsubscribeFromInput();
     }
 
+    private void OnDestroy()
+    {
+        Debug.LogWarning("Input Destroyed");
+    }
+
     private void CheckForComponents()
     {
         if (playerInput == null) playerInput = GetComponent<PlayerInput>();

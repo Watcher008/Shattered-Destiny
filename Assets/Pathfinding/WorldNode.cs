@@ -7,6 +7,9 @@ namespace SD.PathingSystem
 {
     public class WorldNode
     {
+        public delegate void OnNodeEnteredCallback(Entity newEntity);
+        public OnNodeEnteredCallback onNodeEntered;
+
         private Grid<WorldNode> grid;
         public int x { get; private set; }
         public int y { get; private set; }
@@ -95,6 +98,7 @@ namespace SD.PathingSystem
             {
                 sprite.ToggleRenderer(isVisible);
             }
+            onNodeEntered?.Invoke(entity);
         }
 
         public void LeaveNode(Entity entity)

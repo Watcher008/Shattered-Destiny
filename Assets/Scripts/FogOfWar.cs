@@ -21,7 +21,7 @@ public class FogOfWar : MonoBehaviour
 
     public static void HideTile(Vector3 worldPosition)
     {
-        if (!instance.gameObject.activeSelf) return;
+        if (instance == null || !instance.gameObject.activeSelf) return;
 
         var pos = instance.fogOfWarMap.WorldToCell(worldPosition);
         instance.fogOfWarMap.SetTile(pos, instance.fogTile);
@@ -29,6 +29,7 @@ public class FogOfWar : MonoBehaviour
 
     public static void RevealTile(Vector3 worldPosition)
     {
+        if (instance == null || !instance.gameObject.activeSelf) return;
         var pos = instance.fogOfWarMap.WorldToCell(worldPosition);
         instance.fogOfWarMap.SetTile(pos, null);
     }

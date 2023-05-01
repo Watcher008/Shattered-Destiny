@@ -32,23 +32,31 @@ public class CameraController : MonoBehaviour
     {
         cam.orthographicSize = Mathf.Clamp(cam.orthographicSize, minZoom, maxZoom);
 
-        rightMouseButton.action.performed += i => BeginPanCamera();
+        rightMouseButton.action.performed += BeginPanCamera;
         rightMouseButton.action.canceled += i => isPanning = false;
-        mouseScroll.action.performed += i => ZoomCamera(i.ReadValue<Vector2>().y);
+        mouseScroll.action.performed += Zoom;
     }
 
     private void OnDestroy()
     {
-        rightMouseButton.action.performed -= i => BeginPanCamera();
+        rightMouseButton.action.performed -= BeginPanCamera;
         rightMouseButton.action.canceled -= i => isPanning = false;
-        mouseScroll.action.performed -= i => ZoomCamera(i.ReadValue<Vector2>().y);
+        mouseScroll.action.performed -= Zoom;
     }
 
-    void ZoomCamera(float zoom)
+    private void BeginPanCamera(InputAction.CallbackContext obj)
     {
+        dragOrigin = cam.ScreenToWorldPoint(mousePosition.action.ReadValue<Vector2>());
+        if (panCoroutine != null) StopCoroutine(panCoroutine);
+        panCoroutine = StartCoroutine(PanCamera());
+    }
+
+    private void Zoom(InputAction.CallbackContext obj)
+    {
+        float zoom = obj.ReadValue<Vector2>().y;
+
         cam.orthographicSize -= zoom * Time.deltaTime;
         cam.orthographicSize = Mathf.Clamp(cam.orthographicSize, minZoom, maxZoom);
-
         cam.transform.position = ClampCamera(cam.transform.position);
     }
 
@@ -66,13 +74,6 @@ public class CameraController : MonoBehaviour
         float newY = Mathf.Clamp(targetPosition.y, minY, maxY);
 
         return new Vector3 (newX, newY, targetPosition.z);
-    }
-
-    private void BeginPanCamera()
-    {
-        dragOrigin = cam.ScreenToWorldPoint(mousePosition.action.ReadValue<Vector2>());
-        if (panCoroutine != null) StopCoroutine(panCoroutine);
-        panCoroutine = StartCoroutine(PanCamera());
     }
 
     private IEnumerator PanCamera()
