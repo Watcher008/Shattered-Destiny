@@ -4,10 +4,21 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class UIEncounterPanel : MonoBehaviour
+namespace SD.LocationSystem
 {
-    [SerializeField] private TMP_Text header, body;
-    [SerializeField] private RectTransform optionButtonParent;
+    public class UIEncounterPanel : MonoBehaviour
+    {
+        [SerializeField] private PlayerLocationReference locationReference;
 
+        [Space]
 
+        [SerializeField] private TMP_Text header, body;
+        [SerializeField] private RectTransform optionButtonParent;
+
+        public void SetInitialValues()
+        {
+            gameObject.SetActive(true);
+            header.text = locationReference.playerLocation.Name;
+        }
+    }
 }

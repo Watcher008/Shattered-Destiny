@@ -19,7 +19,8 @@ namespace SD.ECS
             position = entity.GetComponentBase<GridPosition>();
             position.onPositionChange += UpdateFieldOfView;
 
-            UpdateFieldOfView();
+            //UpdateFieldOfView();
+            Invoke("UpdateFieldOfView", 0.1f);
         }
 
         public override void Unregister()

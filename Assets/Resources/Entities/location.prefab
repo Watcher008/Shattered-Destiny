@@ -151,4 +151,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ee2c704aee5156448111cf54d5f22b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerLocation: {fileID: 11400000, guid: 47e2812419653f54cb97692d5892c7d6, type: 2}
   playerLocationEncounterEvent: {fileID: 11400000, guid: 8062246088f0c4c45843b92d271dbc14, type: 2}

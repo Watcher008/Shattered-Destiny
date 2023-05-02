@@ -21,6 +21,6 @@ EditorBuildSettings:
     path: Assets/Scenes/Game Scenes/Gameplay/WorldMap.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
-    path: Assets/Scenes/Game Scenes/UI/EncounterMenu.unity
+    path: Assets/Scenes/Game Scenes/UI/LocationMenu.unity
     guid: f62ff23437c57944eabf4ad00240798d
   m_configObjects: {}

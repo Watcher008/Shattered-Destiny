@@ -24,7 +24,7 @@ public class PlayerInputHandler : MonoBehaviour
 
     private void OnDestroy()
     {
-        Debug.LogWarning("Input Destroyed");
+        //Debug.LogWarning("Input Destroyed");
     }
 
     private void CheckForComponents()

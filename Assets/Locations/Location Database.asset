@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a55120f967859d64f88b10c0dafbf6ee, type: 3}
   m_Name: Location Database
   m_EditorClassIdentifier: 
-  presetLocations: {fileID: 11400000, guid: 2daf19102fb39934187734b4a0658da2, type: 2}
+  locationsXML: {fileID: 11400000, guid: 2daf19102fb39934187734b4a0658da2, type: 2}

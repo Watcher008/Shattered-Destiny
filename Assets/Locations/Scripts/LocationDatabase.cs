@@ -6,7 +6,7 @@ namespace SD.LocationSystem
     [CreateAssetMenu(menuName = "Locations/Location Database")]
     public class LocationDatabase : ScriptableObject
     {
-        [SerializeField] private LocationXMLReader presetLocations;
+        [SerializeField] private LocationXMLReader locationsXML;
 
         private Dictionary<string, LocationData> locationsByName;
 
@@ -15,6 +15,12 @@ namespace SD.LocationSystem
         private void LoadPresetLocations()
         {
             locationsByName = new Dictionary<string, LocationData>();
+
+            var presets = locationsXML.LoadXMLFile();
+            foreach ( var preset in presets )
+            {
+                locationsByName.Add(preset.Name, preset);
+            }
 
             //later on also get all new locations from saved data
         }

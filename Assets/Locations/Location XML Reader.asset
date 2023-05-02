@@ -12,17 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 154bc9d4d2afa7d42a41f23944c8b482, type: 3}
   m_Name: Location XML Reader
   m_EditorClassIdentifier: 
-  locationPresets:
-  - {fileID: 11400000, guid: fbabe265249f5864cadd984aa1d4cf07, type: 2}
-  - {fileID: 11400000, guid: d851664ef7283024f8012e7532f96813, type: 2}
-  - {fileID: 11400000, guid: e6ef47f181878aa4e8757a8661033000, type: 2}
-  - {fileID: 11400000, guid: a0064909fc7b37c47bbbbc2ab5dfd97e, type: 2}
-  - {fileID: 11400000, guid: d69b6bb92f58caa47a4b1ab0089880ad, type: 2}
-  - {fileID: 11400000, guid: 99d1a57832706704db4259a4b6e1bdf8, type: 2}
-  - {fileID: 11400000, guid: c55f5b5ca49e70141ada9dca1a7afd9d, type: 2}
-  - {fileID: 11400000, guid: 43867c42d9b752343bf1fedaa4d37bd3, type: 2}
-  - {fileID: 11400000, guid: 9b32c8fd86353ff43afdb046c8e1c984, type: 2}
-  - {fileID: 11400000, guid: f77bdced8594bc9459a4791001c879fb, type: 2}
+  locationPresets: []
   locationTypes:
   - {fileID: 11400000, guid: f1fe91dfac630144f9ecea05be1497da, type: 2}
   - {fileID: 11400000, guid: ed645842dea5bef4a86ec319b90d99f8, type: 2}
