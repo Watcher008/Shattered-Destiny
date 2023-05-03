@@ -8,18 +8,22 @@ namespace SD.LocationSystem
     {
         [SerializeField] private LocationXMLReader locationsXML;
 
-        private Dictionary<string, LocationData> locationsByName;
+        //Locations which can be visited by traversing the worldMap
+        private Dictionary<string, LocationData> primaryLocations;
+
+        //Locations which can be visited by travelling to their parent location
+        private Dictionary<string, LocationData> secondaryLocations;
 
         public void Init() => LoadPresetLocations();
 
         private void LoadPresetLocations()
         {
-            locationsByName = new Dictionary<string, LocationData>();
+            primaryLocations = new Dictionary<string, LocationData>();
 
             var presets = locationsXML.LoadXMLFile();
             foreach ( var preset in presets )
             {
-                locationsByName.Add(preset.Name, preset);
+                primaryLocations.Add(preset.name, preset);
             }
 
             //later on also get all new locations from saved data
@@ -27,9 +31,9 @@ namespace SD.LocationSystem
 
         public LocationData GetLocation(string name)
         {
-            if (locationsByName.ContainsKey(name))
+            if (primaryLocations.ContainsKey(name))
             {
-                return locationsByName[name];
+                return primaryLocations[name];
             }
             return null;
         }
@@ -38,7 +42,7 @@ namespace SD.LocationSystem
         {
             var locations = new List<LocationData>();
 
-            foreach (var location in locationsByName)
+            foreach (var location in primaryLocations)
             {
                 locations.Add(location.Value);
             }

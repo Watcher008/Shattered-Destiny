@@ -1,12 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
 namespace SD.LocationSystem
 {
-    public class UIEncounterPanel : MonoBehaviour
+    public class UILocationPanel : MonoBehaviour
     {
         [SerializeField] private PlayerLocationReference locationReference;
 
@@ -18,7 +16,15 @@ namespace SD.LocationSystem
         public void SetInitialValues()
         {
             gameObject.SetActive(true);
-            header.text = locationReference.playerLocation.Name;
+            var location = locationReference.playerLocation;
+
+            header.text = location.name;
+
+            body.text = "You arrive at " + location.name + ".";
+
+            body.text += "\n \n";
+
+            body.text += location.description;
         }
     }
 }

@@ -3,61 +3,81 @@
 	<location>
 		<xCoordinates>132</xCoordinates>
 		<yCoordinates>29</yCoordinates>
-		<name>cityA</name>
+		<name>city_01</name>
+		<description>A large city on the southern border of the map…</description>
 		<type>City</type>
+		<alignment>Yellow</alignment>
 	</location>
 	<location>
 		<xCoordinates>116</xCoordinates>
 		<yCoordinates>47</yCoordinates>
-		<name>cityB</name>
+		<name>city_02</name>
+		<description>The capital of the green nation and a central point in their territory…</description>
 		<type>City</type>
+		<alignment>Green</alignment>
 	</location>
 	<location>
 		<xCoordinates>137</xCoordinates>
 		<yCoordinates>40</yCoordinates>
-		<name>villageA</name>
+		<name>village_01</name>
+		<description>Lorem Ipsus…</description>
 		<type>Village</type>
+		<alignment>Green</alignment>
 	</location>
 	<location>
 		<xCoordinates>100</xCoordinates>
 		<yCoordinates>51</yCoordinates>
-		<name>villageB</name>
+		<name>village_02</name>
+		<description>Lorem Ipsus…</description>
 		<type>Village</type>
+		<alignment>Green</alignment>
 	</location>
 	<location>
 		<xCoordinates>117</xCoordinates>
 		<yCoordinates>55</yCoordinates>
-		<name>villageC</name>
+		<name>village_03</name>
+		<description>Lorem Ipsus…</description>
 		<type>Village</type>
+		<alignment>Green</alignment>
 	</location>
 	<location>
 		<xCoordinates>98</xCoordinates>
 		<yCoordinates>57</yCoordinates>
-		<name>villageD</name>
+		<name>village_04</name>
+		<description>Lorem Ipsus…</description>
 		<type>Village</type>
+		<alignment>Green</alignment>
 	</location>
 	<location>
 		<xCoordinates>118</xCoordinates>
 		<yCoordinates>64</yCoordinates>
-		<name>villageE</name>
+		<name>village_05</name>
+		<description>Lorem Ipsus…</description>
 		<type>Village</type>
+		<alignment>Green</alignment>
 	</location>
 	<location>
 		<xCoordinates>133</xCoordinates>
 		<yCoordinates>55</yCoordinates>
-		<name>fortA</name>
+		<name>fort_01</name>
+		<description>Lorem Ipsus…</description>
 		<type>Fort</type>
+		<alignment>Green</alignment>
 	</location>
 	<location>
 		<xCoordinates>125</xCoordinates>
 		<yCoordinates>20</yCoordinates>
-		<name>towerB</name>
+		<name>tower_01</name>
+		<description>Lorem Ipsus…</description>
 		<type>Tower</type>
+		<alignment>Green</alignment>
 	</location>
 	<location>
 		<xCoordinates>119</xCoordinates>
 		<yCoordinates>41</yCoordinates>
-		<name>towerA</name>
+		<name>tower_02</name>
+		<description>Lorem Ipsus…</description>
 		<type>Tower</type>
+		<alignment>Green</alignment>
 	</location>
 </location-data>

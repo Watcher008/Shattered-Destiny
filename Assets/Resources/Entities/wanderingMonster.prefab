@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: -8181844160941313549}
   - component: {fileID: 7393938917155045008}
   - component: {fileID: 970777749668545982}
+  - component: {fileID: 2993538080152103289}
   m_Layer: 0
   m_Name: wanderingMonster
   m_TagString: Untagged
@@ -141,6 +142,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97b7b25b69a3ac34ab6d6450d1c59922, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  actionPoints: 0
+  speed: 100
 --- !u!114 &-8181844160941313549
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -153,8 +156,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72cf86fd1e2b61e48be778d04189b6b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0
-  movementCost: 100
+  travelSpeed: 0
 --- !u!114 &7393938917155045008
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -178,5 +180,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 63eaeceeff886a1489a584c331b80ffe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2993538080152103289
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 256999358178774886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 119b80c5d5a48b848ad5c39c145efd56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

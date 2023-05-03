@@ -33,14 +33,17 @@ namespace SD.LocationSystem
             XmlNode xCoord = node.FirstChild;
             XmlNode yCoord = xCoord.NextSibling;
             XmlNode nodeName = yCoord.NextSibling;
-            XmlNode nodeType = nodeName.NextSibling;
+            XmlNode nodeDescription = nodeName.NextSibling;
+            XmlNode nodeType = nodeDescription.NextSibling;
+            XmlNode nodeAlignment = nodeType.NextSibling;
 
             int x = int.Parse(xCoord.InnerXml);
             int y = int.Parse(yCoord.InnerXml);
             string name = nodeName.InnerXml;
+            string description = nodeDescription.InnerXml;
             LocationType type = FindType(nodeType.InnerXml.ToLower());// Resources.Load("Locations/Types/" + nodeType.InnerXml) as LocationType;
 
-            return new LocationData(x, y, name, type);
+            return new LocationData(x, y, name, type, description);
         }
 
         private LocationType FindType(string name)
@@ -52,8 +55,7 @@ namespace SD.LocationSystem
                     return locationTypes[i];
                 }
             }
-            Debug.LogError("Type is null");
-            return null;
+            throw new System.Exception("Location type not found.");
         }
     }
 }
