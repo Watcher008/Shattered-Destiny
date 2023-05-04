@@ -13,12 +13,14 @@ MonoBehaviour:
   m_Name: Human
   m_EditorClassIdentifier: 
   <RaceName>k__BackingField: Human
-  <RacialAttributes>k__BackingField:
-  - attribute: 0
-    value: 0
-  <RacialSkills>k__BackingField: []
+  <RacialAttributeBonuses>k__BackingField: []
+  <RacialSkillBonuses>k__BackingField: []
+  <StartingAge>k__BackingField:
+    diceCount: 4
+    diceSides: 6
+    modifier: 12
   <LifeSpan>k__BackingField:
-    baseValue: 40
-    add: 1
     diceCount: 10
-    diceValue: 8
+    diceSides: 8
+    modifier: 40
+  experienceRate: 2

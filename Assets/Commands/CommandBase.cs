@@ -1,7 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 using SD.EventSystem;
 
 namespace SD.CommandSystem
@@ -85,8 +83,7 @@ namespace SD.CommandSystem
         /// </summary>
         private void InvokeCallbackEvents()
         {
-            int i;
-            for (i = 0; i < callbackEvents?.Count; i++)
+            for (int i = 0; i < callbackEvents?.Count; i++)
             {
                 callbackEvents?[i].Invoke();
             }

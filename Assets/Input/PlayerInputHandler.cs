@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using SD.ECS;
+using UnityEngine.EventSystems;
 
 public class PlayerInputHandler : MonoBehaviour
 {
@@ -84,6 +85,11 @@ public class PlayerInputHandler : MonoBehaviour
 
     private void AutoPathPlayer()
     {
+        //I *think* this should stop the player from clicking through UI objects
+        //If that's not the case, the next best option may be to also constantly check
+        //What the cursor is hovering over (or if it's over a UI element, and handle that accordingly
+        if (EventSystem.current.currentInputModule != null) return;
+        Debug.Log("No UI here.");
         if (!playerActor.IsTurn) return;
 
         var pos = Camera.main.ScreenToWorldPoint(playerInput.actions["Mouse Position"].ReadValue<Vector2>());
