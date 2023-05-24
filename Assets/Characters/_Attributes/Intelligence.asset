@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c11ef345db8ee8479e68a4ebac6f5b5, type: 3}
-  m_Name: 06_Charisma
+  m_Script: {fileID: 11500000, guid: f7f172ffb007801449329da1b3589436, type: 3}
+  m_Name: Intelligence
   m_EditorClassIdentifier: 
-  <FullName>k__BackingField: Charisma
-  <ShortName>k__BackingField: Cha
-  <PrimaryAttribute>k__BackingField: 1
-  <Description>k__BackingField: A character's personality and willpower
+  _id: 2
+  _fullName: Intelligence
+  _shortName: Int
+  _description: A measure of reasoning and knowledge

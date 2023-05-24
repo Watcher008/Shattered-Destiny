@@ -9,8 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bbb27556c5c9de245a7a3d6ab627061d, type: 3}
-  m_Name: PlayerInventory
+  m_Script: {fileID: 11500000, guid: f7f172ffb007801449329da1b3589436, type: 3}
+  m_Name: Strength
   m_EditorClassIdentifier: 
-  SceneFinishedLoadingEvent: {fileID: 0}
-  ScenePath: Assets/Scenes/Game Scenes/UI/PlayerHUD.unity
+  _id: 4
+  _fullName: Strength
+  _shortName: Str
+  _description: A measure of physical power and might

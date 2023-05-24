@@ -9,10 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c11ef345db8ee8479e68a4ebac6f5b5, type: 3}
-  m_Name: 05_Wisdom
+  m_Script: {fileID: 11500000, guid: 48128a198eb349347a6329b15280689c, type: 3}
+  m_Name: Persuasion
   m_EditorClassIdentifier: 
-  <FullName>k__BackingField: Wisdom
-  <ShortName>k__BackingField: Wis
-  <PrimaryAttribute>k__BackingField: 1
-  <Description>k__BackingField: A character's wits and perception
+  _id: 11
+  _fullName: Persuasion
+  _shortName: Per
+  _description: Self-explanatory
+  skillType: 1
+  associatedAttributes:
+  - {fileID: 11400000, guid: 99cfa99d9fc29a74aacdd5135c93dc25, type: 2}

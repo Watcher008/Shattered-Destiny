@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c11ef345db8ee8479e68a4ebac6f5b5, type: 3}
-  m_Name: 02_Dexterity
+  m_Script: {fileID: 11500000, guid: f7f172ffb007801449329da1b3589436, type: 3}
+  m_Name: Agility
   m_EditorClassIdentifier: 
-  <FullName>k__BackingField: Dexterity
-  <ShortName>k__BackingField: Dex
-  <PrimaryAttribute>k__BackingField: 1
-  <Description>k__BackingField: A character's agility and balance
+  _id: 0
+  _fullName: Agility
+  _shortName: Agi
+  _description: A measure of balance and coordination

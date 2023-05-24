@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c11ef345db8ee8479e68a4ebac6f5b5, type: 3}
-  m_Name: 03_Constitution
+  m_Script: {fileID: 11500000, guid: f7f172ffb007801449329da1b3589436, type: 3}
+  m_Name: Charisma
   m_EditorClassIdentifier: 
-  <FullName>k__BackingField: Constitution
-  <ShortName>k__BackingField: Con
-  <PrimaryAttribute>k__BackingField: 1
-  <Description>k__BackingField: A character's vitality and fortitude
+  _id: 1
+  _fullName: Charisma
+  _shortName: Cha
+  _description: A measure of personality and willpower

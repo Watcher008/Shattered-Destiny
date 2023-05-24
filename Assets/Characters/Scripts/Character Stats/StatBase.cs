@@ -5,25 +5,13 @@ namespace SD.CharacterSystem
 {
     public class StatBase
     {
-        public int BaseValue { get; private set; } = 10;
+        public int BaseValue { get; protected set; } = 10;
+        public int XP { get; protected set; }
+        public int XPToNextLevel { get; protected set; }
+
         public int Value => GetModifiedValue();
 
         protected List<int> modifiers;
-
-        public StatBase()
-        {
-            modifiers = new List<int>();
-        }
-
-        public void SetBaseValue(int value)
-        {
-            BaseValue = value;
-        }
-
-        public void IncreaseBaseValue(int value)
-        {
-            BaseValue = Mathf.Clamp(BaseValue + value, 0, 100);
-        }
 
         private int GetModifiedValue()
         {
@@ -43,68 +31,27 @@ namespace SD.CharacterSystem
             if (value == 0) return;
             modifiers.Remove(value);
         }
-    }
 
-    public class Attribute : StatBase
-    {
-        public Attribute() : base()
+        public void OnGainXP(int xp)
         {
-            //modifiers = new List<int>();   
+            if (BaseValue >= 100) return;
+
+            XP += xp;
+
+            while (XP >= XPToNextLevel) OnLevelUp();
+        }
+
+        private void OnLevelUp()
+        {
+            if (BaseValue >= 100) return;
+            BaseValue++;
+            XP -= XPToNextLevel;
+            CalculateXPToNextLevel();
+        }
+
+        protected void CalculateXPToNextLevel()
+        {
+            XPToNextLevel = BaseValue * 100;
         }
     }
-
-    public class Skill : StatBase
-    {
-        public Skill() : base()
-        {
-            //modifiers = new List<int>();
-        }
-    }
-
-    [System.Serializable]
-    public class AttributeReference
-    {
-        public Attributes attribute;
-        public int value;
-    }
-
-    [System.Serializable]
-    public class SkillReference
-    {
-        public Skills skill;
-        public int value;
-    }
-}
-
-public enum Attributes 
-{ 
-    Strength, 
-    Dexterity, 
-    Constitution, 
-    Intelligence, 
-    Wisdom, 
-    Charisma,
-}
-
-public enum Skills
-{
-    Alchemy,
-    Appraisal,
-    Athletics,
-    Barter,
-    Carpentry,
-    Cooking,
-    Cunning,
-    Detect_Traps,
-    Diplomacy,
-    Disarm_Traps,
-    Engineering,
-    Evasion,
-    Herbalism,
-    Literacy,
-    Medicine,
-    Perception,
-    Smithing,
-    Survival,
-    Thievery,
 }
