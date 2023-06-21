@@ -26,4 +26,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Game Scenes/UI/LocationMenu.unity
     guid: f62ff23437c57944eabf4ad00240798d
+  - enabled: 1
+    path: Assets/Scenes/Game Scenes/Background Elements/Dialogue.unity
+    guid: d100cd09ce7bbbb4f9ee55234a8c1de2
   m_configObjects: {}

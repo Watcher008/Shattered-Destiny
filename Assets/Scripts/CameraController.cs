@@ -28,7 +28,7 @@ public class CameraController : MonoBehaviour
         mapMaxY = mapRenderer.transform.position.y + mapRenderer.bounds.size.y /2f;
     }
 
-    private void Start()
+    private void OnEnable()
     {
         cam.orthographicSize = Mathf.Clamp(cam.orthographicSize, minZoom, maxZoom);
 
@@ -37,11 +37,12 @@ public class CameraController : MonoBehaviour
         mouseScroll.action.performed += Zoom;
     }
 
-    private void OnDestroy()
+    private void OnDisable()
     {
         rightMouseButton.action.performed -= BeginPanCamera;
         rightMouseButton.action.canceled -= i => isPanning = false;
         mouseScroll.action.performed -= Zoom;
+        if (panCoroutine != null) StopCoroutine(panCoroutine);
     }
 
     private void BeginPanCamera(InputAction.CallbackContext obj)

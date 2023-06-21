@@ -28,7 +28,7 @@ namespace SD.ECS
         {
             if (isTurn)
             {
-                Debug.Log("A Full round has passed");
+                //Debug.Log("A Full round has passed");
                 fullRoundEvent?.Invoke();
                 Action.SkipAction(actor);
             }

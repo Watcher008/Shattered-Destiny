@@ -611,7 +611,7 @@ MonoBehaviour:
         m_MethodName: UnloadScene
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 11400000, guid: ccf46c1b9270d294397203e65488d794, type: 2}
+          m_ObjectArgument: {fileID: 11400000, guid: 23535b1492d862d488a71fc74280da6a, type: 2}
           m_ObjectArgumentAssemblyTypeName: SD.SceneManagement.ScenePicker, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
@@ -640,7 +640,7 @@ MonoBehaviour:
         m_MethodName: LoadSceneAdditiveWithoutSplashScreen
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 11400000, guid: ccf46c1b9270d294397203e65488d794, type: 2}
+          m_ObjectArgument: {fileID: 11400000, guid: 23535b1492d862d488a71fc74280da6a, type: 2}
           m_ObjectArgumentAssemblyTypeName: SD.SceneManagement.ScenePicker, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
@@ -883,11 +883,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1668286213}
         m_TargetAssemblyTypeName: SD.SceneManagement.BootStraps, Assembly-CSharp
-        m_MethodName: LoadSceneAdditiveWithSplashScreen
+        m_MethodName: UnloadSceneCollection
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 11400000, guid: 8ae175ef77ccfb34d8f37ddc845ec380, type: 2}
-          m_ObjectArgumentAssemblyTypeName: SD.SceneManagement.ScenePicker, Assembly-CSharp
+          m_ObjectArgument: {fileID: 11400000, guid: 4a78f1598c429204993ce968dae33265, type: 2}
+          m_ObjectArgumentAssemblyTypeName: SD.SceneManagement.SceneCollection, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -895,11 +895,11 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 1668286213}
         m_TargetAssemblyTypeName: SD.SceneManagement.BootStraps, Assembly-CSharp
-        m_MethodName: UnloadSceneCollection
+        m_MethodName: LoadSceneAdditiveWithSplashScreen
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 11400000, guid: 4a78f1598c429204993ce968dae33265, type: 2}
-          m_ObjectArgumentAssemblyTypeName: SD.SceneManagement.SceneCollection, Assembly-CSharp
+          m_ObjectArgument: {fileID: 11400000, guid: 8ae175ef77ccfb34d8f37ddc845ec380, type: 2}
+          m_ObjectArgumentAssemblyTypeName: SD.SceneManagement.ScenePicker, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
