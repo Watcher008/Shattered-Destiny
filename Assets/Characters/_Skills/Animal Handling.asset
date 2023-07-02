@@ -17,5 +17,4 @@ MonoBehaviour:
   _shortName: Ani
   _description: Taming animals, riding horses, using pack animals, calming wild animals
   skillType: 2
-  associatedAttributes:
-  - {fileID: 11400000, guid: b22a8b66dd1860d409f842f231fae508, type: 2}
+  <associatedAttributes>k__BackingField: []

@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using SD.Primitives;
 
 namespace SD.CharacterSystem
 {
@@ -16,23 +17,52 @@ namespace SD.CharacterSystem
         [SerializeField] private Image staminaBar;
         [SerializeField] private Image actionPointBar;
 
-        [Space]
+        [Header("Attributes")]
+        [SerializeField] private TMP_Text[] attributeText;
+        [SerializeField] private TMP_Text[] attributeXPText;
+        [SerializeField] private Image[] attributeXPBar;
 
-        [SerializeField] private TMP_Text agiText;
-        [SerializeField] private TMP_Text chaText;
-        [SerializeField] private TMP_Text intText;
-        [SerializeField] private TMP_Text perText;
-        [SerializeField] private TMP_Text strText;
+        [Header("Influence & Reputation")]
+        [SerializeField] private TMP_Text[] influenceText;
+        [SerializeField] private TMP_Text[] reputationText;
+        [SerializeField] private IntReference[] influenceRefs;
+        [SerializeField] private IntReference[] reputationRefs;
 
         public void DisplayValues(CharacterSheet character)
         {
+            DisplayAttributes(character);
+            DisplayInfluenceAndReputation();
+        }
 
+        private void DisplayAttributes(CharacterSheet character)
+        {
+            for (int i = 0; i < character.Attributes.Length; i++)
+            {
+                attributeText[i].text = ((Attribute)i).ToString() + " :" + character.Attributes[i].Value;
+                attributeXPText[i].text = "XP: " + character.Attributes[i].XP + " / " + character.Attributes[i].XPToNextLevel;
+                attributeXPBar[i].fillAmount = character.Attributes[i].XP / character.Attributes[i].XPToNextLevel;
+            }
+        }
 
-            agiText.text = "Agility: " + character.attributes[0].Value;
-            chaText.text = "Charisma: " + character.attributes[1].Value;
-            intText.text = "Intelligence: " + character.attributes[2].Value;
-            perText.text = "Perception: " + character.attributes[3].Value;
-            strText.text = "Strength: " + character.attributes[4].Value;
+        private void DisplayInfluenceAndReputation()
+        {
+            for (int i = 0; i < influenceText.Length; i++)
+            {
+                influenceText[i].text = ((Faction)i).ToString() + ": " + influenceRefs[i].Value;
+            }
+
+            for (int i = 0; i < reputationText.Length; i++)
+            {
+                reputationText[i].text = ((Faction)i).ToString() + ": " + reputationRefs[i].Value;
+            }
         }
     }
+}
+
+public enum Faction
+{
+    Green,
+    Yellow,
+    Red,
+    Purple,
 }

@@ -1,11 +1,14 @@
+using JetBrains.Annotations;
 using System.Collections.Generic;
 
 namespace SD.CharacterSystem
 {
-    public class Attribute : StatBase
+    public class SkillStat : StatBase
     {
-        public Attribute(int baseValue)
+        public Skill Type { get; private set; }
+        public SkillStat(Skill type, int baseValue)
         {
+            Type = type; 
             BaseValue = baseValue;
             CalculateXPToNextLevel();
             modifiers = new List<int>();

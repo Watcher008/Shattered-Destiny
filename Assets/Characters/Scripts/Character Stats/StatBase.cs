@@ -1,18 +1,20 @@
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace SD.CharacterSystem
 {
     public class StatBase
     {
         public int BaseValue { get; protected set; } = 10;
+        public int Value => GetModifiedValue();
+
         public int XP { get; protected set; }
         public int XPToNextLevel { get; protected set; }
 
-        public int Value => GetModifiedValue();
-
         protected List<int> modifiers;
 
+        /// <summary>
+        /// Returns the BaseValue of the stat with all modifiers added.
+        /// </summary>
         private int GetModifiedValue()
         {
             int modifiedValue = BaseValue;
@@ -20,12 +22,18 @@ namespace SD.CharacterSystem
             return modifiedValue;
         }
 
+        /// <summary>
+        /// Adds a temporary modifier to the stat.
+        /// </summary>
         public void AddModifier(int value)
         {
             if (value == 0) return;
             modifiers.Add(value);
         }
 
+        /// <summary>
+        /// Removes an existing modifier from the stat.
+        /// </summary>
         public void RemoveModifier(int value)
         {
             if (value == 0) return;

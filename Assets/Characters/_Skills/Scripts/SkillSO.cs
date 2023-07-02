@@ -7,11 +7,7 @@ namespace SD.CharacterSystem
     {
         [Header("Skill Properties")]
         [SerializeField] private SkillType skillType;
-
-        [SerializeField] private AttributeSO[] associatedAttributes;
-
         public SkillType Type => skillType;
-        public AttributeSO[] AssociatedAttributes => associatedAttributes;
     }
 }
 
