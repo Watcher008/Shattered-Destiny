@@ -3,7 +3,7 @@ namespace SD.CharacterSystem
     [System.Serializable]
     public class SkillReference
     {
-        public SkillSO skill;
+        public Skill skill;
         public int value;
     }
 }

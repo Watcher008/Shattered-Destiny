@@ -21,11 +21,11 @@ namespace SD.CharacterSystem
             Attributes = new AttributeStat[attributeScores.Length];
             foreach (var bonus in Race.RacialAttributeBonuses)
             {
-                attributeScores[bonus.attribute.ID] += bonus.value;
+                attributeScores[(int)bonus.attribute] += bonus.value;
             }
             foreach (var bonus in Class.ClassAttributes)
             {
-                attributeScores[bonus.attribute.ID] += bonus.value;
+                attributeScores[(int)bonus.attribute] += bonus.value;
             }
             for (int i = 0; i < Attributes.Length; i++)
             {
@@ -36,11 +36,11 @@ namespace SD.CharacterSystem
             Skills = new SkillStat[skillScores.Length];
             foreach (var bonus in Race.RacialSkillBonuses)
             {
-                skillScores[bonus.skill.ID] += bonus.value;
+                skillScores[(int)bonus.skill] += bonus.value;
             }
             foreach (var bonus in Class.ClassSkills)
             {
-                skillScores[bonus.skill.ID] += bonus.value;
+                skillScores[(int)bonus.skill] += bonus.value;
             }
             for (int i = 0; i < Skills.Length; i++)
             {

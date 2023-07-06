@@ -25,12 +25,12 @@ namespace SD.CharacterSystem
         {
             for (int i = 0; i < _attributes.Length; i++)
             {
-                if (_attributes[i].attribute.ID != i) Debug.LogError("Attributes in Incorrect Order. Index Error at " + i);
+                if ((int)_attributes[i].attribute != i) Debug.LogError("Attributes in Incorrect Order. Index Error at " + i);
             }
 
             for (int i = 0; i < _skills.Length; i++)
             {
-                if (_skills[i].skill.ID != i) Debug.LogError("Skills in Incorrect Order. Index Error at " + i);
+                if ((int)_skills[i].skill != i) Debug.LogError("Skills in Incorrect Order. Index Error at " + i);
             }
         }
     }

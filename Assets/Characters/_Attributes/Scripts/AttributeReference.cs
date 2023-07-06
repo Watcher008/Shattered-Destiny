@@ -3,7 +3,7 @@ namespace SD.CharacterSystem
     [System.Serializable]
     public class AttributeReference
     {
-        public AttributeSO attribute;
+        public Attribute attribute;
         public int value;
     }
 }
