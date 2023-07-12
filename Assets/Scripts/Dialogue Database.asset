@@ -164,7 +164,7 @@ MonoBehaviour:
       type: 2
       typeString: CustomFieldType_Boolean
     portrait: {fileID: 0}
-    spritePortrait: {fileID: 0}
+    spritePortrait: {fileID: 21300000, guid: 5d056edfe6a47744aa6776cffc8e8727, type: 3}
     alternatePortraits: []
     spritePortraits: []
   - id: 7
@@ -186,7 +186,7 @@ MonoBehaviour:
       type: 2
       typeString: CustomFieldType_Boolean
     portrait: {fileID: 0}
-    spritePortrait: {fileID: 0}
+    spritePortrait: {fileID: 21300000, guid: 55fa9617ae9d38647aa28840b7d7a5e4, type: 3}
     alternatePortraits: []
     spritePortraits: []
   - id: 8
@@ -208,7 +208,7 @@ MonoBehaviour:
       type: 2
       typeString: CustomFieldType_Boolean
     portrait: {fileID: 0}
-    spritePortrait: {fileID: 0}
+    spritePortrait: {fileID: 21300000, guid: 2814273e2f6c92247893c391aab07bc1, type: 3}
     alternatePortraits: []
     spritePortraits: []
   items: []
@@ -598,11 +598,11 @@ MonoBehaviour:
     - title: Title
       value: Farmer Conversation
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Description
       value: 
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Actor
       value: 1
       type: 5
@@ -688,7 +688,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 241
+        x: 240
         y: 26
         width: 160
         height: 30
@@ -697,11 +697,11 @@ MonoBehaviour:
       - title: Title
         value: 
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       - title: Description
         value: 
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       - title: Actor
         value: 6
         type: 5
@@ -713,16 +713,16 @@ MonoBehaviour:
       - title: Menu Text
         value: 
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       - title: Dialogue Text
         value: "Hey, Stranger! Mind helping me harvest some of my potatoes? Old age
           is really doin\u2019 me in this season\u2026"
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       - title: Sequence
         value: 
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 1
       isRoot: 0
       isGroup: 0

@@ -7,9 +7,8 @@ namespace SD.PathingSystem
     {
         [field: SerializeField] public RuleTile Tile { get; private set; }
 
-
-
         [field: SerializeField] public int MovementPenalty { get; private set; }
+        [field: SerializeField] public int ExhaustionCost { get; private set; }
         [field: SerializeField] public bool CanTravelOnFoot { get; private set; } = true;
     }
 }

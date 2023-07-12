@@ -40,10 +40,12 @@ namespace SD.ECS
             direction.y += position.y;
 
             //cost is equal to base movement cost plus the cost of the node being moved into
-            int cost = GameManager.pointsToAct + Pathfinding.instance.GetNode(direction.x, direction.y).movementCost - travelSpeed;
+            var newNode = Pathfinding.instance.GetNode(direction.x, direction.y);
+            int cost = GameManager.pointsToAct + newNode.movementCost - travelSpeed;
             actor.SpendActionPoints(cost);
 
             position.SetPosition(direction.x, direction.y);
+
         }
     }
 }

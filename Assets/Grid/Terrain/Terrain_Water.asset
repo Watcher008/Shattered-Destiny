@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Tile>k__BackingField: {fileID: 11400000, guid: d76db457d3e983e4899f29ef4862115d, type: 2}
   <MovementPenalty>k__BackingField: 4
+  <ExhaustionCost>k__BackingField: 50
   <CanTravelOnFoot>k__BackingField: 0

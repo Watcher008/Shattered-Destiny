@@ -27,4 +27,9 @@ public class TimeData : ScriptableObject
         else if (Hours >= 17 && Hours < 22) return "Evening";
         else return "Night";
     }
+
+    public int NetDays()
+    {
+        return (Years * 365) + (Months * 30) + Days;
+    }
 }
