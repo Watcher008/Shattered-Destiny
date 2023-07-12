@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Game Scenes/Background Elements/EventLogger.unity
     guid: 70aca1f11394a734890328c7c507f185
   - enabled: 1
+    path: Assets/Scenes/Game Scenes/Background Elements/Dialogue.unity
+    guid: d100cd09ce7bbbb4f9ee55234a8c1de2
+  - enabled: 1
     path: Assets/Scenes/Game Scenes/Background Elements/Audio.unity
     guid: d0419f6d964df8e43a96b1186a0abdb8
   - enabled: 1
@@ -24,9 +27,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Game Scenes/UI/PlayerHUD.unity
     guid: 02b901724cea24344865b95e99110c15
   - enabled: 1
+    path: Assets/Scenes/Game Scenes/UI/PlayerMenu.unity
+    guid: d03e8be1d73bdaa4687b631a08a33a22
+  - enabled: 1
     path: Assets/Scenes/Game Scenes/UI/LocationMenu.unity
     guid: f62ff23437c57944eabf4ad00240798d
-  - enabled: 1
-    path: Assets/Scenes/Game Scenes/Background Elements/Dialogue.unity
-    guid: d100cd09ce7bbbb4f9ee55234a8c1de2
   m_configObjects: {}
