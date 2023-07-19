@@ -10,9 +10,9 @@ namespace SD.ECS
         public int x { get; set; }
         public int y { get; set; }
 
-        public override void Register(Entity entity)
+        protected override void Start()
         {
-            base.Register(entity);
+            base.Start();
             SetStartingPosition();
         }
 
@@ -25,7 +25,7 @@ namespace SD.ECS
         public void SetPosition(int x, int y)
         {
             var oldNode = Pathfinding.instance.GetNode(this.x, this.y);
-            oldNode.LeaveNode(entity);
+            oldNode.LeaveNode(Entity);
 
             this.x = x;
             this.y = y;
@@ -33,7 +33,7 @@ namespace SD.ECS
             var newNode = Pathfinding.instance.GetNode(this.x, this.y);
 
             transform.position = newNode.worldPosition;
-            newNode.OccupyNode(entity);
+            newNode.OccupyNode(Entity);
 
             onPositionChange?.Invoke();
         }

@@ -11,11 +11,12 @@ namespace SD.ECS
         private Actor actor;
         private GridPosition position;
 
-        public override void Register(Entity entity)
+        protected override void Start()
         {
-            base.Register(entity);
-            position = entity.GetComponentBase<GridPosition>();
-            actor = entity.GetComponentBase<Actor>();
+            base.Start();
+
+            position = GetComponent<GridPosition>();
+            actor = GetComponent<Actor>();
         }
 
         public bool CanMoveToPosition(Vector2Int direction)

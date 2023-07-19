@@ -13,34 +13,34 @@ namespace SD.ECS
         [SerializeField] private PlayerLocationReference playerLocation;
         [SerializeField] private GameEvent playerLocationEncounterEvent;
 
+        protected override void Start()
+        {
+            base.Start();
+
+            collisionListener = GetComponent<NodeCollisionListener>();
+            collisionListener.onEntityCollision += OnLocationVisited;
+        }
+
         public void SetLocation(LocationData location)
         {
             this.location = location;
-            entity.GetComponentBase<EntityRenderer>().SetSprite(location.type.sprite);
-            entity.GetComponentBase<GridPosition>().SetPosition(location.x, location.y);
-        }
-
-        public override void Register(Entity entity)
-        {
-            base.Register(entity);
-            collisionListener = entity.GetComponentBase<NodeCollisionListener>();
-            collisionListener.onEntityCollision += OnLocationVisited;
+            GetComponent<EntityRenderer>().SetSprite(location.type.sprite);
+            GetComponent<GridPosition>().SetPosition(location.x, location.y);
         }
 
         private void SetLocationValues()
         {
-            if (entity == null) Debug.Log("entity is null");
-            if (entity.GetComponentBase<EntityRenderer>() == null) Debug.Log("render null");
+            if (Entity == null) Debug.Log("entity is null");
+            if (GetComponent<EntityRenderer>() == null) Debug.Log("render null");
             if (location == null) Debug.Log("Location null");
             if (location.type == null) Debug.Log("type null");
-            entity.GetComponentBase<EntityRenderer>().SetSprite(location.type.sprite);
-            entity.GetComponentBase<GridPosition>().SetPosition(location.x, location.y);
+            GetComponent<EntityRenderer>().SetSprite(location.type.sprite);
+            GetComponent<GridPosition>().SetPosition(location.x, location.y);
         }
 
-        public override void Unregister()
+        private void OnDestroy()
         {
             collisionListener.onEntityCollision -= OnLocationVisited;
-            base.Unregister();
         }
 
         private void OnLocationVisited(Entity thisEntity, Entity otherEntity)

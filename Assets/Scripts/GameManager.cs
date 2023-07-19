@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private List<Actor> actors = new List<Actor>();
     [SerializeField] private Actor currentActor;
 
-    [SerializeField] private GameEvent roundDecimalEvent;
+    [SerializeField] private GameEvent turnTickEvent;
 
     private bool runTurnCounter = true;
 
@@ -30,10 +30,11 @@ public class GameManager : MonoBehaviour
     }
 
     #region - Actor Registration -
-    public static void AddSentinel(Actor sentinel, int index)
+    public static void AddSentinel(Sentinel sentinel)
     {
-        instance.actors.Insert(0, sentinel);
-        instance.currentActor = sentinel;
+        instance.actors.Remove(sentinel.Actor);
+        instance.actors.Insert(0, sentinel.Actor);
+        instance.currentActor = sentinel.Actor;
         instance.StartTurn();
     }
     
@@ -50,6 +51,7 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region - Turn Cycle -
+    //Called from GameEventListener
     //Prevents the transitioning to the next actor's turn
     public void PauseTurnCycle()
     {
@@ -57,6 +59,7 @@ public class GameManager : MonoBehaviour
 
     }
 
+    //Called from GameEventListener
     //Resumes the turn cycle and Transitions to next actor's turn
     public void ResumeTurnCycle()
     {
@@ -100,12 +103,11 @@ public class GameManager : MonoBehaviour
     //Passes time by 1/10th of a round
     private void ReplenishEnergy()
     {
-        //Debug.Log("ReplenishEnergy");
         for (int i = 0; i < actors.Count; i++)
         {
             actors[i].RegainActionPoints();
         }
-        roundDecimalEvent?.Invoke();
+        turnTickEvent.Invoke();
     }
 
     private void StartTurn()
@@ -113,8 +115,8 @@ public class GameManager : MonoBehaviour
         //Debug.Log("StartTurn for " + currentActor.name);
         currentActor.IsTurn = true;
 
-        if (!currentActor.entity.IsSentient) Action.SkipAction(currentActor);
-        else if (!currentActor.entity.HasBehavior) Action.SkipAction(currentActor);
+        if (!currentActor.Entity.IsSentient) Action.SkipAction(currentActor);
+        else if (!currentActor.Entity.HasBehavior) Action.SkipAction(currentActor);
     }
 
     public static void EndTurn()

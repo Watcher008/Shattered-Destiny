@@ -4,17 +4,26 @@ namespace SD.ECS
 {
     public class ComponentBase : MonoBehaviour
     {
-        public Entity entity { get; private set; }
-
-        public virtual void Register(Entity entity)
+        private Entity _entity;
+        public Entity Entity
         {
-            this.entity = entity;
+            get
+            {
+                if (_entity == null)
+                {
+                    _entity = GetComponent<Entity>();
+                }
+                return _entity;
+            }
+            private set
+            {
+                _entity = value;
+            }
         }
 
-        public virtual void Unregister()
+        protected virtual void Start()
         {
-            entity.RemoveComponentBase(this);
-            Destroy(this);
+            Entity = GetComponent<Entity>();
         }
     }
 }

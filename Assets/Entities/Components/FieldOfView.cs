@@ -12,21 +12,17 @@ namespace SD.ECS
 
         private List<WorldNode> visibleNodes;
 
-        public override void Register(Entity entity)
+        protected override void Start()
         {
-            base.Register(entity);
+            base.Start();
 
-            position = entity.GetComponentBase<GridPosition>();
+            position = GetComponent<GridPosition>();
             position.onPositionChange += UpdateFieldOfView;
-
-            //UpdateFieldOfView();
             Invoke("UpdateFieldOfView", 0.1f);
         }
-
-        public override void Unregister()
+        private void OnDestroy()
         {
             position.onPositionChange -= UpdateFieldOfView;
-            base.Unregister();
         }
 
         private void UpdateFieldOfView()

@@ -10,18 +10,19 @@ namespace SD.ECS
         private GridPosition position;
         private WorldNode currentNode;
 
-        public override void Register(Entity entity)
+        protected override void Start()
         {
-            base.Register(entity);
-            position = entity.GetComponentBase<GridPosition>();
+            base.Start();
+
+            position = GetComponent<GridPosition>();
             position.onPositionChange += ListenToNode;
             ListenToNode();
         }
 
-        public override void Unregister()
+        private void OnDestroy()
         {
             position.onPositionChange -= ListenToNode;
-            base.Unregister();
+            onEntityCollision = null;
         }
 
         private void ListenToNode()
@@ -34,8 +35,8 @@ namespace SD.ECS
 
         private void OnNodeCollision(Entity newEntity)
         {
-            if (newEntity == entity) return;
-            onEntityCollision?.Invoke(entity, newEntity);
+            if (newEntity == Entity) return;
+            onEntityCollision?.Invoke(Entity, newEntity);
         }
     }
 }

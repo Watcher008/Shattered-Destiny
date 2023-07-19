@@ -11,17 +11,17 @@ namespace SD.ECS
 
         [SerializeField] private GameEvent playerGroupEncounterEvent;
 
-        public override void Register(Entity entity)
+        protected override void Start()
         {
-            base.Register(entity);
-            collisionListener = entity.GetComponentBase<NodeCollisionListener>();
+            base.Start();
+
+            collisionListener = GetComponent<NodeCollisionListener>();
             collisionListener.onEntityCollision += OnGroupEncountered;
         }
 
-        public override void Unregister()
+        private void OnDestroy()
         {
             collisionListener.onEntityCollision -= OnGroupEncountered;
-            base.Unregister();
         }
 
         private void OnGroupEncountered(Entity thisEntity, Entity otherEntity)

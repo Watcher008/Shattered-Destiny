@@ -17,7 +17,7 @@ namespace SD.ECS
         {
             var newNode = Pathfinding.instance.GetNode(_gridPos.x , _gridPos.y);
 
-            Debug.Log("Entering node " + newNode.x + ", " + newNode.y);
+            //Debug.Log("Entering node " + newNode.x + ", " + newNode.y);
         }
     }
 }

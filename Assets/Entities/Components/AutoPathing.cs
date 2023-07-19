@@ -17,14 +17,14 @@ namespace SD.ECS
 
         [SerializeField] private bool allowAutoPathing;
 
-        public override void Register(Entity entity)
+        protected override void Start()
         {
-            base.Register(entity);
+            base.Start();
             pathfinding = Pathfinding.instance;
-            
-            actor = entity.GetComponentBase<Actor>();
-            position = entity.GetComponentBase<GridPosition>();
-            locomotion = entity.GetComponentBase<Locomotion>();
+
+            actor = GetComponent<Actor>();
+            position = GetComponent<GridPosition>();
+            locomotion = GetComponent<Locomotion>();
         }
 
         public void SetAutoPathTarget(int x, int y)

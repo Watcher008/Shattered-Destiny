@@ -6,22 +6,21 @@ namespace SD.ECS
     public class Sentinel : ComponentBase
     {
         [SerializeField] private GameEvent fullRoundEvent;
-        private Actor actor;
+        public Actor Actor { get; private set; }
 
-        public override void Register(Entity entity)
+        protected override void Start()
         {
-            base.Register(entity);
-            actor = entity.GetComponentBase<Actor>();
-            actor.onTurnChange += OnNewRound;
+            base.Start();
 
-            GameManager.RemoveActor(actor);
-            GameManager.AddSentinel(actor, 0);
+            Actor = GetComponent<Actor>();
+            Actor.onTurnChange += OnNewRound;
+
+            GameManager.AddSentinel(this);
         }
 
-        public override void Unregister()
+        private void OnDestroy()
         {
-            actor.onTurnChange -= OnNewRound;
-            base.Unregister();
+            Actor.onTurnChange -= OnNewRound;
         }
 
         private void OnNewRound(bool isTurn)
@@ -30,7 +29,7 @@ namespace SD.ECS
             {
                 //Debug.Log("A Full round has passed");
                 fullRoundEvent?.Invoke();
-                Action.SkipAction(actor);
+                Action.SkipAction(Actor);
             }
         }
     }

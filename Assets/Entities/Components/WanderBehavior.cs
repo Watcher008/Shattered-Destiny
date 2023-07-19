@@ -11,30 +11,30 @@ namespace SD.ECS
         private Locomotion locomotion;
         private int startX, startY;
 
-        public override void Register(Entity entity)
+        protected override void Start()
         {
-            base.Register(entity);
-            entity.HasBehavior = true;
+            base.Start();
 
-            actor = entity.GetComponentBase<Actor>();
-            position = entity.GetComponentBase<GridPosition>();
-            locomotion = entity.GetComponentBase<Locomotion>();
+            Entity.HasBehavior = true;
+
+            actor = GetComponent<Actor>();
+            position = GetComponent<GridPosition>();
+            locomotion = GetComponent<Locomotion>();
 
             startX = position.x;
             startY = position.y;
 
-            actor.onTurnChange += i => Wander();
+            actor.onTurnChange += Wander;
         }
 
-        public override void Unregister()
+        private void OnDestroy()
         {
-            actor.onTurnChange -= i => Wander();
-            base.Unregister();
+            actor.onTurnChange -= Wander;
         }
 
-        public void Wander()
+        public void Wander(bool isTurn)
         {
-            if (!actor.IsTurn) return;
+            if (!isTurn) return;
 
             int x = Random.Range(-1, 1);
             int y = Random.Range(-1, 1);

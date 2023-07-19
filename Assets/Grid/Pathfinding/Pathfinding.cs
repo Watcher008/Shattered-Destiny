@@ -53,6 +53,7 @@ namespace SD.PathingSystem
         }
 
         //Returns a list of nodes that can be travelled to reach a target destination
+        //*** I need to add the optimizations from Sebastian Lague's Heap 
         public List<WorldNode> FindNodePath(int startX, int startY, int endX, int endY, bool ignoreEndNode = false)
         {
             WorldNode startNode = grid.GetGridObject(startX, startY);
@@ -69,14 +70,12 @@ namespace SD.PathingSystem
                 {
                     WorldNode pathNode = grid.GetGridObject(x, y);
                     pathNode.gCost = int.MaxValue;
-                    pathNode.CalculateFCost();
                     pathNode.cameFromNode = null;
                 }
             }
 
             startNode.gCost = 0;
             startNode.hCost = CalculateDistanceCost(startNode, endNode);
-            startNode.CalculateFCost();
 
             while (openList.Count > 0)
             {
@@ -117,7 +116,6 @@ namespace SD.PathingSystem
                         neighbour.cameFromNode = currentNode;
                         neighbour.gCost = tentativeGCost;
                         neighbour.hCost = CalculateDistanceCost(neighbour, endNode);
-                        neighbour.CalculateFCost();
 
                         if (!openList.Contains(neighbour)) openList.Add(neighbour);
                     }

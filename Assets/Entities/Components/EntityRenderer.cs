@@ -6,21 +6,23 @@ namespace SD.ECS
     {
         private SpriteRenderer spriteRenderer;
 
-        public override void Register(Entity entity)
+        protected override void Start()
         {
-            base.Register(entity);
-            spriteRenderer = entity.GetComponent<SpriteRenderer>();
+            base.Start();
+            spriteRenderer = GetComponent<SpriteRenderer>();
         }
 
         public void ToggleRenderer(bool isVisible)
         {
-            if (spriteRenderer == null) spriteRenderer = entity.GetComponent<SpriteRenderer>();
+            if (spriteRenderer == null) spriteRenderer = GetComponent<SpriteRenderer>();
 
             spriteRenderer.enabled = isVisible;
         }
 
         public void SetSprite(Sprite sprite)
         {
+            if (spriteRenderer == null) spriteRenderer = GetComponent<SpriteRenderer>();
+
             spriteRenderer.sprite = sprite;
         }
     }

@@ -31,16 +31,16 @@ namespace SD.ECS
 
         public int Speed => speed;
 
-        public override void Register(Entity entity)
+        protected override void Start()
         {
-            base.Register(entity);
+            base.Start();
             GameManager.AddActor(this);
         }
 
-        public override void Unregister()
+        private void OnDestroy()
         {
             GameManager.RemoveActor(this);
-            base.Unregister();
+            onTurnChange = null;
         }
 
         private void SetTurn(bool isTurn)
