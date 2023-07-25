@@ -5,7 +5,7 @@ public class FogOfWar : MonoBehaviour
 {
     private static FogOfWar instance;
 
-    [SerializeField] private Tilemap fogOfWarMap;
+    private Tilemap fogOfWarMap;
     [SerializeField] private TileBase fogTile;
 
     private void Awake()
@@ -16,6 +16,8 @@ public class FogOfWar : MonoBehaviour
             return;
         }
         instance = this;
+
+        fogOfWarMap = this.GetComponent<Tilemap>();
         fogOfWarMap.CompressBounds();
     }
 

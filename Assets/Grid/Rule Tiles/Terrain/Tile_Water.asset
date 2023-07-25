@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b32eb411296b5104e9f4fcb24a3ea9d4, type: 3}
   m_Name: Tile_Water
   m_EditorClassIdentifier: 
-  m_DefaultSprite: {fileID: 583687862, guid: ef929e8f2db1c684595be7f042564567, type: 3}
+  m_DefaultSprite: {fileID: -916139872, guid: c054d081305fe57439e0399b3a85a1be, type: 3}
   m_DefaultGameObject: {fileID: 0}
   m_DefaultColliderType: 1
   m_TilingRules:
   - m_Id: 0
     m_Sprites:
-    - {fileID: 583687862, guid: ef929e8f2db1c684595be7f042564567, type: 3}
+    - {fileID: -916139872, guid: c054d081305fe57439e0399b3a85a1be, type: 3}
     m_GameObject: {fileID: 0}
     m_MinAnimationSpeed: 1
     m_MaxAnimationSpeed: 1
