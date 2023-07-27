@@ -62,7 +62,10 @@ namespace SD.ECS
         {
             while (nodes.Count > 0)
             {
-                while (!actor.IsTurn) yield return null;
+                while (!actor.IsTurn)
+                {
+                    yield return null;
+                }
 
                 var direction = new Vector2Int(nodes[0].x - position.x, nodes[0].y - position.y);
 

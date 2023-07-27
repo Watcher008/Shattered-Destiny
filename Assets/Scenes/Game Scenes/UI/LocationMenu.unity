@@ -14244,7 +14244,6 @@ GameObject:
   - component: {fileID: 1399285477}
   - component: {fileID: 1399285476}
   - component: {fileID: 1399285480}
-  - component: {fileID: 1399285481}
   m_Layer: 5
   m_Name: LocationCanvas
   m_TagString: Untagged
@@ -14361,19 +14360,6 @@ MonoBehaviour:
   locationReference: {fileID: 11400000, guid: 47e2812419653f54cb97692d5892c7d6, type: 2}
   header: {fileID: 1703483705}
   body: {fileID: 1054380644}
-  optionButtonParent: {fileID: 0}
---- !u!114 &1399285481
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1399285475}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4dfba3ca29b100d479ee44c305c1c8b0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1413230228
 GameObject:
   m_ObjectHideFlags: 0
@@ -20239,7 +20225,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1881492409
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20255,19 +20241,7 @@ MonoBehaviour:
   gameEvent: {fileID: 11400000, guid: beb4dcdefae6daf43aac49a2ea087948, type: 2}
   callbackEvent:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1399285480}
-        m_TargetAssemblyTypeName: SD.LocationSystem.UIEncounterPanel, Assembly-CSharp
-        m_MethodName: SetInitialValues
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   developerNotes: 
 --- !u!4 &1881492410
 Transform:
@@ -20277,7 +20251,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1881492408}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 9.470633, y: -2.8960106, z: -0.08727677}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

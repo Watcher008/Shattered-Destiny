@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace SD.CharacterSystem
 {
@@ -46,7 +47,11 @@ namespace SD.CharacterSystem
 
             XP += xp;
 
-            while (XP >= XPToNextLevel) OnLevelUp();
+            while (XP >= XPToNextLevel)
+            {
+                UnityEngine.Debug.Log("OnGainXP");
+                OnLevelUp();
+            }
         }
 
         private void OnLevelUp()

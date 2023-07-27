@@ -42,40 +42,40 @@ public class PlayerInputHandler : MonoBehaviour
 
     private void SubscribeToInput()
     {
-        playerInput.actions["SouthWest"].performed += i => MovePlayer(-Vector2Int.one);
-        playerInput.actions["South"].performed += i => MovePlayer(Vector2Int.down);
-        playerInput.actions["SouthEast"].performed += i => MovePlayer(Vector2Int.down + Vector2Int.right);
+        playerInput.actions["SouthWest"].performed += _ => MovePlayer(-Vector2Int.one);
+        playerInput.actions["South"].performed += _ => MovePlayer(Vector2Int.down);
+        playerInput.actions["SouthEast"].performed += _ => MovePlayer(Vector2Int.down + Vector2Int.right);
 
-        playerInput.actions["West"].performed += i => MovePlayer(Vector2Int.left);
-        playerInput.actions["East"].performed += i => MovePlayer(Vector2Int.right);
+        playerInput.actions["West"].performed += _ => MovePlayer(Vector2Int.left);
+        playerInput.actions["East"].performed += _ => MovePlayer(Vector2Int.right);
 
-        playerInput.actions["NorthWest"].performed += i => MovePlayer(Vector2Int.up + Vector2Int.left);
-        playerInput.actions["North"].performed += i => MovePlayer(Vector2Int.up);
-        playerInput.actions["NorthEast"].performed += i => MovePlayer(Vector2Int.one);
+        playerInput.actions["NorthWest"].performed += _ => MovePlayer(Vector2Int.up + Vector2Int.left);
+        playerInput.actions["North"].performed += _ => MovePlayer(Vector2Int.up);
+        playerInput.actions["NorthEast"].performed += _ => MovePlayer(Vector2Int.one);
 
-        playerInput.actions["Wait"].performed += i => Action.SkipAction(playerActor);
+        playerInput.actions["Wait"].performed += _ => Action.SkipAction(playerActor);
 
-        playerInput.actions["LMB"].performed += i => AutoPathPlayer();
-        playerInput.actions["RMB"].performed += i => CancelAutoPath();
+        playerInput.actions["LMB"].performed += _ => AutoPathPlayer();
+        playerInput.actions["RMB"].performed += _ => CancelAutoPath();
     }
 
     private void UnsubscribeFromInput()
     {
-        playerInput.actions["SouthWest"].performed -= i => MovePlayer(-Vector2Int.one);
-        playerInput.actions["South"].performed -= i => MovePlayer(Vector2Int.down);
-        playerInput.actions["SouthEast"].performed -= i => MovePlayer(Vector2Int.down + Vector2Int.right);
+        playerInput.actions["SouthWest"].performed -= _ => MovePlayer(-Vector2Int.one);
+        playerInput.actions["South"].performed -= _ => MovePlayer(Vector2Int.down);
+        playerInput.actions["SouthEast"].performed -= _ => MovePlayer(Vector2Int.down + Vector2Int.right);
 
-        playerInput.actions["West"].performed -= i => MovePlayer(Vector2Int.left);
-        playerInput.actions["East"].performed -= i => MovePlayer(Vector2Int.right);
+        playerInput.actions["West"].performed -= _ => MovePlayer(Vector2Int.left);
+        playerInput.actions["East"].performed -= _ => MovePlayer(Vector2Int.right);
 
-        playerInput.actions["NorthWest"].performed -= i => MovePlayer(Vector2Int.up + Vector2Int.left);
-        playerInput.actions["North"].performed -= i => MovePlayer(Vector2Int.up);
-        playerInput.actions["NorthEast"].performed -= i => MovePlayer(Vector2Int.one);
+        playerInput.actions["NorthWest"].performed -= _ => MovePlayer(Vector2Int.up + Vector2Int.left);
+        playerInput.actions["North"].performed -= _ => MovePlayer(Vector2Int.up);
+        playerInput.actions["NorthEast"].performed -= _ => MovePlayer(Vector2Int.one);
 
-        playerInput.actions["Wait"].performed -= i => Action.SkipAction(playerActor);
+        playerInput.actions["Wait"].performed -= _ => Action.SkipAction(playerActor);
 
-        playerInput.actions["LMB"].performed -= i => AutoPathPlayer();
-        playerInput.actions["RMB"].performed -= i => CancelAutoPath();
+        playerInput.actions["LMB"].performed -= _ => AutoPathPlayer();
+        playerInput.actions["RMB"].performed -= _ => CancelAutoPath();
     }
 
     private void MovePlayer(Vector2Int direction)

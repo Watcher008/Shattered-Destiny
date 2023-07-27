@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class PlayerCompanionsPanel : MonoBehaviour
 {
-    [SerializeField] private CharacterCollection companions;
+    [SerializeField] private CharacterCollection _companions;
 
     [Space]
 
@@ -11,13 +11,13 @@ public class PlayerCompanionsPanel : MonoBehaviour
 
     private void OnEnable()
     {
-        companions.onCollectionChanged += UpdatePanels;
+        _companions.onCollectionChanged += UpdatePanels;
         UpdatePanels();
     }
 
     private void OnDisable()
     {
-        companions.onCollectionChanged -= UpdatePanels;
+        _companions.onCollectionChanged -= UpdatePanels;
     }
 
     private void ClearPanels()
@@ -33,10 +33,10 @@ public class PlayerCompanionsPanel : MonoBehaviour
     {
         ClearPanels();
 
-        for (int i = 0; i < companions.Characters.Count; i++)
+        for (int i = 0; i < _companions.Characters.Count; i++)
         {
             var panel = Instantiate(panelPrefab);
-            panel.SetCharacter(companions.Characters[i]);
+            panel.SetCharacter(_companions.Characters[i]);
             panel.transform.SetParent(transform, false);
         }
     }

@@ -1827,7 +1827,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bbfaeadfcb9b57448081f28dc6d1db4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  companions: {fileID: 11400000, guid: fffdf9854ffd57b4bad99d47b5cecaf2, type: 2}
+  _companions: {fileID: 11400000, guid: 2c815559e4dba184fbc1733cc3ea55e9, type: 2}
   panelPrefab: {fileID: 946775929696667448, guid: 00edec7fa6b79dd44bcd8f089fc10ffc, type: 3}
 --- !u!1001 &1913471016
 PrefabInstance:

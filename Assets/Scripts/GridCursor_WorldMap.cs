@@ -14,19 +14,24 @@ namespace SD.PathingSystem
         private void Start()
         {
             cam = Camera.main;
-            mousePosition.action.performed += i => mousePos = i.ReadValue<Vector2>();
+            mousePosition.action.performed += OnMousePosition;
             roundedValue = Pathfinding.instance.GetCellSize();
         }
 
         private void OnDestroy()
         {
-            mousePosition.action.performed -= i => mousePos = i.ReadValue<Vector2>();
+            mousePosition.action.performed -= OnMousePosition;
         }
 
         private void LateUpdate()
         {
             SetCursorPosition();
             CheckNode();
+        }
+
+        private void OnMousePosition(InputAction.CallbackContext obj)
+        {
+            mousePos = obj.ReadValue<Vector2>();
         }
 
         private void SetCursorPosition()

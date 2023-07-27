@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 
 namespace SD.LocationSystem
@@ -11,8 +10,13 @@ namespace SD.LocationSystem
         [Space]
 
         [SerializeField] private TMP_Text header, body;
-        [SerializeField] private RectTransform optionButtonParent;
 
+        private void Awake()
+        {
+            SetInitialValues();
+        }
+
+        //Called from GameEventListener on LocationMenu scene loaded
         public void SetInitialValues()
         {
             gameObject.SetActive(true);

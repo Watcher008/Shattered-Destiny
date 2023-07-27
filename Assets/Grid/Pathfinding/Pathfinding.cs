@@ -162,8 +162,10 @@ namespace SD.PathingSystem
 
         private List<WorldNode> CalculatePath(WorldNode endNode)
         {
-            List<WorldNode> path = new List<WorldNode>();
-            path.Add(endNode);
+            List<WorldNode> path = new List<WorldNode>
+            {
+                endNode
+            };
             WorldNode currentNode = endNode;
             while (currentNode.cameFromNode != null)
             {

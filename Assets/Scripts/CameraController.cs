@@ -39,6 +39,7 @@ public class CameraController : MonoBehaviour
 
     private void OnDisable()
     {
+        isPanning = false;
         rightMouseButton.action.performed -= BeginPanCamera;
         rightMouseButton.action.canceled -= i => isPanning = false;
         mouseScroll.action.performed -= Zoom;
