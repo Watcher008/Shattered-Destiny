@@ -80,8 +80,9 @@ public class GameManager : MonoBehaviour
         //Debug.Log("GetNextActor");
         while (FindAbleActor() == null)
         {
-            Debug.Log("GetNextActor");
+            //Debug.Log("GetNextActor");
             ReplenishEnergy();
+            if (actors.Count <= 1) break;
         }
         currentActor = FindAbleActor();
     }

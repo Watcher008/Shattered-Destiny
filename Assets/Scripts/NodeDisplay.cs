@@ -30,7 +30,7 @@ public class NodeDisplay : MonoBehaviour
     {
         var node = pathfinding.GetNode(playerPosition.x, playerPosition.y);
         if (node == null) return;
-        currentNodeText.text = "At: " + node.terrain.name + " : " + node.x + "," + node.y;
+        currentNodeText.text = "At: " + node.Terrain.name + " : " + node.X + "," + node.Y;
     }
 
     private void SetTargetNodeText()
@@ -39,6 +39,6 @@ public class NodeDisplay : MonoBehaviour
         hoverNodePanel.SetActive(node != null);
         if (node == null) return;
 
-        hoverNodeText.text = "Look: " + node.terrain.name + " : " + node.x + "," + node.y + " : " + node.worldPosition;
+        hoverNodeText.text = "Look: " + node.Terrain.name + " : " + node.X + "," + node.Y + " : " + node.WorldPosition;
     }
 }

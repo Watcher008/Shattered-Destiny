@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad40bd7aaea757241bef67a11a4bd536, type: 3}
   m_Name: Terrain_Water
   m_EditorClassIdentifier: 
-  <Tile>k__BackingField: {fileID: 11400000, guid: d76db457d3e983e4899f29ef4862115d, type: 2}
+  _tile: {fileID: 11400000, guid: d76db457d3e983e4899f29ef4862115d, type: 2}
+  _movementModifier: 0.2
   <MovementPenalty>k__BackingField: 4
   <ExhaustionCost>k__BackingField: 50
-  <CanTravelOnFoot>k__BackingField: 0
+  _canTravelOnFoot: 0

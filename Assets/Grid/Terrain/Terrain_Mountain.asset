@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad40bd7aaea757241bef67a11a4bd536, type: 3}
   m_Name: Terrain_Mountain
   m_EditorClassIdentifier: 
-  <Tile>k__BackingField: {fileID: 11400000, guid: 49f2384485785a140b91016afb28be2a, type: 2}
+  _tile: {fileID: 11400000, guid: 49f2384485785a140b91016afb28be2a, type: 2}
+  _movementModifier: 0.5
   <MovementPenalty>k__BackingField: 5
   <ExhaustionCost>k__BackingField: 20
-  <CanTravelOnFoot>k__BackingField: 1
+  _canTravelOnFoot: 1

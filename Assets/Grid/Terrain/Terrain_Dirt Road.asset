@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad40bd7aaea757241bef67a11a4bd536, type: 3}
   m_Name: Terrain_Dirt Road
   m_EditorClassIdentifier: 
-  <Tile>k__BackingField: {fileID: 11400000, guid: 977b3649991535f4ba36ef0b98401692, type: 2}
+  _tile: {fileID: 11400000, guid: 977b3649991535f4ba36ef0b98401692, type: 2}
+  _movementModifier: 1.2
   <MovementPenalty>k__BackingField: 0
-  <CanTravelOnFoot>k__BackingField: 1
+  <ExhaustionCost>k__BackingField: 0
+  _canTravelOnFoot: 1

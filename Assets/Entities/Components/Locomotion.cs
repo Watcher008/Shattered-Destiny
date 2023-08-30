@@ -5,8 +5,8 @@ namespace SD.ECS
 {
     public class Locomotion : ComponentBase
     {
-        //0 on foot, 100 on horseback?
-        [SerializeField] private int travelSpeed = 0;
+        //100 on foot, 500 on horseback?
+        [SerializeField, Range(100, 500)] private int travelSpeed = 100;
 
         private Actor actor;
         private GridPosition position;
@@ -42,7 +42,7 @@ namespace SD.ECS
 
             //cost is equal to base movement cost plus the cost of the node being moved into
             var newNode = Pathfinding.instance.GetNode(direction.x, direction.y);
-            int cost = GameManager.pointsToAct + newNode.movementCost - travelSpeed;
+            int cost = Mathf.RoundToInt(GameManager.pointsToAct * (1 / newNode.MovementModifier) - travelSpeed);
             actor.SpendActionPoints(cost);
 
             position.SetPosition(direction.x, direction.y);

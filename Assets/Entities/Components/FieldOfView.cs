@@ -10,7 +10,7 @@ namespace SD.ECS
 
         private GridPosition position;
 
-        private List<WorldNode> visibleNodes;
+        private List<PathNode> visibleNodes;
 
         protected override void Start()
         {
@@ -34,7 +34,7 @@ namespace SD.ECS
             for (int i = 0; i < visibleNodes.Count; i++)
             {
                 visibleNodes[i].IsVisible = true;
-                FogOfWar.RevealTile(visibleNodes[i].worldPosition);
+                FogOfWar.RevealTile(visibleNodes[i].WorldPosition);
             }
         }
 
@@ -44,7 +44,7 @@ namespace SD.ECS
             for (int i = 0; i < visibleNodes.Count; i++)
             {
                 visibleNodes[i].IsVisible = false;
-                FogOfWar.HideTile(visibleNodes[i].worldPosition);
+                FogOfWar.HideTile(visibleNodes[i].WorldPosition);
             }
         }
     }

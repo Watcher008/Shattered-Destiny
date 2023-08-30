@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad40bd7aaea757241bef67a11a4bd536, type: 3}
   m_Name: Terrain_Forest
   m_EditorClassIdentifier: 
-  <Tile>k__BackingField: {fileID: 11400000, guid: 2574d9fde3dae8548ac3dbb6d2584f83, type: 2}
+  _tile: {fileID: 11400000, guid: 2574d9fde3dae8548ac3dbb6d2584f83, type: 2}
+  _movementModifier: 0.8
   <MovementPenalty>k__BackingField: 4
   <ExhaustionCost>k__BackingField: 10
-  <CanTravelOnFoot>k__BackingField: 1
+  _canTravelOnFoot: 1

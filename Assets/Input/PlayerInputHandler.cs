@@ -96,7 +96,7 @@ public class PlayerInputHandler : MonoBehaviour
         var node = SD.PathingSystem.Pathfinding.instance.GetNode(pos);
         if (node == null) return;
 
-        autoPathing.SetAutoPathTarget(node.x, node.y);
+        autoPathing.SetAutoPathTarget(node.X, node.Y);
     }
 
     private void CancelAutoPath()

@@ -20,9 +20,9 @@ public class PlayerExhaustion : MonoBehaviour
     {
         var newNode = Pathfinding.instance.GetNode(_gridPos.x, _gridPos.y);
 
-        if (newNode != null && newNode.terrain != null)
+        if (newNode != null && newNode.Terrain != null)
         {
-            currentExhaustion -= newNode.terrain.ExhaustionCost;
+            currentExhaustion -= newNode.Terrain.ExhaustionCost;
         }
         else
         {

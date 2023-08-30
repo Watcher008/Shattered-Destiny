@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad40bd7aaea757241bef67a11a4bd536, type: 3}
   m_Name: Terrain_Grassland
   m_EditorClassIdentifier: 
-  <Tile>k__BackingField: {fileID: 11400000, guid: 3549cd9bdf41a4e459de2d9d22b6c92b, type: 2}
+  _tile: {fileID: 11400000, guid: 3549cd9bdf41a4e459de2d9d22b6c92b, type: 2}
+  _movementModifier: 1
   <MovementPenalty>k__BackingField: 2
-  <CanTravelOnFoot>k__BackingField: 1
+  <ExhaustionCost>k__BackingField: 0
+  _canTravelOnFoot: 1

@@ -19,7 +19,7 @@ namespace SD.ECS
         private void SetStartingPosition()
         {
             var currentNode = Pathfinding.instance.GetNode(transform.position);
-            SetPosition(currentNode.x, currentNode.y);
+            SetPosition(currentNode.X, currentNode.Y);
         }
 
         public void SetPosition(int x, int y)
@@ -32,7 +32,7 @@ namespace SD.ECS
 
             var newNode = Pathfinding.instance.GetNode(this.x, this.y);
 
-            transform.position = newNode.worldPosition;
+            transform.position = newNode.WorldPosition;
             newNode.OccupyNode(Entity);
 
             onPositionChange?.Invoke();

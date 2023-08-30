@@ -8,7 +8,7 @@ namespace SD.ECS
         public OnEntityCollisionCallback onEntityCollision;
 
         private GridPosition position;
-        private WorldNode currentNode;
+        private PathNode currentNode;
 
         protected override void Start()
         {
