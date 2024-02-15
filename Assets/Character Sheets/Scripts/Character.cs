@@ -8,13 +8,11 @@ namespace SD.CharacterSystem
     {
         public string Name { get; private set; }
         public Professions Profession { get; private set; }
-        public List<Relationship> Relations { get; private set; }
 
         public Character(string name, Professions profession)
         {
             this.Name = name;
             this.Profession = profession;
-            Relations = new List<Relationship>();
         }
     }
 }
