@@ -8,7 +8,6 @@ public class PlayerInputHandler : MonoBehaviour
     private PlayerInput playerInput;
 
     private GameObject player;
-    private Actor playerActor;
     private MapCharacter playerCharacter;
     private AutoPathing autoPathing;
 
@@ -33,7 +32,6 @@ public class PlayerInputHandler : MonoBehaviour
         if (playerInput == null) playerInput = GetComponent<PlayerInput>();
         player = GameObject.FindGameObjectWithTag("Player");
 
-        if (playerActor == null) playerActor = player.GetComponent<Actor>();
         if (autoPathing == null) autoPathing = player.GetComponent<AutoPathing>();
         if (playerCharacter == null) playerCharacter = player.GetComponent<MapCharacter>();
     }

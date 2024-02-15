@@ -6,7 +6,7 @@ using SD.ECS;
 public class NodeDisplay : MonoBehaviour
 {
     private Pathfinding pathfinding;
-    private GridPosition playerPosition;
+    private MapCharacter playerPosition;
 
     [SerializeField] private WorldNodeReference playerTravelData;
 
@@ -17,7 +17,7 @@ public class NodeDisplay : MonoBehaviour
     private void Start()
     {
         pathfinding = Pathfinding.instance;
-        playerPosition = GameObject.FindGameObjectWithTag("Player").GetComponent<GridPosition>();
+        playerPosition = GameObject.FindGameObjectWithTag("Player").GetComponent<MapCharacter>();
     }
 
     private void Update()
@@ -28,9 +28,8 @@ public class NodeDisplay : MonoBehaviour
 
     private void SetCurrentNodeText()
     {
-        var node = pathfinding.GetNode(playerPosition.x, playerPosition.y);
-        if (node == null) return;
-        currentNodeText.text = "At: " + node.Terrain.name + " : " + node.X + "," + node.Y;
+        if (playerPosition.Node == null) return;
+        currentNodeText.text = "At: " + playerPosition.Node.Terrain.name + " : " + playerPosition.Node.X + "," + playerPosition.Node.Y;
     }
 
     private void SetTargetNodeText()

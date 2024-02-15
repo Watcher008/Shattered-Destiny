@@ -9,20 +9,18 @@ public class GameManager : MonoBehaviour
 {
     private static GameManager instance;
 
-    [SerializeField] private List<Actor> actors = new List<Actor>();
+    [SerializeField] private List<MapCharacter> actors = new List<MapCharacter>();
 
     [SerializeField] private TurnPhase currentPhase;
 
-    private Actor _player;
+    private MapCharacter _player;
 
-    [SerializeField] private Actor currentActor;
-
-    [SerializeField] private GameEvent turnTickEvent;
+    [SerializeField] private GameEvent newRoundEvent;
 
     private bool waitingForPlayer = false;
     private Coroutine playerTurnCoroutine;
 
-    public static List<Actor> Actors => instance.actors;
+    public static List<MapCharacter> Actors => instance.actors;
     public static TurnPhase CurrentPhase => instance.currentPhase;
 
     private void Awake()
@@ -34,16 +32,16 @@ public class GameManager : MonoBehaviour
         }
         instance = this;
         currentPhase = TurnPhase.Player_Fast;
-        _player = GameObject.FindGameObjectWithTag("Player").GetComponent<Actor>();
+        _player = GameObject.FindGameObjectWithTag("Player").GetComponent<MapCharacter>();
     }
 
     #region - Actor Registration -    
-    public static void AddActor(Actor actor)
+    public static void AddActor(MapCharacter actor)
     {
         instance.actors.Add(actor);
     }
 
-    public static void RemoveActor(Actor actor)
+    public static void RemoveActor(MapCharacter actor)
     {
         instance.actors.Remove(actor);
     }
@@ -54,7 +52,10 @@ public class GameManager : MonoBehaviour
     {
         // Cycle back to start if at end, otherwise iterate phase
         if (currentPhase == TurnPhase.NPC_Slow)
+        {
             currentPhase = TurnPhase.Player_Fast;
+            newRoundEvent?.Invoke();
+        }
         else currentPhase++;
 
         switch (currentPhase)

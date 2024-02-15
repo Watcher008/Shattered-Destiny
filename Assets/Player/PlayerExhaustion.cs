@@ -6,23 +6,21 @@ public class PlayerExhaustion : MonoBehaviour
 {
     private const int maxExhaustion = 100;
     [SerializeField] private int currentExhaustion;
-    private GridPosition _gridPos;
+    private MapCharacter _player;
 
     private void Start()
     {
-        _gridPos = GetComponent<GridPosition>();
-        _gridPos.onPositionChange += OnPositionChanged;
+        _player = GetComponent<MapCharacter>();
+        _player.onPositionChange += OnPositionChanged;
 
         currentExhaustion = maxExhaustion;
     }
 
     private void OnPositionChanged()
     {
-        var newNode = Pathfinding.instance.GetNode(_gridPos.x, _gridPos.y);
-
-        if (newNode != null && newNode.Terrain != null)
+        if (_player.Node != null && _player.Node.Terrain != null)
         {
-            currentExhaustion -= newNode.Terrain.ExhaustionCost;
+            currentExhaustion -= _player.Node.Terrain.ExhaustionCost;
         }
         else
         {
