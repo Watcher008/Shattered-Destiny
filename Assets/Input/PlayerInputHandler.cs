@@ -7,9 +7,9 @@ public class PlayerInputHandler : MonoBehaviour
 {
     private PlayerInput playerInput;
 
-    private Entity playerEntity;
+    private GameObject player;
     private Actor playerActor;
-    private Locomotion locomotion;
+    private MapCharacter playerCharacter;
     private AutoPathing autoPathing;
 
     private void OnEnable()
@@ -31,13 +31,11 @@ public class PlayerInputHandler : MonoBehaviour
     private void CheckForComponents()
     {
         if (playerInput == null) playerInput = GetComponent<PlayerInput>();
+        player = GameObject.FindGameObjectWithTag("Player");
 
-        if (playerEntity == null) playerEntity = GameObject.FindGameObjectWithTag("Player").GetComponent<Entity>();
-        playerEntity.HasBehavior = true;
-
-        if (playerActor == null) playerActor = playerEntity.GetComponent<Actor>();
-        if (locomotion == null) locomotion = playerEntity.GetComponent<Locomotion>();
-        if (autoPathing == null) autoPathing = playerEntity.GetComponent<AutoPathing>();
+        if (playerActor == null) playerActor = player.GetComponent<Actor>();
+        if (autoPathing == null) autoPathing = player.GetComponent<AutoPathing>();
+        if (playerCharacter == null) playerCharacter = player.GetComponent<MapCharacter>();
     }
 
     private void SubscribeToInput()
@@ -53,7 +51,7 @@ public class PlayerInputHandler : MonoBehaviour
         playerInput.actions["North"].performed += _ => MovePlayer(Vector2Int.up);
         playerInput.actions["NorthEast"].performed += _ => MovePlayer(Vector2Int.one);
 
-        playerInput.actions["Wait"].performed += _ => Action.SkipAction(playerActor);
+        playerInput.actions["Wait"].performed += _ => GameManager.EndPlayerTurn();
 
         playerInput.actions["LMB"].performed += _ => AutoPathPlayer();
         playerInput.actions["RMB"].performed += _ => CancelAutoPath();
@@ -72,7 +70,7 @@ public class PlayerInputHandler : MonoBehaviour
         playerInput.actions["North"].performed -= _ => MovePlayer(Vector2Int.up);
         playerInput.actions["NorthEast"].performed -= _ => MovePlayer(Vector2Int.one);
 
-        playerInput.actions["Wait"].performed -= _ => Action.SkipAction(playerActor);
+        playerInput.actions["Wait"].performed -= _ => GameManager.EndPlayerTurn();
 
         playerInput.actions["LMB"].performed -= _ => AutoPathPlayer();
         playerInput.actions["RMB"].performed -= _ => CancelAutoPath();
@@ -80,7 +78,11 @@ public class PlayerInputHandler : MonoBehaviour
 
     private void MovePlayer(Vector2Int direction)
     {
-        if (playerActor.IsTurn) Action.MovementAction(locomotion, direction);
+        if (GameManager.CurrentPhase == TurnPhase.Player_Fast || GameManager.CurrentPhase == TurnPhase.Player_Slow)
+        {
+            playerCharacter.Move(direction.x, direction.y);
+            GameManager.EndPlayerTurn();
+        }
     }
 
     private void AutoPathPlayer()
@@ -90,13 +92,15 @@ public class PlayerInputHandler : MonoBehaviour
         //What the cursor is hovering over (or if it's over a UI element, and handle that accordingly
         if (EventSystem.current.currentInputModule != null) return;
         Debug.Log("No UI here.");
-        if (!playerActor.IsTurn) return;
 
-        var pos = Camera.main.ScreenToWorldPoint(playerInput.actions["Mouse Position"].ReadValue<Vector2>());
-        var node = SD.PathingSystem.Pathfinding.instance.GetNode(pos);
-        if (node == null) return;
+        if (GameManager.CurrentPhase == TurnPhase.Player_Fast || GameManager.CurrentPhase == TurnPhase.Player_Slow)
+        {
+            var pos = Camera.main.ScreenToWorldPoint(playerInput.actions["Mouse Position"].ReadValue<Vector2>());
+            var node = SD.PathingSystem.Pathfinding.instance.GetNode(pos);
+            if (node == null) return;
 
-        autoPathing.SetAutoPathTarget(node.X, node.Y);
+            autoPathing.SetAutoPathTarget(node.X, node.Y);
+        }
     }
 
     private void CancelAutoPath()
