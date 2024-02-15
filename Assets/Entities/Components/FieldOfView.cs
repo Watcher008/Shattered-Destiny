@@ -4,48 +4,34 @@ using SD.PathingSystem;
 
 namespace SD.ECS
 {
-    public class FieldOfView : ComponentBase
+    public class FieldOfView : MonoBehaviour
     {
         [SerializeField] private int sightDistance = 5;
 
-        private GridPosition position;
+        private MapCharacter player;
 
-        private List<PathNode> visibleNodes;
-
-        protected override void Start()
+        private void Start()
         {
-            base.Start();
-
-            position = GetComponent<GridPosition>();
-            position.onPositionChange += UpdateFieldOfView;
+            player = GetComponent<MapCharacter>();
             Invoke("UpdateFieldOfView", 0.1f);
-        }
-        private void OnDestroy()
-        {
-            position.onPositionChange -= UpdateFieldOfView;
         }
 
         private void UpdateFieldOfView()
         {
-            HidePreviousNodes();
-
-            visibleNodes = Pathfinding.instance.GetNodesInRange_Square(position.x, position.y, sightDistance);
-
-            for (int i = 0; i < visibleNodes.Count; i++)
+            foreach (var actor in GameManager.Actors)
             {
-                visibleNodes[i].IsVisible = true;
-                FogOfWar.RevealTile(visibleNodes[i].WorldPosition);
+                var character = actor.GetComponent<MapCharacter>();
+                if (Pathfinding.instance.GetNodeDistance_Straight(player.Node, character.Node) <= sightDistance)
+                {
+                    character.SetVisibility(2);
+                }
+                else
+                {
+                    character.SetVisibility(0);
+                }
             }
-        }
 
-        private void HidePreviousNodes()
-        {
-            if (visibleNodes == null) return;
-            for (int i = 0; i < visibleNodes.Count; i++)
-            {
-                visibleNodes[i].IsVisible = false;
-                FogOfWar.HideTile(visibleNodes[i].WorldPosition);
-            }
+            // Also need to do this for all locations, but set already-discovered locations to faded (1)
         }
     }
 }

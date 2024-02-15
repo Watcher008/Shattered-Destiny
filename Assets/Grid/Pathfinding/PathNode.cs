@@ -7,9 +7,6 @@ namespace SD.PathingSystem
 {
     public class PathNode
     {
-        public delegate void OnNodeEnteredCallback(Entity newEntity);
-        public OnNodeEnteredCallback onNodeEntered;
-
         private readonly Grid<PathNode> _grid;
         public int X { get; private set; }
         public int Y { get; private set; }
@@ -43,21 +40,7 @@ namespace SD.PathingSystem
 
         public bool isExplored = false;
 
-        private bool isVisible = false;
-
-        public bool IsVisible
-        {
-            get => isVisible;
-            set
-            {
-                SetVisibility(value);
-            }
-        }
-
-        private readonly List<Entity> occupants;
-
         public TerrainType Terrain { get; private set; }
-        public LocationData Location { get; private set; }
 
         public PathNode(Grid<PathNode> grid, int x, int y, Vector2 pos)
         {
@@ -68,8 +51,6 @@ namespace SD.PathingSystem
 
             isOccupied = false;
             isWalkable = true;
-
-            occupants = new List<Entity>();
         }
 
         public void SetOccupied(bool isOccupied)
@@ -88,39 +69,6 @@ namespace SD.PathingSystem
         {
             this.Terrain = terrain;
             _grid.TriggerGridObjectChanged(X, Y);
-        }
-
-        public void SetLocation(LocationData location)
-        {
-            this.Location = location;
-        }
-
-        public void OccupyNode(Entity entity)
-        {
-            if (!occupants.Contains(entity)) occupants.Add(entity);
-            if (entity.TryGetComponent(out EntityRenderer sprite))
-            {
-                sprite.ToggleRenderer(isVisible);
-            }
-            onNodeEntered?.Invoke(entity);
-        }
-
-        public void LeaveNode(Entity entity)
-        {
-            occupants.Remove(entity);
-        }
-
-        private void SetVisibility(bool value)
-        {
-            isVisible = value;
-
-            for (int i = 0; i < occupants.Count; i++)
-            {
-                if (occupants[i].TryGetComponent(out EntityRenderer sprite))
-                {
-                    sprite.ToggleRenderer(isVisible);
-                }
-            }
         }
     }
 }

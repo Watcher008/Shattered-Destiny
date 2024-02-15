@@ -52,6 +52,11 @@ namespace SD.PathingSystem
             }
         }
 
+        public List<PathNode> FindNodePath(PathNode start, PathNode end, bool ignoreEndNode = false)
+        {
+            return FindNodePath(start.X, start.Y, end.X, end.Y, ignoreEndNode);
+        }
+
         //Returns a list of nodes that can be travelled to reach a target destination
         //*** I need to add the optimizations from Sebastian Lague's Heap 
         public List<PathNode> FindNodePath(int startX, int startY, int endX, int endY, bool ignoreEndNode = false)
@@ -264,9 +269,11 @@ namespace SD.PathingSystem
             return x + y;
         }
 
+        /// <summary>
+        /// Returns the straight line distance between two nodes. 
+        /// </summary>
         public float GetNodeDistance_Straight(PathNode fromNode, PathNode toNode)
         {
-
             return Mathf.Sqrt(Mathf.Pow(fromNode.X - toNode.X, 2) + Mathf.Pow(fromNode.Y - toNode.Y, 2));
         }
 

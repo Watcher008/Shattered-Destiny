@@ -2,63 +2,29 @@ using UnityEngine;
 
 namespace SD.ECS
 {
-    public class Actor : ComponentBase
+    public class Actor : MonoBehaviour
     {
-        public delegate void OnTurnChangeCallback(bool isTurn);
-        public OnTurnChangeCallback onTurnChange;
+        public delegate void OnTurnChangeCallback();
+        public OnTurnChangeCallback onTurnStart;
 
-        private bool isTurn = false;
-        [SerializeField] private int actionPoints;
-        [SerializeField] private int speed = 100;
+        [SerializeField] private MovementSpeed _speed = MovementSpeed.Slow;
 
-        public bool IsTurn
+        public MovementSpeed Speed => _speed;
+
+        private void Start()
         {
-            get => isTurn;
-            set
-            {
-                SetTurn(value);
-            }
-        }
-
-        public int ActionPoints
-        {
-            get => actionPoints;
-            set
-            {
-                actionPoints = Mathf.Clamp(value, 0, int.MaxValue);
-            }
-        }
-
-        public int Speed => speed;
-
-        protected override void Start()
-        {
-            base.Start();
             GameManager.AddActor(this);
         }
 
         private void OnDestroy()
         {
             GameManager.RemoveActor(this);
-            onTurnChange = null;
+            onTurnStart = null;
         }
 
-        private void SetTurn(bool isTurn)
+        public void TakeAction()
         {
-            if (this.isTurn == isTurn) return;
-
-            this.isTurn = isTurn;
-            onTurnChange?.Invoke(isTurn);
-        }
-
-        public void SpendActionPoints(int points)
-        {
-            ActionPoints -= points;
-        }
-
-        public void RegainActionPoints()
-        {
-            ActionPoints += speed;
+            onTurnStart?.Invoke();
         }
     }
 }

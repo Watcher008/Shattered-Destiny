@@ -5,34 +5,19 @@ using SD.PathingSystem;
 
 namespace SD.ECS
 {
-    public class AutoPathing : ComponentBase
+    public class AutoPathing : MonoBehaviour
     {
-        private Pathfinding pathfinding;
-
-        private Actor actor;
-        private GridPosition position;
-        private Locomotion locomotion;
+        private MapCharacter player;
 
         private Coroutine movementCoroutine;
 
         [SerializeField] private bool allowAutoPathing;
 
-        protected override void Start()
-        {
-            base.Start();
-            pathfinding = Pathfinding.instance;
-
-            actor = GetComponent<Actor>();
-            position = GetComponent<GridPosition>();
-            locomotion = GetComponent<Locomotion>();
-        }
-
         public void SetAutoPathTarget(int x, int y)
         {
             if (!allowAutoPathing) return;
-            if (!actor.IsTurn) return;
 
-            var endNode = pathfinding.GetNode(x, y);
+            var endNode = Pathfinding.instance.GetNode(x, y);
             if (endNode == null) return;
 
             if (endNode.Terrain != null && !endNode.Terrain.CanTravelOnFoot)
@@ -41,13 +26,13 @@ namespace SD.ECS
                 return;
             }
 
-            var path = pathfinding.FindNodePath(position.x, position.y, endNode.X, endNode.Y);
+            var path = Pathfinding.instance.FindNodePath(player.Node, endNode);
             SetPath(path);
         }
 
         private void SetPath(List<PathNode> pathNodes)
         {
-            if (pathNodes[0].X == position.x && pathNodes[0].Y == position.y) pathNodes.RemoveAt(0);
+            if (pathNodes[0] == player.Node) pathNodes.RemoveAt(0);
 
             if (movementCoroutine != null) StopCoroutine(movementCoroutine);
             movementCoroutine = StartCoroutine(FollowNodePath(pathNodes));
@@ -62,20 +47,27 @@ namespace SD.ECS
         {
             while (nodes.Count > 0)
             {
-                while (!actor.IsTurn)
+                // Wait until it's the player's turn to move again
+                while (GameManager.CurrentPhase == TurnPhase.NPC_Fast || GameManager.CurrentPhase  == TurnPhase.NPC_Slow)
                 {
                     yield return null;
                 }
+                Debug.LogWarning("I broke this with the recent changes. Don't use it.");
 
-                var direction = new Vector2Int(nodes[0].X - position.x, nodes[0].Y - position.y);
+                int dx = nodes[0].X - player.Node.X;
+                int dy = nodes[0].Y - player.Node.Y;
 
-                //position is not valid, exit out of coroutine
-                if (!locomotion.CanMoveToPosition(direction)) yield break;
-
-                Action.MovementAction(locomotion, direction);
-
-                nodes.RemoveAt(0);
-                yield return new WaitForSeconds(0.1f);
+                if (player.Move(dx, dy))
+                {
+                    nodes.RemoveAt(0);
+                    GameManager.EndPlayerTurn();
+                    yield return new WaitForSeconds(0.1f);
+                }
+                else
+                {
+                    // Cannot move into node, stop autopathing
+                    break;
+                }              
             }
         }
     }
