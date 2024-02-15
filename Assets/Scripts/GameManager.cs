@@ -3,21 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 using SD.ECS;
 using SD.EventSystem;
+using UnityEditor;
 
 public class GameManager : MonoBehaviour
 {
-    public const int pointsToAct = 1000;
-
     private static GameManager instance;
 
-    [SerializeField] private float turnDelay = 0.1f;
-
     [SerializeField] private List<Actor> actors = new List<Actor>();
+
+    [SerializeField] private TurnPhase currentPhase;
+
+    private Actor _player;
+
     [SerializeField] private Actor currentActor;
 
     [SerializeField] private GameEvent turnTickEvent;
 
-    private bool runTurnCounter = true;
+    private bool waitingForPlayer = false;
+    private Coroutine playerTurnCoroutine;
+
+    public static List<Actor> Actors => instance.actors;
+    public static TurnPhase CurrentPhase => instance.currentPhase;
 
     private void Awake()
     {
@@ -27,17 +33,11 @@ public class GameManager : MonoBehaviour
             return;
         }
         instance = this;
+        currentPhase = TurnPhase.Player_Fast;
+        _player = GameObject.FindGameObjectWithTag("Player").GetComponent<Actor>();
     }
 
-    #region - Actor Registration -
-    public static void AddSentinel(Sentinel sentinel)
-    {
-        instance.actors.Remove(sentinel.Actor);
-        instance.actors.Insert(0, sentinel.Actor);
-        instance.currentActor = sentinel.Actor;
-        instance.StartTurn();
-    }
-    
+    #region - Actor Registration -    
     public static void AddActor(Actor actor)
     {
         instance.actors.Add(actor);
@@ -46,91 +46,82 @@ public class GameManager : MonoBehaviour
     public static void RemoveActor(Actor actor)
     {
         instance.actors.Remove(actor);
-        if (instance.currentActor == actor) instance.GetNextActor();
     }
     #endregion
 
     #region - Turn Cycle -
-    //Called from GameEventListener
-    //Prevents the transitioning to the next actor's turn
-    public void PauseTurnCycle()
+    private void NextPhase()
     {
-        runTurnCounter = false;
+        // Cycle back to start if at end, otherwise iterate phase
+        if (currentPhase == TurnPhase.NPC_Slow)
+            currentPhase = TurnPhase.Player_Fast;
+        else currentPhase++;
 
-    }
-
-    //Called from GameEventListener
-    //Resumes the turn cycle and Transitions to next actor's turn
-    public void ResumeTurnCycle()
-    {
-        runTurnCounter = true;
-        TurnTransition();
-    }
-
-    private void TurnTransition()
-    {
-        if (!runTurnCounter) return;
-
-        GetNextActor();
-        StartTurn();
-    }
-
-    private void GetNextActor()
-    {
-        //Debug.Log("GetNextActor");
-        while (FindAbleActor() == null)
+        switch (currentPhase)
         {
-            //Debug.Log("GetNextActor");
-            ReplenishEnergy();
-            if (actors.Count <= 1) break;
+            case TurnPhase.Player_Fast:
+                // Skip this phase if the player is on foot/slow
+                if (_player.Speed == MovementSpeed.Slow) NextPhase();
+                else
+                {
+                    // Wait for player to act
+                    if (playerTurnCoroutine != null) StopCoroutine(playerTurnCoroutine);
+                    playerTurnCoroutine = StartCoroutine(WaitForPlayerToAct());
+                }
+                break;
+            case TurnPhase.NPC_Fast:
+                // Iterate backwards through the list in case one is removed
+                for (int i = actors.Count - 1; i >= 0; i--)
+                {
+                    if (actors[i] == _player) continue;
+                    else if (actors[i].Speed == MovementSpeed.Slow) continue;
+                    else actors[i].TakeAction();
+                }
+                NextPhase();
+                break;
+            case TurnPhase.Player_Slow:
+                if (playerTurnCoroutine != null) StopCoroutine(playerTurnCoroutine);
+                playerTurnCoroutine = StartCoroutine(WaitForPlayerToAct());
+                break;
+            case TurnPhase.NPC_Slow:
+                for (int i = actors.Count - 1; i >= 0; i--)
+                {
+                    if (actors[i] == _player) continue;
+                    else actors[i].TakeAction();
+                }
+                NextPhase();
+                break;
         }
-        currentActor = FindAbleActor();
     }
 
-    private Actor FindAbleActor()
+    public static void EndPlayerTurn()
     {
-        //Debug.Log("FindAbleActor");
-        for (int i = 0; i < actors.Count; i++)
+        instance.waitingForPlayer = false;
+    }
+
+    private IEnumerator WaitForPlayerToAct()
+    {
+        while (waitingForPlayer)
         {
-            if (ActorCanAct(actors[i])) return actors[i];
+            yield return null;
         }
-        return null;
-    }
-
-    private bool ActorCanAct(Actor actor)
-    {
-        return actor.ActionPoints >= pointsToAct;
-    }
-
-    //Passes time by 1/10th of a round
-    private void ReplenishEnergy()
-    {
-        for (int i = 0; i < actors.Count; i++)
-        {
-            actors[i].RegainActionPoints();
-        }
-        turnTickEvent.Invoke();
-    }
-
-    private void StartTurn()
-    {
-        //Debug.Log("StartTurn for " + currentActor.name);
-        currentActor.IsTurn = true;
-
-        if (!currentActor.Entity.IsSentient) Action.SkipAction(currentActor);
-        else if (!currentActor.Entity.HasBehavior) Action.SkipAction(currentActor);
-    }
-
-    public static void EndTurn()
-    {
-        instance.currentActor.IsTurn = false;
-        instance.StartCoroutine(instance.WaitForTurn());
-    }
-
-    private IEnumerator WaitForTurn()
-    {
-        yield return new WaitForSeconds(turnDelay);
-        TurnTransition();
+        NextPhase();
     }
     #endregion
+}
+
+// Player always gets to act before NPCs
+// Player/NPCs on horseback get two movement actions
+public enum TurnPhase
+{
+    Player_Fast,
+    NPC_Fast,
+    Player_Slow,
+    NPC_Slow,
+}
+
+public enum MovementSpeed
+{
+    Fast,
+    Slow,
 }
