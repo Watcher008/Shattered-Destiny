@@ -1,9 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using SD.ECS;
 using SD.EventSystem;
-using UnityEditor;
 
 public class GameManager : MonoBehaviour
 {
@@ -78,6 +76,7 @@ public class GameManager : MonoBehaviour
                     else if (actors[i].Speed == MovementSpeed.Slow) continue;
                     else actors[i].TakeAction();
                 }
+                Debug.Log("Check for collisions.");
                 NextPhase();
                 break;
             case TurnPhase.Player_Slow:
@@ -90,11 +89,15 @@ public class GameManager : MonoBehaviour
                     if (actors[i] == _player) continue;
                     else actors[i].TakeAction();
                 }
+                Debug.Log("Check for collisions.");
                 NextPhase();
                 break;
         }
     }
 
+    /// <summary>
+    /// Called after the player has taken an action.
+    /// </summary>
     public static void EndPlayerTurn()
     {
         instance.waitingForPlayer = false;
@@ -106,6 +109,7 @@ public class GameManager : MonoBehaviour
         {
             yield return null;
         }
+        Debug.Log("Check for Player collisions.");
         NextPhase();
     }
     #endregion

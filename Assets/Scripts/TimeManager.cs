@@ -29,7 +29,8 @@ public class TimeManager : MonoBehaviour
         hour = timeData.Hours;
     }
 
-    public void OnTenthWorldRoundPass()
+
+    public void OnWorldRoundPass()
     {
         hour += 2;
         if (hour >= HOURS_IN_DAY)
