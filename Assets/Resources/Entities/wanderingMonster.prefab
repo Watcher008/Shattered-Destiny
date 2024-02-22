@@ -10,10 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 7720405639861310886}
   - component: {fileID: 7934700374611231145}
-  - component: {fileID: 6387185444900400469}
-  - component: {fileID: 2472380779834906709}
-  - component: {fileID: 7393938917155045008}
   - component: {fileID: -5803295106008490081}
+  - component: {fileID: 7393938917155045008}
   m_Layer: 0
   m_Name: wanderingMonster
   m_TagString: Untagged
@@ -88,7 +86,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &6387185444900400469
+--- !u!114 &-5803295106008490081
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -97,19 +95,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 256999358178774886}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 14e3dac2c6a9dc549ac6d8496666aedd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &2472380779834906709
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 256999358178774886}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97b7b25b69a3ac34ab6d6450d1c59922, type: 3}
+  m_Script: {fileID: 11500000, guid: fa835d21cfaa0b34480bd4f798a6d8f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 1
@@ -126,15 +112,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxWanderDistance: 3
---- !u!114 &-5803295106008490081
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 256999358178774886}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa835d21cfaa0b34480bd4f798a6d8f7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

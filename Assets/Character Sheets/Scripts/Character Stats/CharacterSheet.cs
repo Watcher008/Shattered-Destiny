@@ -9,9 +9,8 @@ namespace SD.CharacterSystem
         public ClassArchetype Class { get; private set; }
 
         public AttributeStat[] Attributes { get; private set; }
-        public SkillStat[] Skills { get; private set; }
 
-        public CharacterSheet(string name, CharacterRace race, ClassArchetype job, int[] attributeScores, int[] skillScores)
+        public CharacterSheet(string name, CharacterRace race, ClassArchetype job, int[] attributeScores)
         {
             Name = name;
             Race = race;
@@ -30,92 +29,6 @@ namespace SD.CharacterSystem
             for (int i = 0; i < Attributes.Length; i++)
             {
                 Attributes[i] = new AttributeStat((Attribute)i, attributeScores[i]);
-            }
-
-            //Skills
-            Skills = new SkillStat[skillScores.Length];
-            foreach (var bonus in Race.RacialSkillBonuses)
-            {
-                skillScores[(int)bonus.skill] += bonus.value;
-            }
-            foreach (var bonus in Class.ClassSkills)
-            {
-                skillScores[(int)bonus.skill] += bonus.value;
-            }
-            for (int i = 0; i < Skills.Length; i++)
-            {
-                Skills[i] = new SkillStat((Skill)i, skillScores[i]);
-            }
-        }
-
-        public void OnGainSkillXP(Skill skill, int xpValue)
-        {
-            float xpMod = GetSkillXPMod(skill);
-            xpValue = Mathf.RoundToInt(xpValue * xpMod);
-            Skills[(int)skill].OnGainXP(xpValue);
-        }
-
-        private float GetSkillXPMod(Skill skill)
-        {
-            switch (skill)
-            {
-                case Skill.AnimalHandling:
-                    return GetXPModifier(Attribute.Intelligence);
-                case Skill.Athletics:
-                    {
-                        float str = GetXPModifier(Attribute.Strength);
-                        float agi = GetXPModifier(Attribute.Agility);
-                        return (str + agi) * 0.5f;
-                    }
-                case Skill.Barter:
-                    {
-                        float intl = GetXPModifier(Attribute.Intelligence);
-                        float cha = GetXPModifier(Attribute.Charisma);
-                        float per = GetXPModifier(Attribute.Perception);
-                        return (intl + cha + per) * 0.333f;
-                    }
-                case Skill.Camping:
-                    return GetXPModifier(Attribute.Perception);
-                case Skill.Deception:
-                    return GetXPModifier(Attribute.Charisma);
-                case Skill.Doctor:
-                    return GetXPModifier(Attribute.Intelligence);
-                case Skill.Gambling:
-                    {
-                        float intl = GetXPModifier(Attribute.Intelligence);
-                        float cha = GetXPModifier(Attribute.Charisma);
-                        return (intl + cha) * 0.5f;
-                    }
-                case Skill.Herbalism:
-                    return GetXPModifier(Attribute.Intelligence);
-                case Skill.Hunting:
-                    {
-                        float agi = GetXPModifier(Attribute.Agility);
-                        float str = GetXPModifier(Attribute.Strength);
-                        float per = GetXPModifier(Attribute.Perception);
-                        return (agi + str + per) * 0.333f;
-                    }
-                case Skill.Intimidation:
-                    {
-                        float cha = GetXPModifier(Attribute.Charisma);
-                        float str = GetXPModifier(Attribute.Strength);
-                        return (cha + str) * 0.5f;
-                    }
-                case Skill.Navigation:
-                    {
-                        float per = GetXPModifier(Attribute.Perception);
-                        float intl = GetXPModifier(Attribute.Intelligence);
-                        return (per + intl) * 0.5f;
-                    }
-                case Skill.Persuasion:
-                    return GetXPModifier(Attribute.Charisma);
-                case Skill.Stealth:
-                    {
-                        float agi = GetXPModifier(Attribute.Agility);
-                        float per = GetXPModifier(Attribute.Perception);
-                        return (agi + per) * 0.5f;
-                    }
-                default: return 1.0f;
             }
         }
 
@@ -138,27 +51,8 @@ namespace SD.CharacterSystem
 
 public enum Attribute
 {
-    Agility,
-    Charisma,
+    Physicality,
     Intelligence,
-    Magic,
-    Perception,
-    Strength
-}
-
-public enum Skill
-{
-    AnimalHandling,
-    Athletics,
-    Barter,
-    Camping,
-    Deception,
-    Doctor,
-    Gambling,
-    Herbalism,
-    Hunting,
-    Intimidation,
-    Navigation,
-    Persuasion,
-    Stealth,
+    Social,
+    Survival,
 }

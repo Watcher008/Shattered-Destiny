@@ -37,6 +37,11 @@ public class GameManager : MonoBehaviour
     public static void AddActor(MapCharacter actor)
     {
         instance.actors.Add(actor);
+        if (actor.TryGetComponent<PlayerExhaustion>(out _)) // Is player present?
+        {
+            instance.currentPhase = TurnPhase.NPC_Slow;
+            instance.NextPhase();
+        }
     }
 
     public static void RemoveActor(MapCharacter actor)
@@ -76,7 +81,7 @@ public class GameManager : MonoBehaviour
                     else if (actors[i].Speed == MovementSpeed.Slow) continue;
                     else actors[i].TakeAction();
                 }
-                Debug.Log("Check for collisions.");
+                //Debug.Log("Check for collisions.");
                 NextPhase();
                 break;
             case TurnPhase.Player_Slow:
@@ -89,7 +94,7 @@ public class GameManager : MonoBehaviour
                     if (actors[i] == _player) continue;
                     else actors[i].TakeAction();
                 }
-                Debug.Log("Check for collisions.");
+                //Debug.Log("Check for collisions.");
                 NextPhase();
                 break;
         }
@@ -105,6 +110,7 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator WaitForPlayerToAct()
     {
+        waitingForPlayer = true;
         while (waitingForPlayer)
         {
             yield return null;

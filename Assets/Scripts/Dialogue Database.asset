@@ -326,6 +326,20 @@ MonoBehaviour:
       value: Placeholder
       type: 0
       typeString: 
+  - id: 9
+    fields:
+    - title: Name
+      value: Attribute_Physicality
+      type: 0
+      typeString: 
+    - title: Initial Value
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Description
+      value: 
+      type: 0
+      typeString: 
   - id: 8
     fields:
     - title: Name
@@ -340,24 +354,10 @@ MonoBehaviour:
       value: 
       type: 0
       typeString: 
-  - id: 9
-    fields:
-    - title: Name
-      value: Attribute_Perception
-      type: 0
-      typeString: 
-    - title: Initial Value
-      value: 0
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Description
-      value: 
-      type: 0
-      typeString: 
   - id: 10
     fields:
     - title: Name
-      value: Attribute_Strength
+      value: Attribute_Social
       type: 0
       typeString: 
     - title: Initial Value
@@ -371,217 +371,7 @@ MonoBehaviour:
   - id: 11
     fields:
     - title: Name
-      value: Attribute_Agility
-      type: 0
-      typeString: 
-    - title: Initial Value
-      value: 0
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Description
-      value: 
-      type: 0
-      typeString: 
-  - id: 12
-    fields:
-    - title: Name
-      value: Attribute_Charisma
-      type: 0
-      typeString: 
-    - title: Initial Value
-      value: 0
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Description
-      value: 
-      type: 0
-      typeString: 
-  - id: 13
-    fields:
-    - title: Name
-      value: Attribute_Magic
-      type: 0
-      typeString: 
-    - title: Initial Value
-      value: 0
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Description
-      value: 
-      type: 0
-      typeString: 
-  - id: 14
-    fields:
-    - title: Name
-      value: Skill_Hunting
-      type: 0
-      typeString: 
-    - title: Initial Value
-      value: 0
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Description
-      value: 
-      type: 0
-      typeString: 
-  - id: 15
-    fields:
-    - title: Name
-      value: Skill_Navigation
-      type: 0
-      typeString: 
-    - title: Initial Value
-      value: 0
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Description
-      value: 
-      type: 0
-      typeString: 
-  - id: 16
-    fields:
-    - title: Name
-      value: Skill_AnimalHandling
-      type: 0
-      typeString: 
-    - title: Initial Value
-      value: 0
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Description
-      value: 
-      type: 0
-      typeString: 
-  - id: 17
-    fields:
-    - title: Name
-      value: Skill_Doctor
-      type: 0
-      typeString: 
-    - title: Initial Value
-      value: 0
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Description
-      value: 
-      type: 0
-      typeString: 
-  - id: 18
-    fields:
-    - title: Name
-      value: Skill_Herbalism
-      type: 0
-      typeString: 
-    - title: Initial Value
-      value: 0
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Description
-      value: 
-      type: 0
-      typeString: 
-  - id: 19
-    fields:
-    - title: Name
-      value: Skill_Camping
-      type: 0
-      typeString: 
-    - title: Initial Value
-      value: 0
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Description
-      value: 
-      type: 0
-      typeString: 
-  - id: 20
-    fields:
-    - title: Name
-      value: Skill_Athleticism
-      type: 0
-      typeString: 
-    - title: Initial Value
-      value: 0
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Description
-      value: 
-      type: 0
-      typeString: 
-  - id: 21
-    fields:
-    - title: Name
-      value: Skill_Stealth
-      type: 0
-      typeString: 
-    - title: Initial Value
-      value: 0
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Description
-      value: 
-      type: 0
-      typeString: 
-  - id: 22
-    fields:
-    - title: Name
-      value: Skill_Deception
-      type: 0
-      typeString: 
-    - title: Initial Value
-      value: 0
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Description
-      value: 
-      type: 0
-      typeString: 
-  - id: 23
-    fields:
-    - title: Name
-      value: Skill_Intimidation
-      type: 0
-      typeString: 
-    - title: Initial Value
-      value: 0
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Description
-      value: 
-      type: 0
-      typeString: 
-  - id: 24
-    fields:
-    - title: Name
-      value: Skill_Persuasion
-      type: 0
-      typeString: 
-    - title: Initial Value
-      value: 0
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Description
-      value: 
-      type: 0
-      typeString: 
-  - id: 25
-    fields:
-    - title: Name
-      value: Skill_Barter
-      type: 0
-      typeString: 
-    - title: Initial Value
-      value: 0
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Description
-      value: 
-      type: 0
-      typeString: 
-  - id: 26
-    fields:
-    - title: Name
-      value: Skill_Gambling
+      value: Attribute_Survival
       type: 0
       typeString: 
     - title: Initial Value

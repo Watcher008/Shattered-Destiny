@@ -18,8 +18,6 @@ namespace SD.CharacterSystem
 
         [SerializeField] private AttributeReference[] racialAttributeBonuses;
         public AttributeReference[] RacialAttributeBonuses => racialAttributeBonuses;
-
-        [field: SerializeField] public SkillReference[] RacialSkillBonuses { get; private set; }
         
         [field: SerializeField] public DiceCombo StartingAge { get; private set; }
         

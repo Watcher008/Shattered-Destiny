@@ -8,18 +8,14 @@ namespace SD.CharacterSystem
     public class UICharacterSheet : MonoBehaviour
     {
         [SerializeField] private Image characterPortrait;
-        [SerializeField] private TMP_Text ageText;
-        [SerializeField] private TMP_Text wellBeingText;
 
         [Space]
 
         [SerializeField] private Image healthBar;
-        [SerializeField] private Image staminaBar;
         [SerializeField] private Image actionPointBar;
 
         [Header("Attributes")]
         [SerializeField] private TMP_Text[] attributeText;
-        [SerializeField] private TMP_Text[] attributeXPText;
         [SerializeField] private Image[] attributeXPBar;
 
         [Header("Influence & Reputation")]
@@ -38,8 +34,7 @@ namespace SD.CharacterSystem
         {
             for (int i = 0; i < character.Attributes.Length; i++)
             {
-                attributeText[i].text = ((Attribute)i).ToString() + " :" + character.Attributes[i].Value;
-                attributeXPText[i].text = "XP: " + character.Attributes[i].XP + " / " + character.Attributes[i].XPToNextLevel;
+                attributeText[i].text = character.Attributes[i].Value.ToString();
                 attributeXPBar[i].fillAmount = character.Attributes[i].XP / character.Attributes[i].XPToNextLevel;
             }
         }

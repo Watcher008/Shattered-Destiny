@@ -10,6 +10,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5c253d6674e591441abd1931af316a7e, type: 3}
-  m_Name: Purple Influence
+  m_Name: Conglomerate Influence
   m_EditorClassIdentifier: 
   Value: 0
