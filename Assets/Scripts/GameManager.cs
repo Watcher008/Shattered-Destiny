@@ -2,14 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using SD.EventSystem;
+using SD.LocationSystem;
 
 public class GameManager : MonoBehaviour
 {
     private static GameManager instance;
 
-    [SerializeField] private List<MapCharacter> actors = new List<MapCharacter>();
+    private List<MapCharacter> actors = new List<MapCharacter>();
 
-    [SerializeField] private TurnPhase currentPhase;
+    private TurnPhase currentPhase;
 
     private MapCharacter _player;
 
@@ -20,6 +21,9 @@ public class GameManager : MonoBehaviour
 
     public static List<MapCharacter> Actors => instance.actors;
     public static TurnPhase CurrentPhase => instance.currentPhase;
+
+    private GameEvent locationEncounterEvent;
+
 
     private void Awake()
     {
@@ -115,9 +119,58 @@ public class GameManager : MonoBehaviour
         {
             yield return null;
         }
-        Debug.Log("Check for Player collisions.");
+        if (TryGetActorCollision(_player, out MapCharacter character))
+        {
+            BeginCombatEncounter(character);
+        }
+        else if (LocationManager.TryGetLocation(_player.Node, out var location))
+        {
+           BeginLocationEncounter(location);
+        }
+        else NextPhase();
+    }
+    #endregion
+
+    private bool TryGetActorCollision(MapCharacter origin, out MapCharacter character)
+    {
+        character = null;
+        if (origin == null || origin.Node == null) return false;
+        foreach(var actor in actors)
+        {
+            if (actor == origin) continue;
+            if (actor.Node == origin.Node)
+            {
+                character = actor;
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    #region - Encounters - 
+    private void BeginLocationEncounter(MapLocation location)
+    {
+        print($"Player arrived at {location.gameObject.name}.");
+    }
+
+    // Called by GameEventListener on object
+    public void EndLocationEncounter()
+    {
         NextPhase();
     }
+
+    private void BeginCombatEncounter(MapCharacter character)
+    {
+        print($"Player encountered {character.gameObject.name}.");
+    }
+
+    public void EndCombatEncounter()
+    {
+        NextPhase();
+    }
+
+
     #endregion
 }
 
