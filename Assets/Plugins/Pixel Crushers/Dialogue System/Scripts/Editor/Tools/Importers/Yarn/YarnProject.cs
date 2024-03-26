@@ -1,5 +1,4 @@
 #if USE_YARN
-
 using System;
 using System.IO;
 using System.Collections.Generic;
@@ -212,6 +211,16 @@ namespace PixelCrushers.DialogueSystem.Yarn
     {
         public IReadOnlyList<Instruction> Instructions { get; private set; }
         public Instruction LastInstruction { get; private set; }
+        // MainInstruction is the dominant instruction of the group. For example, a SetVariable may have the following instruction list:
+        //  1. Push float
+        //  2. Set Variable
+        //  3. Pop
+        // The main instruction here is the SetVariable one, and defines the functionality of the BasicStatement.
+        // TODO: Need to properly populate MainInstruction, right now it kinda only works properly for SetVariable.
+        //       Usually this is the LastInstruction, but need to really make sure that's true in every other case besides SetVariable.
+        //       After those changes are made, look at every reference to LastInstruction, and in places where MainInstruction should
+        //       be used instead, switch from LastInstruction to MainInstruction.
+        public Instruction MainInstruction { get; private set; }
 
         public string BranchLabel { get; private set; }
         public bool HasArguments { get; private set; } = false;
@@ -230,11 +239,23 @@ namespace PixelCrushers.DialogueSystem.Yarn
             Instructions = instructions;
             TotalInstructions = Instructions.Count;
 
-            if (Instructions.Count > 0)
+            LastInstruction = Instructions[Instructions.Count - 1];
+            // Default MainInstruction to the last instruction, that's usually the case.
+            // Need to adjust for SetVariable commands, though.
+            MainInstruction = LastInstruction;
+            foreach (var instruction in instructions)
             {
-                LastInstruction = Instructions[Instructions.Count - 1];
-                BranchLabel = GetBranchLabel();
+                if (instruction.Opcode.IsStoreVariable())
+                {
+                    MainInstruction = instruction;
+                    break;
+                }
             }
+
+            BranchLabel = GetBranchLabel();
+
+            Assert.IsNotNull(LastInstruction, "All Basic Statements should have their last instruction specified");
+            Assert.IsNotNull(MainInstruction, "All Basic Statements should have a main instruction specified");
 
             CheckForArguments();
         }
@@ -1071,6 +1092,7 @@ namespace PixelCrushers.DialogueSystem.Yarn
                             stmt.OptionConditionsVariable = varName;
                         }
 
+                        // Debug.Log($"Adding options statement with main opcode: {stmt.MainInstruction.Opcode} last opcode: {stmt.LastInstruction.Opcode}");
                         optionsList.Add(stmt);
                     }
                     else
@@ -1109,19 +1131,28 @@ namespace PixelCrushers.DialogueSystem.Yarn
                 }
                 else if (stmt.LastInstruction.Opcode.IsPop() && currentBlock.Type.IsShortcutOption())
                 {
-                    var scOpt = (ShortcutOption)currentBlock;
-
-                    if (_prefs.debug) Debug.Log($"Closing out shortcut options list with exit label: {currentBlock.Parent.ExitLabel}");
-
-                    if (currentBlock.Parent.ExitLabel == null)
+                    // The final instruction must be a Pop and ONLY an Pop.
+                    // Not a Pop as the final instruction of any other type of Statement (e.g. a StoreVariable)
+                    if (stmt.TotalInstructions == 1)
                     {
-                        currentBlock.Parent.ExitLabel = stmt.Label;
-                    }
-                    Assert.AreEqual(stmt.Label, currentBlock.Parent.ExitLabel, "Parser Error (bug): Mismatched Pop instruction label and Shortcut Options List exit label");
+                        var scOpt = (ShortcutOption)currentBlock;
 
-                    // Ignore the pop
-                    // currentBlock.Parent.AddStatement(stmt);
-                    currentBlock = blockStack.Pop();
+                        if (_prefs.debug) Debug.Log($"Closing out shortcut options list with exit label: {currentBlock.Parent.ExitLabel}");
+
+                        if (currentBlock.Parent.ExitLabel == null)
+                        {
+                            currentBlock.Parent.ExitLabel = stmt.Label;
+                        }
+                        Assert.AreEqual(stmt.Label, currentBlock.Parent.ExitLabel, "Parser Error (bug): Mismatched Pop instruction label and Shortcut Options List exit label");
+
+                        // Ignore the pop
+                        // currentBlock.Parent.AddStatement(stmt);
+                        currentBlock = blockStack.Pop();
+                    }
+                    else
+                    {
+                        currentBlock.AddStatement(stmt);
+                    }
                 }
                 else if (stmt.LastInstruction.Opcode.IsStop())
                 {
@@ -1201,6 +1232,10 @@ namespace PixelCrushers.DialogueSystem.Yarn
 
                     // Grab the instruction right before StoreVariable.
                     // This will be a push, and tells us the type of variable we're storing
+                    // NOTE: Why not check stmtInstructions[0] here instead of looking back two?
+                    //       Looking again at this code after a year, revisit this when Yarn2.0 changes are made.
+                    //       I trust that this is done for a reason, perhaps we cannot guarantee that the Push
+                    //       really is at stmtInstructions[0] ...
                     var finalPush = stmtInstructions[stmtInstructions.Count - 2];
                     var pushedValue = finalPush.Operands[0];
 
@@ -1221,6 +1256,18 @@ namespace PixelCrushers.DialogueSystem.Yarn
                         case Operand.ValueOneofCase.StringValue:
                             Variables[varName] = YarnVariable.String(varName);
                             break;
+                    }
+
+                    // After a StoreVariable, we should have a Pop (to correspond with the original Push)
+                    // Add it to the StoreVariable instruction list.
+                    // This should ALWAYS be true as there should ALWAYS be a pop after a StoreVariable cmd,
+                    // maybe drop the If and make an Assert?
+                    var popIndex = index + 1;
+                    // Debug.Log($"Checking to see if Pop instruction at index: {popIndex}");
+                    if (popIndex < conversation.Node.Instructions.Count)
+                    {
+                        var popInst = conversation.Node.Instructions[popIndex];
+                        if (popInst.Opcode.IsPop()) stmtInstructions.Add(popInst);
                     }
 
                     if (_prefs.debug) Debug.Log($"Storing variable of type: {Variables[varName].type}");
@@ -1412,5 +1459,4 @@ namespace PixelCrushers.DialogueSystem.Yarn
         }
     }
 }
-
 #endif

@@ -53,17 +53,17 @@ namespace PixelCrushers.DialogueSystem
 
         private static MenuResult menuResult = MenuResult.Unselected;
 
-        private enum AudioDragDropCommand { AudioWait, Audio, SALSA, LipSync }
+        private enum AudioDragDropCommand { AudioWait, Audio, SALSA, LipSync, Nothing }
 
         private static AudioDragDropCommand audioDragDropCommand = AudioDragDropCommand.AudioWait;
 
-        private enum GameObjectDragDropCommand { Camera, DOF, SetActiveTrue, SetActiveFalse }
+        private enum GameObjectDragDropCommand { Camera, DOF, SetActiveTrue, SetActiveFalse, Nothing }
 
         private static GameObjectDragDropCommand gameObjectDragDropCommand = GameObjectDragDropCommand.Camera;
 
         private static GameObjectDragDropCommand alternateGameObjectDragDropCommand = GameObjectDragDropCommand.SetActiveTrue;
 
-        private enum ComponentDragDropCommand { SetEnabledTrue, SetEnabledFalse }
+        private enum ComponentDragDropCommand { SetEnabledTrue, SetEnabledFalse, Nothing }
 
         private static ComponentDragDropCommand componentDragDropCommand = ComponentDragDropCommand.SetEnabledTrue;
 
@@ -97,23 +97,30 @@ namespace PixelCrushers.DialogueSystem
             alternateGameObjectDragDropCommand = commands.alternateGameObjectDragDropCommand;
         }
 
-        public static string DrawLayout(GUIContent guiContent, string sequence, ref Rect rect)
+        public static string DrawLayout(GUIContent guiContent, string sequence, ref Rect rect, DialogueEntry entry = null, Field field = null)
         {
             var syntaxState = SequenceSyntaxState.Unchecked;
-            return DrawLayout(guiContent, sequence, ref rect, ref syntaxState);
+            return DrawLayout(guiContent, sequence, ref rect, ref syntaxState, entry, field);
         }
 
-        public static string DrawLayout(GUIContent guiContent, string sequence, ref Rect rect, ref SequenceSyntaxState syntaxState)
+        public static string DrawLayout(GUIContent guiContent, string sequence, ref Rect rect, ref SequenceSyntaxState syntaxState, DialogueEntry entry = null, Field field = null)
         {
             if (!string.IsNullOrEmpty(queuedText))
             {
                 if (!string.IsNullOrEmpty(sequence)) sequence += ";\n";
                 sequence += queuedText;
                 queuedText = string.Empty;
+                GUI.changed = true;
             }
 
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField(guiContent);
+
+            if (entry != null && field != null && DialogueEditor.DialogueEditorWindow.instance != null)
+            {
+                DialogueEditor.DialogueEditorWindow.instance.DrawAISequence(entry, field);
+            }
+
             EditorGUI.BeginDisabledGroup(string.IsNullOrEmpty(sequence));
             if (GUILayout.Button(new GUIContent("Check", "Check sequence for errors."), EditorStyles.miniButton, GUILayout.Width(52)))
             {
@@ -133,8 +140,6 @@ namespace PixelCrushers.DialogueSystem
                 sequence = ApplyMenuResult(menuResult, sequence);
                 menuResult = MenuResult.Unselected;
             }
-
-            //EditorWindowTools.StartIndentedSection(); // Removed indent; looks better without.
 
             SetSyntaxStateGUIColor(syntaxState);
 
@@ -169,22 +174,32 @@ namespace PixelCrushers.DialogueSystem
                                 else if (obj is AudioClip)
                                 {
                                     // Drop audio clip according to selected audio command:
+                                    var currentAudioCommand = GetCurrentAudioCommand();
+                                    if (string.IsNullOrEmpty(currentAudioCommand)) continue;
                                     var clip = obj as AudioClip;
                                     var path = AssetDatabase.GetAssetPath(clip);
-                                    if (path.Contains("Resources"))
+#if USE_ADDRESSABLES
+                                    if (true) // If using addressables, doesn't need to be in Resources
                                     {
-                                        sequence = AddCommandToSequence(sequence, GetCurrentAudioCommand() + "(" + GetResourceName(path) + ")");
+                                        sequence = AddCommandToSequence(sequence, currentAudioCommand + "(" + GetResourceName(path) + ")");
                                         GUI.changed = true;
                                     }
-                                    else if (GetCurrentAudioCommand() == "LipSync")
+#else
+                                    if (path.Contains("Resources"))
                                     {
-                                        sequence = AddCommandToSequence(sequence, GetCurrentAudioCommand() + "(" + System.IO.Path.GetFileNameWithoutExtension(path) + ")");
+                                        sequence = AddCommandToSequence(sequence, currentAudioCommand + "(" + GetResourceName(path) + ")");
+                                        GUI.changed = true;
+                                    }
+                                    else if (currentAudioCommand == "LipSync")
+                                    {
+                                        sequence = AddCommandToSequence(sequence, currentAudioCommand + "(" + System.IO.Path.GetFileNameWithoutExtension(path) + ")");
                                         GUI.changed = true;
                                     }
                                     else
                                     {
-                                        EditorUtility.DisplayDialog("Not in Resources Folder", "To use drag-n-drop, audio clips must be located in the hierarchy of a Resources folder.", "OK");
+                                        EditorUtility.DisplayDialog("Not in Resources Folder", "To use drag-n-drop, audio clips must be located in the hierarchy of a Resources folder or must be marked Addressable.", "OK");
                                     }
+#endif
                                 }
                                 else if (obj is GameObject)
                                 {
@@ -199,7 +214,9 @@ namespace PixelCrushers.DialogueSystem
                                     {
                                         // Drop GameObject according to selected GameObject command:
                                         var command = Event.current.alt ? alternateGameObjectDragDropCommand : gameObjectDragDropCommand;
-                                        sequence = AddCommandToSequence(sequence, GetCurrentGameObjectCommand(command, go.name));
+                                        var currentGameObjectCommand = GetCurrentGameObjectCommand(command, go.name);
+                                        if (string.IsNullOrEmpty(currentGameObjectCommand)) continue;
+                                        sequence = AddCommandToSequence(sequence, currentGameObjectCommand);
                                     }
                                     GUI.changed = true;
                                 }
@@ -217,7 +234,9 @@ namespace PixelCrushers.DialogueSystem
                                     {
                                         // Drop component according to selected component command:
                                         var command = Event.current.alt ? alternateComponentDragDropCommand : componentDragDropCommand;
-                                        sequence = AddCommandToSequence(sequence, GetCurrentComponentCommand(command, component.GetType().Name, go.name));
+                                        var currentComponentCommand = GetCurrentComponentCommand(command, component.GetType().Name, go.name);
+                                        if (string.IsNullOrEmpty(currentComponentCommand)) continue;
+                                        sequence = AddCommandToSequence(sequence, currentComponentCommand);
                                     }
                                     GUI.changed = true;
                                 }
@@ -229,8 +248,6 @@ namespace PixelCrushers.DialogueSystem
 
             // If content changed, reset syntax check state:
             if (EditorGUI.EndChangeCheck()) syntaxState = SequenceSyntaxState.Unchecked;
-
-            //EditorWindowTools.EndIndentedSection();
 
             return sequence;
         }
@@ -256,19 +273,24 @@ namespace PixelCrushers.DialogueSystem
             menu.AddItem(new GUIContent("Audio Drag-n-Drop/Use Audio()"), audioDragDropCommand == AudioDragDropCommand.Audio, SetAudioDragDropCommand, AudioDragDropCommand.Audio);
             menu.AddItem(new GUIContent("Audio Drag-n-Drop/Use SALSA() (3rd party)"), audioDragDropCommand == AudioDragDropCommand.SALSA, SetAudioDragDropCommand, AudioDragDropCommand.SALSA);
             menu.AddItem(new GUIContent("Audio Drag-n-Drop/Use LipSync() (3rd party)"), audioDragDropCommand == AudioDragDropCommand.LipSync, SetAudioDragDropCommand, AudioDragDropCommand.LipSync);
+            menu.AddItem(new GUIContent("Audio Drag-n-Drop/(Do Nothing)"), audioDragDropCommand == AudioDragDropCommand.Nothing, SetAudioDragDropCommand, AudioDragDropCommand.Nothing);
             menu.AddItem(new GUIContent("GameObject Drag-n-Drop/Help..."), false, ShowSequenceEditorGameObjectHelp, null);
             menu.AddItem(new GUIContent("GameObject Drag-n-Drop/Default/Use Camera()"), gameObjectDragDropCommand == GameObjectDragDropCommand.Camera, SetGameObjectDragDropCommand, GameObjectDragDropCommand.Camera);
             menu.AddItem(new GUIContent("GameObject Drag-n-Drop/Default/Use DOF()"), gameObjectDragDropCommand == GameObjectDragDropCommand.DOF, SetGameObjectDragDropCommand, GameObjectDragDropCommand.DOF);
             menu.AddItem(new GUIContent("GameObject Drag-n-Drop/Default/SetActive(GameObject,true)"), gameObjectDragDropCommand == GameObjectDragDropCommand.SetActiveTrue, SetGameObjectDragDropCommand, GameObjectDragDropCommand.SetActiveTrue);
             menu.AddItem(new GUIContent("GameObject Drag-n-Drop/Default/SetActive(GameObject,false)"), gameObjectDragDropCommand == GameObjectDragDropCommand.SetActiveFalse, SetGameObjectDragDropCommand, GameObjectDragDropCommand.SetActiveFalse);
+            menu.AddItem(new GUIContent("GameObject Drag-n-Drop/Default/(Do Nothing)"), gameObjectDragDropCommand == GameObjectDragDropCommand.Nothing, SetGameObjectDragDropCommand, GameObjectDragDropCommand.Nothing);
             menu.AddItem(new GUIContent("GameObject Drag-n-Drop/Alt-Key/Use Camera()"), alternateGameObjectDragDropCommand == GameObjectDragDropCommand.Camera, SetAlternateGameObjectDragDropCommand, GameObjectDragDropCommand.Camera);
             menu.AddItem(new GUIContent("GameObject Drag-n-Drop/Alt-Key/Use DOF()"), alternateGameObjectDragDropCommand == GameObjectDragDropCommand.DOF, SetAlternateGameObjectDragDropCommand, GameObjectDragDropCommand.DOF);
             menu.AddItem(new GUIContent("GameObject Drag-n-Drop/Alt-Key/SetActive(GameObject,true)"), alternateGameObjectDragDropCommand == GameObjectDragDropCommand.SetActiveTrue, SetAlternateGameObjectDragDropCommand, GameObjectDragDropCommand.SetActiveTrue);
             menu.AddItem(new GUIContent("GameObject Drag-n-Drop/Alt-Key/SetActive(GameObject,false)"), alternateGameObjectDragDropCommand == GameObjectDragDropCommand.SetActiveFalse, SetAlternateGameObjectDragDropCommand, GameObjectDragDropCommand.SetActiveFalse);
+            menu.AddItem(new GUIContent("GameObject Drag-n-Drop/Alt-Key/(Do Nothing)"), alternateGameObjectDragDropCommand == GameObjectDragDropCommand.Nothing, SetAlternateGameObjectDragDropCommand, GameObjectDragDropCommand.Nothing);
             menu.AddItem(new GUIContent("Component Drag-n-Drop/Default/SetEnabled(Component,true,GameObject)"), componentDragDropCommand == ComponentDragDropCommand.SetEnabledTrue, SetComponentDragDropCommand, ComponentDragDropCommand.SetEnabledTrue);
             menu.AddItem(new GUIContent("Component Drag-n-Drop/Default/SetEnabled(Component,false,GameObject)"), componentDragDropCommand == ComponentDragDropCommand.SetEnabledFalse, SetComponentDragDropCommand, ComponentDragDropCommand.SetEnabledFalse);
+            menu.AddItem(new GUIContent("Component Drag-n-Drop/Default/(Do Nothing)"), componentDragDropCommand == ComponentDragDropCommand.Nothing, SetComponentDragDropCommand, ComponentDragDropCommand.Nothing);
             menu.AddItem(new GUIContent("Component Drag-n-Drop/Alt-Key/SetEnabled(Component,true,GameObject)"), alternateComponentDragDropCommand == ComponentDragDropCommand.SetEnabledTrue, SetAlternateComponentDragDropCommand, ComponentDragDropCommand.SetEnabledTrue);
             menu.AddItem(new GUIContent("Component Drag-n-Drop/Alt-Key/SetEnabled(Component,false,GameObject)"), alternateComponentDragDropCommand == ComponentDragDropCommand.SetEnabledFalse, SetAlternateComponentDragDropCommand, ComponentDragDropCommand.SetEnabledFalse);
+            menu.AddItem(new GUIContent("Component Drag-n-Drop/Alt-Key/(Do Nothing)"), alternateComponentDragDropCommand == ComponentDragDropCommand.Nothing, SetAlternateComponentDragDropCommand, ComponentDragDropCommand.Nothing);
             AddAllSequencerCommands(menu);
             AddAllShortcuts(menu);
             if (customSequenceMenuSetup != null) customSequenceMenuSetup(menu);
@@ -294,6 +316,8 @@ namespace PixelCrushers.DialogueSystem
         {
             switch (audioDragDropCommand)
             {
+                case AudioDragDropCommand.Nothing:
+                    return string.Empty;
                 case AudioDragDropCommand.Audio:
                     return "Audio";
                 case AudioDragDropCommand.SALSA:
@@ -334,6 +358,8 @@ namespace PixelCrushers.DialogueSystem
                     return "SetActive(" + goName + ",true)";
                 case GameObjectDragDropCommand.SetActiveFalse:
                     return "SetActive(" + goName + ",false)";
+                case GameObjectDragDropCommand.Nothing:
+                    return string.Empty;
             }
         }
 
@@ -356,7 +382,9 @@ namespace PixelCrushers.DialogueSystem
                 case ComponentDragDropCommand.SetEnabledTrue:
                     return "SetEnabled(" + componentName + ",true," + goName + ")";
                 case ComponentDragDropCommand.SetEnabledFalse:
-                    return "SetEnabled(" + componentName+ ",false," + goName + ")";
+                    return "SetEnabled(" + componentName + ",false," + goName + ")";
+                case ComponentDragDropCommand.Nothing:
+                    return string.Empty;
             }
         }
 
@@ -473,6 +501,13 @@ namespace PixelCrushers.DialogueSystem
                     foreach (var type in assembly.GetTypes().Where(t => typeof(PixelCrushers.DialogueSystem.SequencerCommands.SequencerCommand).IsAssignableFrom(t)))
                     {
                         var commandName = type.Name.Substring("SequencerCommand".Length);
+
+                        var attr = Attribute.GetCustomAttribute(type, typeof(SequencerCommandGroupAttribute)) as SequencerCommandGroupAttribute;
+                        if (attr != null && !string.IsNullOrEmpty(attr.submenu))
+                        {
+                            menu.AddItem(new GUIContent(attr.submenu + "/" + commandName), false, StartSequencerCommand, commandName);
+                        }
+
                         list.Add(commandName);
                     }
                 }
@@ -488,20 +523,58 @@ namespace PixelCrushers.DialogueSystem
         private static void AddAllShortcuts(GenericMenu menu)
         {
             menu.AddItem(new GUIContent("Shortcuts/Help..."), false, OpenURL, "https://www.pixelcrushers.com/dialogue_system/manual2x/html/cutscene_sequences.html#shortcuts");
+
+            // Dictionary to hold submenus and their corresponding shortcuts
+            var submenuDict = new Dictionary<string, List<string>>();
+
+            // Find all SequencerShortcuts in the scene
             var list = new List<string>();
-            var allSequencerShortcuts = GameObject.FindObjectsOfType<SequencerShortcuts>();
+            var allSequencerShortcuts = GameObjectUtility.FindObjectsByType<SequencerShortcuts>();
             foreach (var sequencerShortcuts in allSequencerShortcuts)
             {
                 foreach (var shortcut in sequencerShortcuts.shortcuts)
                 {
-                    list.Add(@"{{" + shortcut.shortcut + @"}}");
+                    //list.Add(@"{{" + shortcut.shortcut + @"}}");
+
+                    // Check if the shortcut has a submenu specified
+                    if (!string.IsNullOrEmpty(shortcut.subMenu))
+                    {
+                        // If the submenu doesn't exist, create a new list for it
+                        if (!submenuDict.ContainsKey(shortcut.subMenu))
+                        {
+                            submenuDict[shortcut.subMenu] = new List<string>();
+                        }
+                        // Add the shortcut to the submenu list
+                        submenuDict[shortcut.subMenu].Add(@"{{" + shortcut.shortcut + @"}}");
+                    }
+                    else
+                    {
+                        // If no submenu is specified, add it to a default "General" list
+                        if (!submenuDict.ContainsKey("General"))
+                        {
+                            submenuDict["General"] = new List<string>();
+                        }
+                        submenuDict["General"].Add(shortcut.shortcut);
+                    }
                 }
             }
-            list.Sort();
-            for (int i = 0; i < list.Count; i++)
+
+            // Sort and add the submenu items to the menu
+            foreach (var submenu in submenuDict.Keys)
             {
-                menu.AddItem(new GUIContent("Shortcuts/" + list[i]), false, StartOtherCommand, list[i]);
+                submenuDict[submenu].Sort(); // Sort the shortcuts
+                foreach (var shortcut in submenuDict[submenu])
+                {
+                    string menuPath = string.IsNullOrEmpty(submenu) ? shortcut : $"{submenu}/{shortcut}";
+                    menu.AddItem(new GUIContent("Shortcuts/" + menuPath), false, StartOtherCommand, shortcut);
+                }
             }
+
+            //list.Sort();
+            //for (int i = 0; i < list.Count; i++)
+            //{
+            //    menu.AddItem(new GUIContent("Shortcuts/" + list[i]), false, StartOtherCommand, list[i]);
+            //}
         }
 
         private static void StartSequencerCommand(object data)
@@ -533,7 +606,7 @@ namespace PixelCrushers.DialogueSystem
             }
             var parser = new SequenceParser();
             var result = parser.Parse(sequenceToCheck);
-            return (result == null || result.Count == 0) ? SequenceSyntaxState.Error : SequenceSyntaxState.Valid; 
+            return (result == null || result.Count == 0) ? SequenceSyntaxState.Error : SequenceSyntaxState.Valid;
         }
 
         public static void SetSyntaxStateGUIColor(SequenceSyntaxState syntaxState)

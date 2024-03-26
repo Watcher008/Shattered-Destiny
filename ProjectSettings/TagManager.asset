@@ -4,14 +4,8 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Land1Borders
-  - Land2Borders
-  - Land3Borders
-  - Land4Borders
-  - Mountain
-  - NotWalkable
-  - Forest
   - CommandLog
+  - PlayerInput
   layers:
   - Default
   - TransparentFX

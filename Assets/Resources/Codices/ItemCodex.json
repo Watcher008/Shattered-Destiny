@@ -1,0 +1,28 @@
+{
+    "Weapons":[
+        {
+            "Name": "Basic Sword",
+            "Damage": 1,
+            "Range": 1,
+            "Attribute": 1
+        },
+        {
+            "Name": "Basic Warhammer",
+            "Damage": 1,
+            "Range": 1,
+            "Attribute": 1
+        },
+        {
+            "Name": "Basic Bow",
+            "Damage": 1,
+            "Range": 2,
+            "Attribute": 1
+        },
+        {
+            "Name": "Basic Staff",
+            "Damage": 1,
+            "Range": 2,
+            "Attribute": 2
+        }
+    ]
+}

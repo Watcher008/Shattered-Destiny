@@ -27,7 +27,8 @@ namespace PixelCrushers.DialogueSystem
             None,
             ChatMapper,
             ArticyDraft,
-            AuroraToolset
+            AuroraToolset,
+            Arcweave
         };
 
         /// <summary>
@@ -153,6 +154,7 @@ namespace PixelCrushers.DialogueSystem
                 case RefreshSource.ChatMapper: RunChatMapperConverter(); break;
                 case RefreshSource.ArticyDraft: RunArticyConverter(); break;
                 case RefreshSource.AuroraToolset: RunAuroraConverter(); break;
+                case RefreshSource.Arcweave: RunArcweaveConverter(); break;
             }
             if (DialogueEditor.DialogueEditorWindow.instance != null)
             {
@@ -193,6 +195,18 @@ namespace PixelCrushers.DialogueSystem
 #endif
         }
 
+        private void RunArcweaveConverter()
+        {
+#if USE_ARCWEAVE
+            bool alreadyOpen = ArcweaveSupport.ArcweaveImporterWindow.isOpen;
+            var window = ArcweaveSupport.ArcweaveImporterWindow.Init();
+            window.LoadAndConvert();
+            if (!alreadyOpen) window.Close();
+#else
+            Debug.Log("Dialogue System: Enable Arcweave support first by adding USE_ARCWEAVE to Edit > Project Settings > Player: Other Settings > Scripting Define Symbols.");
+#endif
+        }
+
         private void DrawInspectorSelection()
         {
             if (DialogueEditor.DialogueEditorWindow.instance == null) return;
@@ -230,7 +244,11 @@ namespace PixelCrushers.DialogueSystem
                 }
                 else if (selectionType == typeof(Conversation))
                 {
+                    EditorGUILayout.BeginHorizontal();
                     DrawInspectorSelectionTitle("Conversation");
+                    GUILayout.FlexibleSpace();
+                    DialogueEditor.DialogueEditorWindow.instance.DrawAIBranchingConversationButton(selection as Conversation);
+                    EditorGUILayout.EndHorizontal();
                     if (DialogueEditor.DialogueEditorWindow.instance.showNodeEditor)
                     {
                         if (DialogueEditor.DialogueEditorWindow.instance.DrawConversationProperties())

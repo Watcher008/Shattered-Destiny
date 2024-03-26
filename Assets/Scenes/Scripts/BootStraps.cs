@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using SD.EventSystem;
+using SD.Characters;
 
 namespace SD.SceneManagement
 {
@@ -21,6 +22,10 @@ namespace SD.SceneManagement
 
         [SerializeField] private GameObject loadingScreen;
         [SerializeField] private Image loadingProgressBar;
+
+        [Header("Codices")]
+        [SerializeField] private CreatureCodex _codex;
+        [SerializeField] private ItemCodex _itemCodex;
 
         private List<AsyncOperation> scenesToLoad = new List<AsyncOperation>();
         private List<GameEvent> eventsToInvokeAfterLoading = new List<GameEvent>();
@@ -39,8 +44,31 @@ namespace SD.SceneManagement
 
         private void Boot()
         {
+            _codex.Init();
+            _itemCodex.Init();
+
             bootEvent?.Invoke();
             LoadSceneCollectionAdditive(bootScenes);
+        }
+
+        /// <summary>
+        /// Sets the scene as active to host instantiated objects.
+        /// </summary>
+        public void SetActiveScene(ScenePicker scene)
+        {
+            if (scene == null)
+            {
+                Debug.LogWarning("Scene is null");
+                return;
+            }
+            string sceneName = Path.GetFileNameWithoutExtension(scene.ScenePath);
+            var activeScene = SceneManager.GetSceneByName(sceneName);
+            if (activeScene == null)
+            {
+                Debug.LogWarning("Cannot find scene by name");
+                return;
+            }
+            SceneManager.SetActiveScene(activeScene);
         }
 
         /// <summary>

@@ -87,6 +87,9 @@ namespace PixelCrushers.DialogueSystem
             [Tooltip("If prepending actor name, separate from Dialogue Text with this string.")]
             public string prependActorNameSeparator = ": ";
 
+            [Tooltip("If prepending actor name, format this way, where {0} is name + separator, and {1} is Dialogue Text.")]
+            public string prependActorNameFormat = "{0}{1}";
+
             [Tooltip("Color to use for this actor's subtitles.")]
             public Color subtitleColor = Color.white;
         }
@@ -164,8 +167,8 @@ namespace PixelCrushers.DialogueSystem
         }
 
         /// <summary>
-        /// Gets the name to use for this DialogueActor, including parsing if it contains a [lua]
-        /// or [var] tag.
+        /// Gets the name to use for this DialogueActor, including parsing if it contains a [lua],
+        /// [var], or [em#] tag.
         /// </summary>
         /// <returns>The name to use, or <c>null</c> if not set.</returns>
         public virtual string GetActorName()
@@ -173,7 +176,7 @@ namespace PixelCrushers.DialogueSystem
             var actorName = string.IsNullOrEmpty(actor) ? name : actor;
             var result = CharacterInfo.GetLocalizedDisplayNameInDatabase(DialogueLua.GetActorField(actorName, "Name").asString);
             if (!string.IsNullOrEmpty(result)) actorName = result;
-            if (actorName.Contains("[lua") || actorName.Contains("[var"))
+            if (actorName.Contains("[lua") || actorName.Contains("[var") || actorName.Contains("[em"))
             {
                 return FormattedText.Parse(actorName, DialogueManager.masterDatabase.emphasisSettings).text;
             }
@@ -253,7 +256,10 @@ namespace PixelCrushers.DialogueSystem
                 }
                 else
                 {
-                    return UITools.WrapTextInColor(subtitle.speakerInfo.Name + standardDialogueUISettings.prependActorNameSeparator, standardDialogueUISettings.subtitleColor) + text;
+                    //return UITools.WrapTextInColor(subtitle.speakerInfo.Name + standardDialogueUISettings.prependActorNameSeparator, standardDialogueUISettings.subtitleColor) + text;
+                    var coloredName = UITools.WrapTextInColor(subtitle.speakerInfo.Name + standardDialogueUISettings.prependActorNameSeparator, standardDialogueUISettings.subtitleColor);
+                    var s = string.Format(standardDialogueUISettings.prependActorNameFormat, new object[] { coloredName, text });
+                    return FormattedText.Parse(s).text;
                 }
             }
             else

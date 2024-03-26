@@ -24,6 +24,7 @@ namespace PixelCrushers.DialogueSystem.SequencerCommands
         {
             bool all = false;
             string allExcept = string.Empty;
+            bool checkExcept = false;
             CinemachineVirtualCamera vcam = null;
 
             var vcamName = GetParameter(0);
@@ -34,6 +35,7 @@ namespace PixelCrushers.DialogueSystem.SequencerCommands
             else if (vcamName.StartsWith("except:"))
             {
                 all = true;
+                checkExcept = true;
                 allExcept = vcamName.Substring("except:".Length);
             }
             else
@@ -73,6 +75,7 @@ namespace PixelCrushers.DialogueSystem.SequencerCommands
                     var allVcams = FindObjectsOfType<CinemachineVirtualCamera>();
                     foreach (CinemachineVirtualCamera avcam in allVcams)
                     {
+                        if (checkExcept && string.Equals(avcam.name, allExcept)) continue;
                         avcam.Priority = priority;
                         if (cut)
                         {

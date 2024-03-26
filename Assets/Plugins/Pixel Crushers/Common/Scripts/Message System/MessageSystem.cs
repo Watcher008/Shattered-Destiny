@@ -58,6 +58,8 @@ namespace PixelCrushers
 
         private static bool s_sendInEditMode = false;
 
+        private static bool s_allowReceiveSameFrameAdded = true;
+
         private static bool s_debug = false;
 
         private static int s_sendMessageDepth = 0;
@@ -71,6 +73,7 @@ namespace PixelCrushers
             s_sendersToLog = new HashSet<GameObject>();
             s_listenersToLog = new HashSet<GameObject>();
             s_sendInEditMode = false;
+            s_allowReceiveSameFrameAdded = true;
             s_debug = false;
             s_sendMessageDepth = 0;
         }
@@ -83,6 +86,15 @@ namespace PixelCrushers
         {
             get { return s_sendInEditMode; }
             set { s_sendInEditMode = value; }
+        }
+
+        /// <summary>
+        /// Allow listeners to receive messages on the same frame they registered with the MessageSystem.
+        /// </summary>
+        public static bool allowReceiveSameFrameAdded
+        {
+            get { return s_allowReceiveSameFrameAdded; }
+            set { s_allowReceiveSameFrameAdded = value; }
         }
 
         /// <summary>
@@ -340,7 +352,7 @@ namespace PixelCrushers
                         x.removed = true;
                         continue;
                     }
-                    if (x.frameAdded == Time.frameCount) continue;
+                     if (!allowReceiveSameFrameAdded && x.frameAdded == Time.frameCount) continue;
                     if (string.Equals(x.message, message) && (string.Equals(x.parameter, parameter) || string.IsNullOrEmpty(x.parameter)))
                     {
                         try

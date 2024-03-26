@@ -17,7 +17,7 @@ namespace PixelCrushers.DialogueSystem.Articy
 
         private const string ArticyProjectFilenameKey = "PixelCrushers.DialogueSystem.ArticyProjectFilename";
         private const string ArticyPortraitFolderKey = "PixelCrushers.DialogueSystem.ArticyPortraitFolder";
-        private const string ArticyStageDirectionsAreSequencesKey = "PixelCrushers.DialogueSystem.StageDirectionsAreSequences";
+        private const string ArticyStageDirectionsModeKey = "PixelCrushers.DialogueSystem.StageDirectionsMode";
         private const string ArticyUseDefaultActorsIfNoneKey = "PixelCrushers.DialogueSystem.UseDefaultActorsIfNone";
         private const string ArticyFlowFragmentModeKey = "PixelCrushers.DialogueSystem.FlowFragmentMode";
         private const string ArticyLooseFlowKey = "PixelCrushers.DialogueSystem.ArticyConvertLooseFlow";
@@ -33,10 +33,12 @@ namespace PixelCrushers.DialogueSystem.Articy
         private const string ArticyDropdownsKey = "PixelCrushers.DialogueSystem.ArticyDropdowns";
         private const string ArticySlotsKey = "PixelCrushers.DialogueSystem.ArticySlots";
         private const string ArticyUseTechnicalNamesKey = "PixelCrushers.DialogueSystem.UseTechnicalNames";
+        private const string ArticyIncludeFeatureNamesKey = "PixelCrushers.DialogueSystem.IncludeFeatureNamesInFields";
         private const string ArticyCustomDisplayNameKey = "PixelCrushers.DialogueSystem.ArticyCustomDisplayName";
         private const string ArticyDirectConversationLinksToEntry1Key = "PixelCrushers.DialogueSystem.DirectConversationLinksToEntry1";
         private const string ArticyConvertMarkupToRichTextKey = "PixelCrushers.DialogueSystem.ArticyConvertMarkupToRichText";
         private const string ArticySplitTextOnPipesKey = "PixelCrushers.DialogueSystem.SplitTextOnPipes";
+        private const string ArticyTrimWhitespaceKey = "PixelCrushers.DialogueSystem.TrimWhitespace";
         private const string ArticyFlowFragmentScriptKey = "PixelCrushers.DialogueSystem.ArticyFlowFragmentScript";
         private const string ArticyVoiceOverPropertyKey = "PixelCrushers.DialogueSystem.ArticyVoiceOverPropertyKey";
         private const string ArticyLocalizationXlsKey = "PixelCrushers.DialogueSystem.ArticyLocalizationXlsxKey";
@@ -47,7 +49,7 @@ namespace PixelCrushers.DialogueSystem.Articy
             var converterPrefs = new ConverterPrefs();
             converterPrefs.ProjectFilename = EditorPrefs.GetString(ArticyProjectFilenameKey);
             converterPrefs.PortraitFolder = EditorPrefs.GetString(ArticyPortraitFolderKey);
-            converterPrefs.StageDirectionsAreSequences = EditorPrefs.HasKey(ArticyStageDirectionsAreSequencesKey) ? EditorPrefs.GetBool(ArticyStageDirectionsAreSequencesKey) : true;
+            converterPrefs.StageDirectionsMode = EditorPrefs.HasKey(ArticyStageDirectionsModeKey) ? (ConverterPrefs.StageDirModes)EditorPrefs.GetInt(ArticyStageDirectionsModeKey) : ConverterPrefs.StageDirModes.Sequences;
             converterPrefs.UseDefaultActorsIfNoneAssignedToDialogue = EditorPrefs.HasKey(ArticyUseDefaultActorsIfNoneKey) ? EditorPrefs.GetBool(ArticyUseDefaultActorsIfNoneKey) : true;
             converterPrefs.FlowFragmentMode = (ConverterPrefs.FlowFragmentModes)(EditorPrefs.HasKey(ArticyFlowFragmentModeKey) ? EditorPrefs.GetInt(ArticyFlowFragmentModeKey) : 0);
             converterPrefs.CreateConversationsForLooseFlow = EditorPrefs.GetBool(ArticyLooseFlowKey, false);
@@ -63,10 +65,12 @@ namespace PixelCrushers.DialogueSystem.Articy
             converterPrefs.ConvertDropdownsAs = EditorPrefs.HasKey(ArticyDropdownsKey) ? (ConverterPrefs.ConvertDropdownsModes)EditorPrefs.GetInt(ArticyDropdownsKey) : ConverterPrefs.ConvertDropdownsModes.Int;
             converterPrefs.ConvertSlotsAs = EditorPrefs.HasKey(ArticySlotsKey) ? (ConverterPrefs.ConvertSlotsModes)EditorPrefs.GetInt(ArticySlotsKey) : ConverterPrefs.ConvertSlotsModes.DisplayName;
             converterPrefs.UseTechnicalNames = EditorPrefs.GetBool(ArticyUseTechnicalNamesKey, false);
+            converterPrefs.IncludeFeatureNameInFields = EditorPrefs.GetBool(ArticyIncludeFeatureNamesKey, false);
             converterPrefs.CustomDisplayName = EditorPrefs.GetBool(ArticyCustomDisplayNameKey, false);
             converterPrefs.DirectConversationLinksToEntry1 = EditorPrefs.GetBool(ArticyDirectConversationLinksToEntry1Key, false);
             converterPrefs.ConvertMarkupToRichText = EditorPrefs.GetBool(ArticyConvertMarkupToRichTextKey, true);
             converterPrefs.SplitTextOnPipes = EditorPrefs.GetBool(ArticySplitTextOnPipesKey, true);
+            converterPrefs.TrimWhitespace = EditorPrefs.GetBool(ArticyTrimWhitespaceKey, true);
             converterPrefs.FlowFragmentScript = EditorPrefs.GetString(ArticyFlowFragmentScriptKey, ConverterPrefs.DefaultFlowFragmentScript);
             converterPrefs.VoiceOverProperty = EditorPrefs.GetString(ArticyVoiceOverPropertyKey, ConverterPrefs.DefaultVoiceOverProperty);
             converterPrefs.LocalizationXlsx = EditorPrefs.GetString(ArticyLocalizationXlsKey);
@@ -78,7 +82,7 @@ namespace PixelCrushers.DialogueSystem.Articy
         {
             EditorPrefs.SetString(ArticyProjectFilenameKey, converterPrefs.ProjectFilename);
             EditorPrefs.SetString(ArticyPortraitFolderKey, converterPrefs.PortraitFolder);
-            EditorPrefs.SetBool(ArticyStageDirectionsAreSequencesKey, converterPrefs.StageDirectionsAreSequences);
+            EditorPrefs.SetInt(ArticyStageDirectionsModeKey, (int)converterPrefs.StageDirectionsMode);
             EditorPrefs.SetBool(ArticyUseDefaultActorsIfNoneKey, converterPrefs.UseDefaultActorsIfNoneAssignedToDialogue);
             EditorPrefs.SetInt(ArticyFlowFragmentModeKey, (int)converterPrefs.FlowFragmentMode);
             EditorPrefs.SetBool(ArticyLooseFlowKey, converterPrefs.CreateConversationsForLooseFlow);
@@ -94,10 +98,12 @@ namespace PixelCrushers.DialogueSystem.Articy
             EditorPrefs.SetInt(ArticyDropdownsKey, (int)converterPrefs.ConvertDropdownsAs);
             EditorPrefs.SetInt(ArticySlotsKey, (int)converterPrefs.ConvertSlotsAs);
             EditorPrefs.SetBool(ArticyUseTechnicalNamesKey, converterPrefs.UseTechnicalNames);
+            EditorPrefs.SetBool(ArticyIncludeFeatureNamesKey, converterPrefs.IncludeFeatureNameInFields);
             EditorPrefs.SetBool(ArticyCustomDisplayNameKey, converterPrefs.CustomDisplayName);
             EditorPrefs.SetBool(ArticyDirectConversationLinksToEntry1Key, converterPrefs.DirectConversationLinksToEntry1);
             EditorPrefs.SetBool(ArticyConvertMarkupToRichTextKey, converterPrefs.ConvertMarkupToRichText);
             EditorPrefs.SetBool(ArticySplitTextOnPipesKey, converterPrefs.SplitTextOnPipes);
+            EditorPrefs.SetBool(ArticyTrimWhitespaceKey, converterPrefs.TrimWhitespace);
             EditorPrefs.SetString(ArticyFlowFragmentScriptKey, converterPrefs.FlowFragmentScript);
             EditorPrefs.SetString(ArticyVoiceOverPropertyKey, converterPrefs.VoiceOverProperty);
             EditorPrefs.SetString(ArticyLocalizationXlsKey, converterPrefs.LocalizationXlsx);
@@ -108,7 +114,7 @@ namespace PixelCrushers.DialogueSystem.Articy
         {
             EditorPrefs.DeleteKey(ArticyProjectFilenameKey);
             EditorPrefs.DeleteKey(ArticyPortraitFolderKey);
-            EditorPrefs.DeleteKey(ArticyStageDirectionsAreSequencesKey);
+            EditorPrefs.DeleteKey(ArticyStageDirectionsModeKey);
             EditorPrefs.DeleteKey(ArticyUseDefaultActorsIfNoneKey);
             EditorPrefs.DeleteKey(ArticyFlowFragmentModeKey);
             EditorPrefs.DeleteKey(ArticyLooseFlowKey);
@@ -124,10 +130,12 @@ namespace PixelCrushers.DialogueSystem.Articy
             EditorPrefs.DeleteKey(ArticyDropdownsKey);
             EditorPrefs.DeleteKey(ArticySlotsKey);
             EditorPrefs.DeleteKey(ArticyUseTechnicalNamesKey);
+            EditorPrefs.DeleteKey(ArticyIncludeFeatureNamesKey);
             EditorPrefs.DeleteKey(ArticyCustomDisplayNameKey);
             EditorPrefs.DeleteKey(ArticyDirectConversationLinksToEntry1Key);
             EditorPrefs.DeleteKey(ArticyConvertMarkupToRichTextKey);
             EditorPrefs.DeleteKey(ArticySplitTextOnPipesKey);
+            EditorPrefs.DeleteKey(ArticyTrimWhitespaceKey);
             EditorPrefs.DeleteKey(ArticyFlowFragmentScriptKey);
             EditorPrefs.DeleteKey(ArticyVoiceOverPropertyKey);
             EditorPrefs.DeleteKey(ArticyLocalizationXlsKey);

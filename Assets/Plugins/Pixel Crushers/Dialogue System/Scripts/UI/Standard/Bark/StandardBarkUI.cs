@@ -72,6 +72,9 @@ namespace PixelCrushers.DialogueSystem
         [Tooltip("Keep the bark text onscreen until the sequence ends.")]
         public bool waitUntilSequenceEnds = false;
 
+        [Tooltip("If bark is visible and waiting for sequence to end, but new bark wants to show, cancel wait for previous sequence.")]
+        public bool cancelWaitUntilSequenceEndsIfReplacingBark = false;
+
         /// <summary>
         /// Wait for an "OnContinue" message.
         /// </summary>
@@ -177,7 +180,7 @@ namespace PixelCrushers.DialogueSystem
                 hasEverBarked = true;
                 SetUIElementsActive(false);
                 string subtitleText = subtitle.formattedText.text;
-                if (includeName)
+                if (includeName && !string.IsNullOrEmpty(Tools.StripTextMeshProTags(subtitle.speakerInfo.Name)))
                 {
                     if (nameText != null)
                     {
@@ -185,7 +188,7 @@ namespace PixelCrushers.DialogueSystem
                     }
                     else
                     {
-                        subtitleText = string.Format("{0}: {1}", subtitleText, subtitle.formattedText.text);
+                        subtitleText = string.Format("{0}: {1}", subtitle.speakerInfo.Name, subtitle.formattedText.text);
                     }
                 }
                 else
@@ -214,10 +217,7 @@ namespace PixelCrushers.DialogueSystem
                 }
                 if (typewriter != null) typewriter.StartTyping(subtitleText);
 
-                //--- We now observe DialogueTime.time instead of using Invoke.
-                //CancelInvoke("Hide");
                 var barkDuration = Mathf.Approximately(0, duration) ? DialogueManager.GetBarkDuration(subtitleText) : duration;
-                //if (!(waitUntilSequenceEnds || waitForContinueButton)) Invoke("Hide", barkDuration);
                 if (waitUntilSequenceEnds) numSequencesActive++;
                 doneTime = waitForContinueButton ? Mathf.Infinity : (DialogueTime.time + barkDuration);
             }

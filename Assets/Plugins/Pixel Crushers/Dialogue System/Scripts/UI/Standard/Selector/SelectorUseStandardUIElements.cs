@@ -99,6 +99,8 @@ namespace PixelCrushers.DialogueSystem
             {
                 previousUseDefaultGUI = selector.useDefaultGUI;
                 selector.useDefaultGUI = false;
+                selector.Enabled += OnSelectorEnabled;
+                selector.Disabled += OnSelectorDisabled;
                 selector.SelectedUsableObject += OnSelectedUsable;
                 selector.DeselectedUsableObject += OnDeselectedUsable;
                 defaultUseMessage = selector.defaultUseMessage;
@@ -108,6 +110,8 @@ namespace PixelCrushers.DialogueSystem
             {
                 previousUseDefaultGUI = proximitySelector.useDefaultGUI;
                 proximitySelector.useDefaultGUI = false;
+                proximitySelector.Enabled += OnSelectorEnabled;
+                proximitySelector.Disabled += OnSelectorDisabled;
                 proximitySelector.SelectedUsableObject += OnSelectedUsable;
                 proximitySelector.DeselectedUsableObject += OnDeselectedUsable;
                 defaultUseMessage = proximitySelector.defaultUseMessage;
@@ -121,6 +125,8 @@ namespace PixelCrushers.DialogueSystem
             if (selector != null)
             {
                 selector.useDefaultGUI = previousUseDefaultGUI;
+                selector.Enabled -= OnSelectorEnabled;
+                selector.Disabled -= OnSelectorDisabled;
                 selector.SelectedUsableObject -= OnSelectedUsable;
                 selector.DeselectedUsableObject -= OnDeselectedUsable;
             }
@@ -128,6 +134,8 @@ namespace PixelCrushers.DialogueSystem
             if (proximitySelector != null)
             {
                 proximitySelector.useDefaultGUI = previousUseDefaultGUI;
+                proximitySelector.Enabled -= OnSelectorEnabled;
+                proximitySelector.Disabled -= OnSelectorDisabled;
                 proximitySelector.SelectedUsableObject -= OnSelectedUsable;
                 proximitySelector.DeselectedUsableObject -= OnDeselectedUsable;
             }
@@ -275,6 +283,16 @@ namespace PixelCrushers.DialogueSystem
             }
         }
 
+        protected void OnSelectorEnabled()
+        {
+            ShowControlsOrUsableUI();
+        }
+
+        protected void OnSelectorDisabled()
+        {
+            HideControls();
+        }
+
         public void OnConversationStart(Transform actor)
         {
             HideControls();
@@ -282,6 +300,11 @@ namespace PixelCrushers.DialogueSystem
 
         public void OnConversationEnd(Transform actor)
         {
+            ShowControlsOrUsableUI();
+        }
+
+        protected void ShowControlsOrUsableUI()
+        { 
             if (usableUI != null)
             {
                 usableUI.Show(GetUseMessage());

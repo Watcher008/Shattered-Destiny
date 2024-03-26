@@ -2,7 +2,6 @@
 
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.EventSystems;
 
 namespace PixelCrushers.DialogueSystem
 {
@@ -23,14 +22,23 @@ namespace PixelCrushers.DialogueSystem
         [Tooltip("Input field.")]
         public UIInputField inputField;
 
-        [Tooltip("(Optional) Key code that accepts input.")]
+        [Tooltip("(Optional) Key code that accepts user's text input.")]
         public KeyCode acceptKey = KeyCode.Return;
 
-        [Tooltip("(Optional) key code that cancels input.")]
+        [Tooltip("(Optional) Input button that accepts user's text input.")]
+        public string acceptButton = string.Empty;
+
+        [Tooltip("(Optional) Key code that cancels user's text input.")]
         public KeyCode cancelKey = KeyCode.Escape;
+
+        [Tooltip("(Optional) Input button that cancels user's text input.")]
+        public string cancelButton = string.Empty;
 
         [Tooltip("Automatically open touchscreen keyboard.")]
         public bool showTouchScreenKeyboard = false;
+
+        [Tooltip("Allow blank text input.")]
+        public bool allowBlankInput = true;
 
         public UnityEvent onAccept = new UnityEvent();
 
@@ -44,6 +52,13 @@ namespace PixelCrushers.DialogueSystem
         protected bool m_isAwaitingInput = false;
 
         protected TouchScreenKeyboard m_touchScreenKeyboard = null;
+
+        protected bool m_isQuitting = false;
+
+        protected virtual void OnApplicationQuit()
+        {
+            m_isQuitting = true;
+        }
 
         protected override void Start()
         {
@@ -78,11 +93,13 @@ namespace PixelCrushers.DialogueSystem
         {
             if (m_isAwaitingInput && !DialogueManager.IsDialogueSystemInputDisabled())
             {
-                if (InputDeviceManager.IsKeyDown(acceptKey))
+                if (InputDeviceManager.IsKeyDown(acceptKey) || InputDeviceManager.IsButtonDown(acceptButton) ||
+                    (m_touchScreenKeyboard != null && m_touchScreenKeyboard.status == TouchScreenKeyboard.Status.Done))
                 {
                     AcceptTextInput();
                 }
-                else if (InputDeviceManager.IsKeyDown(cancelKey))
+                else if (InputDeviceManager.IsKeyDown(cancelKey) || InputDeviceManager.IsButtonDown(cancelButton) ||
+                    (m_touchScreenKeyboard != null && m_touchScreenKeyboard.status == TouchScreenKeyboard.Status.Canceled))
                 {
                     CancelTextInput();
                 }
@@ -104,6 +121,7 @@ namespace PixelCrushers.DialogueSystem
         /// </summary>
         public virtual void AcceptTextInput()
         {
+            if (!allowBlankInput && string.IsNullOrEmpty(inputField.text)) return;
             m_isAwaitingInput = false;
             if (m_acceptedText != null)
             {
@@ -122,9 +140,9 @@ namespace PixelCrushers.DialogueSystem
             if (inputField != null)
             {
                 inputField.ActivateInputField();
-                if (EventSystem.current != null)
+                if (eventSystem != null)
                 {
-                    EventSystem.current.SetSelectedGameObject(inputField.gameObject);
+                    eventSystem.SetSelectedGameObject(inputField.gameObject);
                 }
             }
         }
@@ -136,6 +154,7 @@ namespace PixelCrushers.DialogueSystem
 
         protected virtual void Hide()
         {
+            if (m_isQuitting) return;
             Close();
             SetActive(false);
             if (m_touchScreenKeyboard != null)

@@ -1,0 +1,123 @@
+{
+    "Creatures":[
+        {
+            "Name": "Bandit",
+            "Attributes": [15, 15, 15, 15],
+            "MaxHealth": 5,
+            "Movement": 3,
+            "Initiative": 1,
+
+            "MaxActionPoints": 5,
+            "StartingActionPoints": 3,
+            "RefreshActionPoints": 1,
+
+            "DefaultWeapon": "Basic Sword"
+        },
+        {
+            "Name": "Bandit Archer",
+            "Attributes": [15, 15, 15, 15],
+            "MaxHealth": 5,
+            "Movement": 3,
+            "Initiative": 1,
+
+            "MaxActionPoints": 5,
+            "StartingActionPoints": 3,
+            "RefreshActionPoints": 1,
+
+            "DefaultWeapon": "Basic Bow"
+        },
+
+        {
+            "Name": "Mage Acolyte",
+            "Attributes": [20, 40, 15, 15],
+            "MaxHealth": 20,
+            "Movement": 2,
+            "Initiative": 4,
+
+            "MaxActionPoints": 5,
+            "StartingActionPoints": 3,
+            "RefreshActionPoints": 1,
+
+            "DefaultWeapon": "Basic Staff"
+        },
+        {
+            "Name": "Mage Apprentice",
+            "Attributes": [15, 50, 15, 15],
+            "MaxHealth": 30,
+            "Movement": 3,
+            "Initiative": 6,
+
+            "MaxActionPoints": 8,
+            "StartingActionPoints": 5,
+            "RefreshActionPoints": 2,
+
+            "DefaultWeapon": "Basic Staff"
+        },
+        {
+            "Name": "Mage Brute",
+            "Attributes": [15, 50, 15, 15],
+            "MaxHealth": 40,
+            "Movement": 3,
+            "Initiative": 5,
+
+            "MaxActionPoints": 7,
+            "StartingActionPoints": 5,
+            "RefreshActionPoints": 2,
+
+            "DefaultWeapon": "Basic Staff"
+        },
+
+        {
+            "Name": "Imperial Recruit",
+            "Attributes": [25, 25, 15, 15],
+            "MaxHealth": 25,
+            "Movement": 3,
+            "Initiative": 4,
+
+            "MaxActionPoints": 5,
+            "StartingActionPoints": 3,
+            "RefreshActionPoints": 1,
+
+            "DefaultWeapon": "Basic Sword"
+        },
+        {
+            "Name": "Imperial Caster",
+            "Attributes": [25, 45, 15, 15],
+            "MaxHealth": 35,
+            "Movement": 3,
+            "Initiative": 5,
+
+            "MaxActionPoints": 8,
+            "StartingActionPoints": 5,
+            "RefreshActionPoints": 2,
+
+            "DefaultWeapon": "Basic Staff"
+        },
+        {
+            "Name": "Blade",
+            "Attributes": [75, 25, 15, 15],
+            "MaxHealth": 50,
+            "Movement": 4,
+            "Initiative": 4,
+
+            "MaxActionPoints": 10,
+            "StartingActionPoints": 7,
+            "RefreshActionPoints": 3,
+
+            "DefaultWeapon": "Basic Sword"
+        },
+        {
+            "Name": "Imperial Ranger",
+            "Attributes": [45, 25, 15, 15],
+            "MaxHealth": 35,
+            "Movement": 3,
+            "Initiative": 5,
+
+            "MaxActionPoints": 8,
+            "StartingActionPoints": 5,
+            "RefreshActionPoints": 2,
+
+            "DefaultWeapon": "Basic Bow"
+        }
+    ]
+}

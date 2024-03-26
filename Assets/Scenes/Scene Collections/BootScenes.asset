@@ -9,10 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa8cefa31a8a45944819d570ea23daf9, type: 3}
+  m_Script: {fileID: 11500000, guid: 4830551fe9740b5449000c8929026dd9, type: 3}
   m_Name: BootScenes
   m_EditorClassIdentifier: 
   <Scenes>k__BackingField:
-  - {fileID: 11400000, guid: 780f9338bf24a2f4bbbb1fc2ade3c813, type: 2}
-  - {fileID: 11400000, guid: d321c952985b41a42ae2ab822d301388, type: 2}
-  - {fileID: 11400000, guid: 8ae175ef77ccfb34d8f37ddc845ec380, type: 2}
+  - {fileID: 11400000, guid: a0868712ad19d384aa1b6cab41c8fd60, type: 2}
+  - {fileID: 11400000, guid: 226ee1fc2211e914ca7c3b57d47840c3, type: 2}

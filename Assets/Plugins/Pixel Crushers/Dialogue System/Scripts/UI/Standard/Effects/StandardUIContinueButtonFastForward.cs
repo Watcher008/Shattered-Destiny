@@ -20,6 +20,11 @@ namespace PixelCrushers.DialogueSystem
         [Tooltip("Typewriter effect to fast forward if it's not done playing.")]
         public AbstractTypewriterEffect typewriterEffect;
 
+#if USE_STM
+        [Tooltip("If using SuperTextMesh, assign this instead of typewriter effect.")]
+        public SuperTextMesh superTextMesh;
+#endif
+
         [Tooltip("Hide the continue button when continuing.")]
         public bool hideContinueButtonOnContinue = false;
 
@@ -67,6 +72,12 @@ namespace PixelCrushers.DialogueSystem
             {
                 typewriterEffect.Stop();
             }
+#if USE_STM
+            else if (superTextMesh != null && superTextMesh.reading)
+            {
+                superTextMesh.SkipToEnd();
+            }
+#endif
             else
             {
                 if (hideContinueButtonOnContinue && continueButton != null) continueButton.gameObject.SetActive(false);

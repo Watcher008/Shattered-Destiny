@@ -38,7 +38,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             variableView.Draw();
             if (Application.isPlaying)
             {
-                GUI.Label(new Rect(80, 2, 500, 30), "(Use Watches section or Variable View window for runtime values.)");
+                GUI.Label(new Rect(72, -4, 500, 30), "(Use Watches tab or Variable Viewer for runtime values.)");
             }
         }
 

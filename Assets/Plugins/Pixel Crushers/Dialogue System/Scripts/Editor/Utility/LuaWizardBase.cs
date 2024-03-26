@@ -418,6 +418,7 @@ namespace PixelCrushers.DialogueSystem
                     case CustomLuaParameterType.Quest:
                     case CustomLuaParameterType.QuestEntry:
                     case CustomLuaParameterType.Variable:
+                    case CustomLuaParameterType.VariableName:
                     case CustomLuaParameterType.Item:
                         customParamValues[i] = (int)0;
                         break;

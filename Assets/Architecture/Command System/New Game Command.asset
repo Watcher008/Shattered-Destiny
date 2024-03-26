@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0edd79b6219a21e4c9fc2d943f99e75d, type: 3}
+  m_Name: New Game Command
+  m_EditorClassIdentifier: 
+  callbackEvents:
+  - {fileID: 11400000, guid: 44fb074031309a84dad33c561b5f8e69, type: 2}
+  developerNotes: 
+  _playerData: {fileID: 11400000, guid: 964da513a2d1311478cf1791204336b2, type: 2}

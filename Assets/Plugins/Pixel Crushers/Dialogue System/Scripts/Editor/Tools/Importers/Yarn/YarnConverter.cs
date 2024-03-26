@@ -1,5 +1,4 @@
 #if USE_YARN
-
 using System;
 using System.IO;
 using System.Collections.Generic;
@@ -405,8 +404,14 @@ end
 
                 var luaVarName = FormatLuaVariableName(variable.name);
 
+                // Don't smash user variables if they've already been created in the DB
+                if (_dialogueDb.GetVariable(luaVarName) != null)
+                {
+                    continue;
+                }
+
                 var fieldType = FieldType.Text;
-                switch(variable.type)
+                switch (variable.type)
                 {
                     case Operand.ValueOneofCase.BoolValue:
                         fieldType = FieldType.Boolean;
@@ -501,7 +506,7 @@ end
         // The return value of this method is the exit dialogue entry of the final statement processed by this function.
         // That value is passed on to subsequent recursive calls of ResolveDialogueEntryLinks, and should be linked
         // to the entrace dialogue entry of the very first statement processed.
-        private DialogueEntry ResolveDialogueEntryLinks(BlockStatement block, DialogueEntry previousEntry=null)
+        private DialogueEntry ResolveDialogueEntryLinks(BlockStatement block, DialogueEntry previousEntry = null)
         {
             // if (_prefs.debug) Debug.Log("YarnToDialogueSystemConverter::ResolveDialogueEntryLinks()");
 
@@ -752,7 +757,7 @@ end
                 }
             }
         }
- 
+
         public string GenerateConditionsStringScript(BasicStatement stmt)
         {
             // var script = $"{Lua.EvaluateYarnExpression}({GenerateYarnInstructionListScript(stmt)})[1]\n";
@@ -778,18 +783,18 @@ end
                 dialogueEntryId,
                 GenerateYarnInstructionListScript(stmt)
             );
-// $@"
-// local is_first = true
-// for _, value in ipairs({Lua.EvaluateYarnExpression}({GenerateYarnInstructionListScript(stmt)})) do
-//     if is_first then
-//         {ClearAndAddStringFormatArgumentLuaName}({conversationId}, {dialogueEntryId}, tostring(value))
-//     else
-//         {AddStringFormatArgumentLuaName}({conversationId}, {dialogueEntryId}, tostring(value))
-//     end
+            // $@"
+            // local is_first = true
+            // for _, value in ipairs({Lua.EvaluateYarnExpression}({GenerateYarnInstructionListScript(stmt)})) do
+            //     if is_first then
+            //         {ClearAndAddStringFormatArgumentLuaName}({conversationId}, {dialogueEntryId}, tostring(value))
+            //     else
+            //         {AddStringFormatArgumentLuaName}({conversationId}, {dialogueEntryId}, tostring(value))
+            //     end
 
-//     is_first = false
-// end
-// ";
+            //     is_first = false
+            // end
+            // ";
             return script;
         }
 
@@ -829,7 +834,7 @@ end
 
                     instructionListItems.Add(arg);
                 }
-                else if(instruction.Opcode.IsCallFunc())
+                else if (instruction.Opcode.IsCallFunc())
                 {
                     var cmdName = instruction.Operands[0].StringValue;
                     var isBuiltInOp = nameToBuiltInOperatorMap.ContainsKey(cmdName);
@@ -845,7 +850,7 @@ end
                         instructionListItems.Add(FormatLuaCustomCommand(cmdName));
                     }
                 }
-                else if(instruction.Opcode.IsStatementTerminatingOpCode())
+                else if (instruction.Opcode.IsStatementTerminatingOpCode())
                 {
                     break;
                 }
@@ -859,7 +864,7 @@ end
             return lua;
         }
 
-        public Actor GetOrCreateActor(string name, bool isPlayer=false, int id=-1)
+        public Actor GetOrCreateActor(string name, bool isPlayer = false, int id = -1)
         {
             var actor = _dialogueDb.GetActor(name);
             if (actor == null)
@@ -918,7 +923,8 @@ end
 
                 string text = null;
 
-                var opCode = basicStmt.LastInstruction.Opcode;
+                // var opCode = basicStmt.LastInstruction.Opcode;
+                var opCode = basicStmt.MainInstruction.Opcode;
 
                 string textKey = null;
                 if (opCode.IsAddOption() || opCode.IsRunLine())
@@ -964,7 +970,8 @@ end
                         // Set the conditions of the actual option dialogue entry that will be displayed to the user
                         // to the true/false value of the conditions variable.
                         // basicStmt.OptionConditionsDialogueEntry.conditionsString = optVar;
-                        optDlgEntry.conditionsString = $"true --{luaOptVar}";
+                        // optDlgEntry.conditionsString = $"true --{luaOptVar}";
+                        optDlgEntry.conditionsString = luaOptVar;
                     }
 
                     if (basicStmt.HasArguments)
@@ -992,7 +999,11 @@ end
                 {
                     var cmdString = basicStmt.LastInstruction.Operands[0].StringValue;
 
-                    var cmdTokens = cmdString.Split(' ');
+                    //---Was (need to preserve quoted strings): var cmdTokens = cmdString.Split(' ');
+                    var tokens = new List<string>(Regex.Split(cmdString, @"(?<match>\w+)|(?<match>\""[\w\s\.\']*"")|(?<match>'[\w\s\.]*')|(?<match>\{[\w\s\.]*\})"));
+                    tokens.RemoveAll(s => string.IsNullOrWhiteSpace(s));
+                    var cmdTokens = tokens.ToArray();
+
                     var cmdName = cmdTokens[0];
                     var title = YarnConverter.EntryTitle.RunCommand;
                     var desc = string.Format(YarnConverter.EntryDescription.RunCommand, cmdString);
@@ -1017,6 +1028,16 @@ end
                             basicStmt.AddDialogueEntry(dlgEntry);
                         }
                     }
+                    else if (cmdName == "seq") // Handle special <<seq SequencerCommand()>>
+                    {
+                        var sequence = basicStmt.LastInstruction.Operands[0].StringValue.Substring("seq ".Length);
+                        if (!string.IsNullOrWhiteSpace(sequence))
+                        {
+                            var dlgEntry = CreateDialogueEntry(conversation, "Sequence", desc);
+                            dlgEntry.Sequence = sequence;
+                            basicStmt.AddDialogueEntry(dlgEntry);
+                        }
+                    }
                     // else if (basicStmt.HasArguments)
                     else
                     {
@@ -1028,6 +1049,12 @@ end
                         {
                             var cmdToken = cmdTokens[index];
 
+                            // Put quotes around strings:
+                            var isString = !(IsNumber(cmdToken) || IsBool(cmdToken));
+                            var needsQuote = isString &&
+                                !(cmdToken.Length >= 2 && IsQuoteChar(cmdToken[0]) && IsQuoteChar(cmdToken[cmdToken.Length - 1]));
+                            var quote = needsQuote ? "'" : string.Empty;
+
                             // If we've found a placeholder for a runtime calculated arg,
                             // pull it from the calculated arg table in the lua script.
                             if (basicStmt.HasArguments && Lua.RunCommandRuntimeArgumentRegex.IsMatch(cmdToken))
@@ -1037,7 +1064,7 @@ end
                             }
                             else
                             {
-                                cmd += $"{sep}'{cmdToken}'";
+                                cmd += $"{sep}{quote}{cmdToken}{quote}";
                             }
 
                             sep = ", ";
@@ -1068,6 +1095,7 @@ end
                     var dlgEntry = CreateDialogueEntry(conversation, title, desc);
                     SetDialogueEntryActors(dlgEntry, textKey);
                     SetDialogueEntryText(dlgEntry, conversation.Title, textKey);
+                    if (string.IsNullOrEmpty(dlgEntry.DialogueText)) dlgEntry.Sequence = EntrySequence.ContinueDialogue;
                     basicStmt.AddDialogueEntry(dlgEntry);
 
                     // If the runline stmt has runtime arguments, we need to create a node to calculate them
@@ -1098,7 +1126,7 @@ end
                 }
                 else if (opCode.IsStoreVariable())
                 {
-                    var varName = basicStmt.LastInstruction.Operands[0].StringValue;
+                    var varName = basicStmt.MainInstruction.Operands[0].StringValue;
                     var script = GenerateSetVariableScript(varName, basicStmt);
                     var title = YarnConverter.EntryTitle.StoreVariable;
                     var desc = string.Format(YarnConverter.EntryDescription.StoreVariable, varName);
@@ -1241,7 +1269,24 @@ end
             }
         }
 
-        private DialogueEntry CreateDialogueEntry(Conversation conversation, string title=null, string description=null)
+        private bool IsNumber(string token)
+        {
+            double d;
+            return double.TryParse(token, out d);
+        }
+
+        private bool IsBool(string token)
+        {
+            bool b;
+            return bool.TryParse(token, out b);
+        }
+
+        private bool IsQuoteChar(char c)
+        {
+            return c == '\'' || c == '"';
+        }
+
+        private DialogueEntry CreateDialogueEntry(Conversation conversation, string title = null, string description = null)
         {
             var dialogueEntry = _template.CreateDialogueEntry(_template.GetNextDialogueEntryID(conversation), conversation.id, title);
 
@@ -1793,5 +1838,4 @@ namespace PixelCrushers.DialogueSystem.Yarn
         }
     }
 }
-
 #endif

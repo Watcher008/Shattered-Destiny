@@ -45,7 +45,7 @@ namespace PixelCrushers.DialogueSystem.Articy
 
         public enum FlowFragmentModes { NestedConversationGroups, ConversationGroups, Quests, Ignore }
 
-        public enum StageDirModes { Sequences, NotSequences }
+        public enum StageDirModes { Sequences, Nothing, Description }
 
         public enum ConvertDropdownsModes { Int, TechnicalName, DisplayName }
 
@@ -56,7 +56,7 @@ namespace PixelCrushers.DialogueSystem.Articy
         public string ProjectFilename { get; set; }
         public string PortraitFolder { get; set; }
         public bool UseDefaultActorsIfNoneAssignedToDialogue { get; set; }
-        public bool StageDirectionsAreSequences { get; set; }
+        public StageDirModes StageDirectionsMode { get; set; }
         public FlowFragmentModes FlowFragmentMode { get; set; }
         public bool CreateConversationsForLooseFlow { get; set; }
         public string OtherScriptFields { get; set; }
@@ -71,10 +71,13 @@ namespace PixelCrushers.DialogueSystem.Articy
         public ConvertDropdownsModes ConvertDropdownsAs { get; set; }
         public ConvertSlotsModes ConvertSlotsAs { get; set; }
         public bool UseTechnicalNames { get; set; }
+        public bool IncludeFeatureNameInFields { get; set; }
+        public bool SetDisplayName { get; set; }
         public bool CustomDisplayName { get; set; }
         public bool DirectConversationLinksToEntry1 { get; set; }
         public bool ConvertMarkupToRichText { get; set; }
         public bool SplitTextOnPipes { get; set; }
+        public bool TrimWhitespace { get; set; } = true;
         public string FlowFragmentScript { get; set; }
         public string VoiceOverProperty { get; set; }
         public string LocalizationXlsx { get; set; }
@@ -85,14 +88,13 @@ namespace PixelCrushers.DialogueSystem.Articy
         public const string DefaultVoiceOverProperty = "VoiceOverFile";
 
         public Encoding Encoding { get { return EncodingTypeTools.GetEncoding(EncodingType); } }
-        //public bool ConvertDropdownsAsString { get { return ConvertDropdownsAs == ConvertDropdownsModes.Strings; } }
 
         public ConverterPrefs()
         {
             ProjectFilename = string.Empty;
             PortraitFolder = string.Empty;
             UseDefaultActorsIfNoneAssignedToDialogue = true;
-            StageDirectionsAreSequences = true;
+            StageDirectionsMode = StageDirModes.Sequences;
             FlowFragmentMode = FlowFragmentModes.ConversationGroups;
             CreateConversationsForLooseFlow = false;
             OtherScriptFields = string.Empty;
@@ -107,10 +109,13 @@ namespace PixelCrushers.DialogueSystem.Articy
             ConvertDropdownsAs = ConvertDropdownsModes.Int;
             ConvertSlotsAs = ConvertSlotsModes.DisplayName;
             UseTechnicalNames = false;
+            IncludeFeatureNameInFields = false;
+            SetDisplayName = false;
             CustomDisplayName = false;
             DirectConversationLinksToEntry1 = false;
             ConvertMarkupToRichText = true;
             SplitTextOnPipes = true;
+            TrimWhitespace = true;
             FlowFragmentScript = DefaultFlowFragmentScript;
             VoiceOverProperty = DefaultVoiceOverProperty;
             LocalizationXlsx = string.Empty;

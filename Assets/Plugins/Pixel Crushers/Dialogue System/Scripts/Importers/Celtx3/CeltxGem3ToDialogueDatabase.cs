@@ -15,19 +15,28 @@ namespace PixelCrushers.DialogueSystem.Celtx
         Template template = Template.FromDefault();
         DialogueDatabase database;
         dynamic celtxDataObject;
+        bool importGameplayAsEmptyNodes;
 
         Dictionary<string, Actor> actorLookupViaCeltxId = new Dictionary<string, Actor>();
-        Dictionary<string, DialogueEntry> portalsPendingLinks = new Dictionary<string, DialogueEntry>();
+        Dictionary<string, Item> itemLookupViaCeltxId = new Dictionary<string, Item>();
+        Dictionary<string, Location> locationLookupViaCeltxId = new Dictionary<string, Location>();
         Dictionary<string, Variable> variableLookupViaCeltxId = new Dictionary<string, Variable>();
+        Dictionary<string, DialogueEntry> portalsPendingLinks = new Dictionary<string, DialogueEntry>();
         Dictionary<string, dynamic> radioVarOptionsLookupViaCeltxId = new Dictionary<string, dynamic>();
         Dictionary<string, CeltxCondition> celtxConditionLookupViaCeltxId = new Dictionary<string, CeltxCondition>();
+        Dictionary<string, string> catalogTypeByBreakdownId = new Dictionary<string, string>();
+        Dictionary<string, string> catalogIdByBreakdownId = new Dictionary<string, string>();
+        Dictionary<string, string> customNameByBreakdownId = new Dictionary<string, string>();
+        Dictionary<string, string> customTypeByBreakdownId = new Dictionary<string, string>();
 
-        public DialogueDatabase ProcessCeltxGem3DataObject(dynamic celtxDataObject, DialogueDatabase database, bool importGameplayScriptText, bool importBreakdownCatalogContent, bool checkSequenceSyntax)
+        public DialogueDatabase ProcessCeltxGem3DataObject(dynamic celtxDataObject, DialogueDatabase database, bool importGameplayAsEmptyNodes, bool importGameplayScriptText, bool importBreakdownCatalogContent, bool checkSequenceSyntax)
         {
             try
             {
                 this.database = database;
                 this.celtxDataObject = celtxDataObject;
+                this.database.version = celtxDataObject.meta.version;
+                this.importGameplayAsEmptyNodes = importGameplayAsEmptyNodes;
 
                 GenerateActorsFromCharacters();
                 GenerateLocationsFromCatalog();
@@ -50,7 +59,7 @@ namespace PixelCrushers.DialogueSystem.Celtx
             return database;
         }
 
-        #region General Helper Methods
+#region General Helper Methods
 
         private void AppendToField(List<Field> fields, string title, string value, FieldType fieldType)
         {
@@ -164,7 +173,8 @@ namespace PixelCrushers.DialogueSystem.Celtx
             {
                 foreach (DialogueEntry entry in conversation.dialogueEntries)
                 {
-                    var isBlankNode = string.IsNullOrEmpty(entry.DialogueText) &&
+                    var isBlankNode = entry.id != 0 && // <START> nodes can't be group nodes.
+                        string.IsNullOrEmpty(entry.DialogueText) &&
                         string.IsNullOrEmpty(entry.MenuText) &&
                         string.IsNullOrEmpty(entry.Sequence);
                     if (isBlankNode)
@@ -174,9 +184,9 @@ namespace PixelCrushers.DialogueSystem.Celtx
                 }
             }
         }
-        #endregion
+#endregion
 
-        #region Non-Dialogue Processing
+#region Non-Dialogue Processing
         private void GenerateActorsFromCharacters()
         {
             var characters = celtxDataObject.subdocuments.catalog.character;
@@ -210,8 +220,46 @@ namespace PixelCrushers.DialogueSystem.Celtx
 #endif
                     }
                 }
+                AppendToField(actor.fields, CeltxFields.Pictures, GetPictureString(characterData), FieldType.Files);
                 actorLookupViaCeltxId[(string)characterData.id] = actor;
             }
+        }
+
+        private string GetPictureString(dynamic catalogItemAttrs)
+        {
+            try
+            {
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.Append("[");
+                if (catalogItemAttrs.item_data.media != null && catalogItemAttrs.item_data.media.Count > 0)
+                {
+                    var mediaCount = catalogItemAttrs.item_data.media.Count;
+                    for (int i = 0; i < mediaCount; i++)
+                    {
+                        var media = catalogItemAttrs.item_data.media[i];
+                        stringBuilder.Append(media.name);
+
+                        if (i == mediaCount - 1)
+                        {
+                            stringBuilder.Append("]");
+                        }
+                        else
+                        {
+                            stringBuilder.Append(";");
+                        }
+                    }
+                    return stringBuilder.ToString();
+                }
+                else
+                {
+                    return "[]";
+                }
+            }
+            catch (System.Exception e)
+            {
+                LogError(MethodBase.GetCurrentMethod(), e, catalogItemAttrs.id, catalogItemAttrs.title);
+            }
+            return "[]";
         }
 
         private void GenerateLocationsFromCatalog()
@@ -240,6 +288,7 @@ namespace PixelCrushers.DialogueSystem.Celtx
                         UnityEditor.EditorUtility.SetDirty(database.syncInfo.syncLocationsDatabase);
 #endif
                     }
+                    locationLookupViaCeltxId[(string)locationData.id] = location;
                 }
             }
         }
@@ -271,6 +320,7 @@ namespace PixelCrushers.DialogueSystem.Celtx
 #endif
                     }
                 }
+                itemLookupViaCeltxId[(string)itemData.id] = item;
             }
         }
 
@@ -338,9 +388,9 @@ namespace PixelCrushers.DialogueSystem.Celtx
                 variableLookupViaCeltxId.Add((string)variableData.id, variable);
             }
         }
-        #endregion
+#endregion
 
-        #region Condition Processing
+#region Condition Processing
 
         private void GenerateConditions()
         {
@@ -551,16 +601,16 @@ namespace PixelCrushers.DialogueSystem.Celtx
             }
         }
 
-        #endregion
+#endregion
 
-        #region LaneProcessing
+#region LaneProcessing
         private void GenerateConversationsFromLanes()
         {
             foreach (var laneObject in celtxDataObject.lanes)
             {
                 var laneData = laneObject.Value;
-                Debug.Log(laneData);
-                Debug.Log(laneData.name + " - " + laneData.id + laneData.desc);
+                //Debug.Log(laneData);
+                //Debug.Log(laneData.name + " - " + laneData.id + laneData.desc);
 
                 string conversationName = CreateHierarchicalConversationName(laneData);
 
@@ -628,25 +678,48 @@ namespace PixelCrushers.DialogueSystem.Celtx
             Dictionary<string, DialogueEntry> dialogueEntryToDict = new Dictionary<string, DialogueEntry>();
             Dictionary<string, DialogueEntry> dialogueEntryFromDict = new Dictionary<string, DialogueEntry>();
 
+            catalogTypeByBreakdownId.Clear();
+            catalogIdByBreakdownId.Clear();
+            customNameByBreakdownId.Clear();
+            customTypeByBreakdownId.Clear();
+            foreach (var breakdown in laneSubdocument.breakdowns)
+            {
+                var breakdownData = breakdown.Value;
+                var breakdown_id = breakdownData.id.ToString();
+                catalogTypeByBreakdownId[breakdown_id] = breakdownData.type.ToString();
+                catalogIdByBreakdownId[breakdown_id] = breakdownData.catalog_id.ToString();
+                customNameByBreakdownId[breakdown_id] = breakdownData.name.ToString();
+                customTypeByBreakdownId[breakdown_id] = breakdownData.custom_type.ToString();
+            }
+
             var laneNodes = laneSubdocument.nodes;
 
             bool rootProcessed = false;
             DialogueEntry startEntry = null;
 
-            // Create dialogue entries and links for the nodes and edges
+            // Make list of all non-root nodes so we can identify root node:
+            HashSet<string> nonRootNodeIds = new HashSet<string>();
+            foreach (var edgeObject in laneSubdocument.edges)
+            {
+                var edgeData = edgeObject.Value;
+                var to = (string)edgeData.to;
+                nonRootNodeIds.Add(to);
+            }
+
+            // Create <START> node:
+            startEntry = CreateNextDialogueEntryForConversation(conversation, "START", "");
+
+
+            // Set conversation's ActorID and ConversantID:
             foreach (var nodeObject in laneNodes)
             {
                 var nodeData = nodeObject.Value;
                 var nodeId = (string)nodeData.id;
                 var nodeName = (string)nodeData.name;
-                var nodeDesc = (string)nodeData.desc;
-                var nodeType = (string)nodeData.type;
-
-                DialogueEntry lastEntry = null;
 
                 var scriptObject = GetNodeScriptObject(nodeId, laneSubdocument);
 
-                if (!rootProcessed)
+                if (!rootProcessed && !nonRootNodeIds.Contains(nodeId))
                 {
                     List<Actor> actors = GetCharactersFromRootPage(scriptObject);
                     if (actors.Count >= 2)
@@ -662,8 +735,47 @@ namespace PixelCrushers.DialogueSystem.Celtx
                     {
                         Debug.LogWarning("Node " + nodeName + " with id " + nodeId + " has no actors.");
                     }
+                    startEntry.ActorID = conversation.ActorID;
+                    startEntry.ConversantID = conversation.ConversantID;
 
-                    startEntry = CreateNextDialogueEntryForConversation(conversation, "START", (string)nodeId);
+                    Field.SetValue(startEntry.fields, CeltxFields.CeltxId, (string)nodeId);
+                }
+            }
+
+
+            // Create dialogue entries and links for the nodes and edges
+            foreach (var nodeObject in laneNodes)
+            {
+                var nodeData = nodeObject.Value;
+                var nodeId = (string)nodeData.id;
+                var nodeName = (string)nodeData.name;
+                var nodeDesc = (string)nodeData.desc;
+                var nodeType = (string)nodeData.type;
+
+                DialogueEntry lastEntry = null;
+
+                var scriptObject = GetNodeScriptObject(nodeId, laneSubdocument);
+
+                if (!rootProcessed && !nonRootNodeIds.Contains(nodeId))
+                {
+                    List<Actor> actors = GetCharactersFromRootPage(scriptObject);
+                    if (actors.Count >= 2)
+                    {
+                        conversation.ActorID = actors[0].id;
+                        conversation.ConversantID = actors[1].id;
+                    }
+                    else if (actors.Count == 1)
+                    {
+                        conversation.ConversantID = conversation.ActorID = actors[0].id;
+                    }
+                    else
+                    {
+                        Debug.LogWarning("Node " + nodeName + " with id " + nodeId + " has no actors.");
+                    }
+                    startEntry.ActorID = conversation.ActorID;
+                    startEntry.ConversantID = conversation.ConversantID;
+
+                    Field.SetValue(startEntry.fields, CeltxFields.CeltxId, (string)nodeId);
                     AppendToField(startEntry.fields, DialogueSystemFields.Description, (string)nodeDesc, FieldType.Text);
                 }
 
@@ -673,7 +785,7 @@ namespace PixelCrushers.DialogueSystem.Celtx
                 // Set variables
                 AddSetVariableScriptForNode(lastEntry, nodeData.customVars);
 
-                if (!rootProcessed)
+                if (!rootProcessed && !nonRootNodeIds.Contains(nodeId))
                 {
                     startEntry.outgoingLinks.Add(new Link(startEntry.conversationID, startEntry.id, lastEntry.conversationID, lastEntry.id));
                     dialogueEntryFromDict.Add(nodeId, lastEntry);
@@ -743,10 +855,27 @@ namespace PixelCrushers.DialogueSystem.Celtx
                 var edgeData = edgeObject.Value;
                 var to = (string)edgeData.to;
                 var from = (string)edgeData.from;
-                var conditionId = (string)edgeData.condition;
+                string conditionId = null;
+                try
+                {
+                    conditionId = (string)edgeData.condition;
+                }
+                catch (System.Exception)
+                {
+                    conditionId = null;
+                }
 
-                var toDialogueObject = dialogueEntryToDict[to];
-                var fromDialogueObject = dialogueEntryFromDict[from];
+                DialogueEntry toDialogueObject, fromDialogueObject;
+                if (!dialogueEntryToDict.TryGetValue(to, out toDialogueObject))
+                {
+                    Debug.LogWarning($"LinkDialogueEntriesFromEdges cannot locate destination entry {to}.");
+                    continue;
+                }
+                if (!dialogueEntryFromDict.TryGetValue(from, out fromDialogueObject))
+                {
+                    Debug.LogWarning($"LinkDialogueEntriesFromEdges cannot locate origin entry {from}.");
+                    continue;
+                }
 
                 LinkDialogueEntries(fromDialogueObject, toDialogueObject, conditionId);
             }
@@ -755,6 +884,8 @@ namespace PixelCrushers.DialogueSystem.Celtx
         private DialogueEntry ProcessSequenceNodePage(Conversation conversation, DialogueEntry initialNodeEntry, dynamic scriptObject)
         {
             DialogueEntry currentEntry = initialNodeEntry;
+            DialogueEntry breakdownEntry = currentEntry;
+            bool createdGameplayEntry = false;
 
             try
             {
@@ -765,25 +896,60 @@ namespace PixelCrushers.DialogueSystem.Celtx
                 foreach (var contentObject in pageContents)
                 {
                     string contentType = GetContentType(contentObject);
-                    if (!contentType.Equals("cxgameplay") &&
-                        !contentType.Equals("cxcharacter") &&
-                        !contentType.Equals("cxparenthetical") &&
-                        !contentType.Equals("cxdialog") &&
-                        !contentType.Equals("cxcharacter_item") &&
-                        !contentType.Equals("cxdirective"))
+                    if (!(contentType.Equals("cxgameplay") ||
+                        contentType.Equals("cxcharacter") ||
+                        contentType.Equals("cxparenthetical") ||
+                        contentType.Equals("cxdialog") ||
+                        contentType.Equals("cxcharacter_item") ||
+                        contentType.Equals("cxdirective")))
                     {
                         Debug.LogWarning("Skipping content with type: " + contentType + " for node " + initialNodeEntry.Title);
                         continue;
                     }
 
-                    string combinedText = GetContentText(contentObject);
+                    if (importGameplayAsEmptyNodes && contentType == "cxgameplay")
+                    {
+                        var firstText = string.Empty;
+                        foreach (var content in contentObject.content)
+                        {
+                            if (content.type == "text")
+                            {
+                                firstText = content.text;
+                                break;
+                            }
+                        }
+                        if (!string.IsNullOrEmpty(firstText) &&
+                            !(firstText.StartsWith("[SEQ]", System.StringComparison.OrdinalIgnoreCase) ||
+                              firstText.StartsWith("[COND]", System.StringComparison.OrdinalIgnoreCase) ||
+                              firstText.StartsWith("[SCRIPT]", System.StringComparison.OrdinalIgnoreCase)))
+                        {
+                            entryCount++;
+                            DialogueEntry newEntry = CreateNextDialogueEntryForConversation(conversation, string.Empty, (string)contentObject.attrs.id, true);                            
+                            newEntry.ActorID = currentEntry.ActorID;
+                            newEntry.ConversantID = currentEntry.ConversantID;
+                            newEntry.Title = GetContentText(contentObject, currentEntry, null);
+                            LinkDialogueEntries(currentEntry, newEntry, null);
+                            currentEntry = newEntry;
+                            breakdownEntry = currentEntry;
+                            createdGameplayEntry = true;
+                            createNewEntry = true;
+                        }
+                    }
 
                     if (createNewEntry)
                     {
-                        entryCount += 1;
+                        entryCount++;
                         currentEntry = CreateAdditionalEntryForSequence(conversation, currentEntry, initialNodeEntry, entryCount);
                         createNewEntry = false;
+                        if (!createdGameplayEntry) breakdownEntry = currentEntry;
                     }
+
+                    string id = contentObject.attrs.id;
+                    Field.SetValue(currentEntry.fields, CeltxFields.CeltxId, id);
+
+                    createdGameplayEntry = false;
+
+                    string combinedText = GetContentText(contentObject, currentEntry, breakdownEntry); // Note: May add fields to currentEntry and/or breakdownEntry.
 
                     switch (contentType)
                     {
@@ -801,6 +967,10 @@ namespace PixelCrushers.DialogueSystem.Celtx
                             {
                                 if (!string.IsNullOrEmpty(currentEntry.userScript)) currentEntry.userScript += ";\n";
                                 currentEntry.userScript += GetTextWithoutTag(combinedText);
+                            }
+                            else
+                            {
+                                currentEntry.Title = combinedText;
                             }
                             break;
 
@@ -855,6 +1025,8 @@ namespace PixelCrushers.DialogueSystem.Celtx
                             createNewEntry = true;
                             break;
                     }
+
+                    breakdownEntry = currentEntry;
                 }
 
             }
@@ -913,13 +1085,34 @@ namespace PixelCrushers.DialogueSystem.Celtx
         private List<Actor> GetCharactersFromRootPage(dynamic scriptObject)
         {
             List<Actor> actors = new List<Actor>();
-            var pageContent = scriptObject.content[0].content[0].content;
-
-            foreach (var contentObject in pageContent)
+            dynamic pageContent = null;
+            if (scriptObject != null)
             {
-                if (GetContentType(contentObject).Equals("cxcharacter_item"))
+                foreach (var contentLv0 in scriptObject.content)
                 {
-                    actors.Add(actorLookupViaCeltxId[(string)contentObject.attrs.catalog_id]);
+                    if (contentLv0 != null)
+                    {
+                        foreach (var contentLv1 in contentLv0.content)
+                        {
+                            if (contentLv1 != null)
+                            {
+                                pageContent = contentLv1.content;
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+            if (pageContent != null)
+            {
+                foreach (var contentObject in pageContent)
+                {
+                    if (contentObject == null) continue;
+                    if (GetContentType(contentObject).Equals("cxcharacter_item"))
+                    {
+                        actors.Add(actorLookupViaCeltxId[(string)contentObject.attrs.catalog_id]);
+                    }
                 }
             }
             return actors;
@@ -940,9 +1133,9 @@ namespace PixelCrushers.DialogueSystem.Celtx
             var characterCatalogId = characterObject.attrs.catalog_id;
             return actorLookupViaCeltxId[(string)characterCatalogId];
         }
-        #endregion
+#endregion
 
-        #region Text Processing
+#region Text Processing
 
         private bool StringStartsWithTag(string stringToCheck, string targetTag)
         {
@@ -960,22 +1153,25 @@ namespace PixelCrushers.DialogueSystem.Celtx
             return (endTagPos == -1) ? "" : text.Substring(endTagPos + 1);
         }
 
-        private string GetContentText(dynamic contentObject)
+        private string GetContentText(dynamic contentObject, DialogueEntry currentEntry, DialogueEntry breakdownEntry)
         {
             StringBuilder stringBuilder = new StringBuilder();
 
-            foreach (var subContentObject in contentObject.content)
+            if (contentObject != null && contentObject.content != null)
             {
-                if (GetContentType(subContentObject).Equals("text"))
+                foreach (var subContentObject in contentObject.content)
                 {
-                    stringBuilder.Append(GetMarkedText(subContentObject));
+                    if (GetContentType(subContentObject).Equals("text"))
+                    {
+                        stringBuilder.Append(GetMarkedText(subContentObject, currentEntry, breakdownEntry));
+                    }
                 }
             }
 
             return stringBuilder.ToString();
         }
 
-        private string GetMarkedText(dynamic textContent)
+        private string GetMarkedText(dynamic textContent, DialogueEntry currentEntry, DialogueEntry breakdownEntry)
         {
             try
             {
@@ -1007,6 +1203,36 @@ namespace PixelCrushers.DialogueSystem.Celtx
                                 prependString = prependString + "<s>";
                                 appendString = "</s>" + appendString;
                                 break;
+                            case "cxbreakdown":
+                                if (breakdownEntry != null)
+                                {
+                                    var breakdown_attrs = mark.attrs;
+                                    string attrName = breakdown_attrs.name;
+                                    string type = (string)breakdown_attrs.type;
+                                    string catalog_id = (string)breakdown_attrs.catalog_id;
+                                    AddBreakdownField(currentEntry, breakdownEntry, mark.id, type, catalog_id, attrName);
+                                }
+                                break;
+                            case "cxmultitagbreakdown":
+                                if (breakdownEntry != null)
+                                {
+                                    var multitagbreakdown_attrs = mark.attrs;
+                                    foreach (var asset in multitagbreakdown_attrs.assetList)
+                                    {
+                                        string attrName = multitagbreakdown_attrs.name;
+                                        string breakdown_id = (string)asset;
+                                        string multitag_type;
+                                        if (catalogTypeByBreakdownId.TryGetValue(breakdown_id, out multitag_type))
+                                        {
+                                            string multitag_catalog_id;
+                                            if (catalogIdByBreakdownId.TryGetValue(breakdown_id, out multitag_catalog_id))
+                                            {
+                                                AddBreakdownField(currentEntry, breakdownEntry, breakdown_id, multitag_type, multitag_catalog_id, attrName);
+                                            }
+                                        }
+                                    }
+                                }
+                                break;
                         }
                     }
                     return prependString + text + appendString;
@@ -1022,9 +1248,146 @@ namespace PixelCrushers.DialogueSystem.Celtx
                 return "";
             }
         }
-        #endregion
 
-        #region Logging
+        private void AddBreakdownField(DialogueEntry currentEntry, DialogueEntry breakdownEntry, string breakdown_id,
+            string type, string catalog_id, string attrName)
+        {
+            switch (type)
+            {
+                case "character":
+                    AddActorBreakdownField(currentEntry, catalog_id);
+                    break;
+                case "item":
+                    AddItemBreakdownField(breakdownEntry, catalog_id);
+                    break;
+                case "location":
+                    AddLocationBreakdownField(breakdownEntry, catalog_id);
+                    break;
+                default:
+                    AddCustomBreakdownField(breakdownEntry, breakdown_id, catalog_id);
+                    break;
+            }
+        }
+
+        private void AddToField(List<Field> fields, string fieldTitle, string value, FieldType fieldType)
+        {
+            Field field = Field.Lookup(fields, fieldTitle);
+            if (field != null)
+            {
+                if (string.IsNullOrEmpty(field.value))
+                {
+                    field.value = value;
+                }
+                else
+                {
+                    if (value.Contains(';')) Debug.LogWarning($"Appending '{value}' to {fieldTitle} using ';' as separator, but '{value}' also contains ';'");
+                    field.value += ';' + value;
+                }
+                field.type = fieldType;
+            }
+            else
+            {
+                fields.Add(new Field(fieldTitle, value, fieldType));
+            }
+        }
+
+        private void AddActorBreakdownField(DialogueEntry currentEntry, string catalog_id)
+        {
+            Actor actor;
+            if (actorLookupViaCeltxId.TryGetValue(catalog_id, out actor))
+            {
+                string fieldTitle = GetAvailableFieldTitle(currentEntry, "BreakdownActor");
+                AddToField(currentEntry.fields, fieldTitle, actor.id.ToString(), FieldType.Actor);
+            }
+            else
+            {
+                Debug.LogWarning($"Can't find actor with Celtx ID {catalog_id} to reference in breakdown.");
+            }
+        }
+
+        private void AddItemBreakdownField(DialogueEntry currentEntry, string catalog_id)
+        {
+            Item item;
+            if (itemLookupViaCeltxId.TryGetValue(catalog_id, out item))
+            {
+                string fieldTitle = GetAvailableFieldTitle(currentEntry, "BreakdownItem");
+                AddToField(currentEntry.fields, fieldTitle, item.id.ToString(), FieldType.Item);
+            }
+            else
+            {
+                Debug.LogWarning($"Can't find item with Celtx ID {catalog_id} to reference in breakdown.");
+            }
+        }
+
+        private void AddLocationBreakdownField(DialogueEntry currentEntry, string catalog_id)
+        {
+            Location location;
+            if (locationLookupViaCeltxId.TryGetValue(catalog_id, out location))
+            {
+                string fieldTitle = GetAvailableFieldTitle(currentEntry, "BreakdownLocation");
+                AddToField(currentEntry.fields, fieldTitle, location.id.ToString(), FieldType.Location);
+            }
+            else
+            {
+                Debug.LogWarning($"Can't find item with Celtx ID {catalog_id} to reference in breakdown.");
+            }
+        }
+
+        private void AddCustomBreakdownField(DialogueEntry currentEntry, string breakdown_id, string catalog_id)
+        {
+            string customName = null;
+            var custom = celtxDataObject.subdocuments.catalog.custom;
+            foreach (var customObject in custom)
+            {
+                var customData = customObject.Value;
+                string customId = (string) customData.id;
+                if (string.Equals(customId, catalog_id))
+                {
+                    customName = (string) customData.name;
+                    break;
+                }
+            }
+
+            string customType;
+            if (customName != null && customTypeByBreakdownId.TryGetValue(breakdown_id, out customType))
+            {
+                if (string.IsNullOrEmpty(customType)) customType = GetAvailableFieldTitle(currentEntry, "BreakdownCustom");
+                AddToField(currentEntry.fields, customType, customName, FieldType.Text);
+            }
+
+            //--- By customer request, we use breakdown name in field instead of custom value.
+            ////---Was: (But in JSON multiple breakdown types share the same catalog_id. Bug?)	
+            //var custom = celtxDataObject.subdocuments.catalog.custom;
+            //foreach (var customObject in custom)
+            //{
+            //    var customData = customObject.Value;
+            //    string customId = (string)customData.id;
+            //    if (string.Equals(customId, catalog_id))
+            //    {
+            //        string customName = (string)customData.name;
+            //        string fieldTitle = (string)customData.custom_type;
+            //        if (string.IsNullOrEmpty(fieldTitle)) fieldTitle = GetAvailableFieldTitle(currentEntry, "BreakdownCustom");
+            //        AddToField(currentEntry.fields, fieldTitle, customName, FieldType.Text);
+            //        break;
+            //    }
+            //}
+        }
+
+        private string GetAvailableFieldTitle(DialogueEntry currentEntry, string defaultFieldTitle)
+        {
+            if (!Field.FieldExists(currentEntry.fields, defaultFieldTitle)) return defaultFieldTitle;
+            int num = 2;
+            int safeguard = 0;
+            while (Field.FieldExists(currentEntry.fields, defaultFieldTitle + num) && ++safeguard < 99)
+            {
+                num++;
+            }
+            return defaultFieldTitle + num;
+        }
+
+#endregion
+
+#region Logging
 
         private string GetNullDataString(string nullFieldName)
         {
@@ -1071,9 +1434,9 @@ namespace PixelCrushers.DialogueSystem.Celtx
             W, E, I
         }
 
-        #endregion
+#endregion
 
-        #region TODO Items
+#region TODO Items
         // TODO: Waiting on Celtx team
         //private bool IsPlayerCharacter(CxAttrs characterAttrs)
         //{
@@ -1101,44 +1464,7 @@ namespace PixelCrushers.DialogueSystem.Celtx
         //    }
         //    return false;
         //}
-
-        //TODO: Waiting on CeltX team 
-        //                AppendToField(actor.fields, CeltxFields.Pictures, getPictureString(catalogItemAttrs), FieldType.Files);
-        //private string getPictureString(CxAttrs catalogItemAttrs)
-        //{
-        //    try
-        //    {
-        //        StringBuilder stringBuilder = new StringBuilder();
-        //        stringBuilder.Append("[");
-        //        if (catalogItemAttrs.item_data.media != null && catalogItemAttrs.item_data.media.Count > 0)
-        //        {
-        //            foreach (CxMedia media in catalogItemAttrs.item_data.media)
-        //            {
-        //                stringBuilder.Append(media.name);
-
-        //                if (media.Equals(catalogItemAttrs.item_data.media.Last()))
-        //                {
-        //                    stringBuilder.Append("]");
-        //                }
-        //                else
-        //                {
-        //                    stringBuilder.Append(";");
-        //                }
-        //            }
-        //            return stringBuilder.ToString();
-        //        }
-        //        else
-        //        {
-        //            return "[]";
-        //        }
-        //    }
-        //    catch (System.Exception e)
-        //    {
-        //        LogError(MethodBase.GetCurrentMethod(), e, catalogItemAttrs.id, catalogItemAttrs.title);
-        //    }
-        //    return "[]";
-        //}
-        #endregion
+#endregion
     }
 }
 #endif

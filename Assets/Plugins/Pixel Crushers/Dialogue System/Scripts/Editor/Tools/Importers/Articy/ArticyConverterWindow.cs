@@ -149,10 +149,10 @@ namespace PixelCrushers.DialogueSystem.Articy
         /// </summary>
         private void DrawStageDirectionsPopup()
         {
-            var mode = prefs.StageDirectionsAreSequences ? ConverterPrefs.StageDirModes.Sequences : ConverterPrefs.StageDirModes.NotSequences;
+            var mode = prefs.StageDirectionsMode;
             mode = (ConverterPrefs.StageDirModes)EditorGUILayout.EnumPopup(new GUIContent("Stage Directions are ", "Specify whether articy:draft Stage Directions contain Dialogue System sequences."), mode, GUILayout.Width(300));
             EditorGUI.BeginChangeCheck();
-            prefs.StageDirectionsAreSequences = (mode == ConverterPrefs.StageDirModes.Sequences);
+            prefs.StageDirectionsMode = mode;
             if (EditorGUI.EndChangeCheck()) ConverterPrefsTools.Save(prefs);
         }
 
@@ -243,9 +243,20 @@ namespace PixelCrushers.DialogueSystem.Articy
             prefs.UseTechnicalNames = EditorGUILayout.Toggle(new GUIContent("Use Technical Names",
                 "Name dialogue database elements by their articy technical name instead of display name."),
                 prefs.UseTechnicalNames);
-            prefs.CustomDisplayName = EditorGUILayout.Toggle(new GUIContent("Custom DisplayName",
-                "Instead of using entity's name as Display Name, use a custom field named 'DisplayName'."),
-                prefs.CustomDisplayName);
+            if (!prefs.UseTechnicalNames)
+            {
+                prefs.SetDisplayName = EditorGUILayout.Toggle(new GUIContent("Set Display Name",
+                    "Set Display Name field to entity's default display name."),
+                    prefs.SetDisplayName);
+            }
+            if (!prefs.SetDisplayName)
+            {
+                prefs.CustomDisplayName = EditorGUILayout.Toggle(new GUIContent("Custom DisplayName",
+                    "Instead of using entity's name as Display Name, use a custom field named 'DisplayName'."),
+                    prefs.CustomDisplayName);
+            }
+            prefs.IncludeFeatureNameInFields = EditorGUILayout.Toggle(new GUIContent("Include Feature Names",
+                "Add containing feature name to property name when importing properties as fields."), prefs.IncludeFeatureNameInFields);
         }
 
         private void DrawDirectConversationLinksToEntry1Toggle()
@@ -280,7 +291,13 @@ namespace PixelCrushers.DialogueSystem.Articy
         {
             prefs.SplitTextOnPipes = EditorGUILayout.Toggle(new GUIContent("Split Text On Pipes",
                 "When dialogue text contains pipe characters ( | ), split into separate dialogue entry nodes."),
-                prefs.ConvertMarkupToRichText);
+                prefs.SplitTextOnPipes);
+            if (prefs.SplitTextOnPipes)
+            {
+                prefs.TrimWhitespace = EditorGUILayout.Toggle(new GUIContent("  Trim Whitespace",
+                "Trim whitespace around pipes."),
+                prefs.TrimWhitespace);
+            }
         }
 
         /// <summary>
@@ -340,7 +357,10 @@ namespace PixelCrushers.DialogueSystem.Articy
         private void DrawReadXMLButton()
         {
             EditorGUI.BeginDisabledGroup(string.IsNullOrEmpty(prefs.ProjectFilename));
-            if (GUILayout.Button(new GUIContent("Read XML", "Load the XML file so you can adjust conversion parameters such as what to include in the dialogue database and which actor is the player. Also click this button after re-exporting from articy to reload the updated XML file."), GUILayout.Width(120))) ReviewArticyProject();
+            if (GUILayout.Button(new GUIContent("Read XML", "Load the XML file so you can adjust conversion parameters such as what to include in the dialogue database and which actor is the player. Also click this button after re-exporting from articy to reload the updated XML file."), GUILayout.Width(120)))
+            {
+                ReviewArticyProject();
+            }
             EditorGUI.EndDisabledGroup();
         }
 
@@ -804,7 +824,11 @@ namespace PixelCrushers.DialogueSystem.Articy
             if (prefs.Overwrite)
             {
                 database = AssetDatabase.LoadAssetAtPath(assetPath, typeof(DialogueDatabase)) as DialogueDatabase;
-                if (database != null) database.Clear();
+                if (database != null)
+                {
+                    database.Clear();
+                    database.SyncAll();
+                }
             }
             if (database == null)
             {

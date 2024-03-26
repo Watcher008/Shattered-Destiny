@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83d432c943b8995479a1ad246553f48e, type: 3}
+  m_Name: Player Data
+  m_EditorClassIdentifier: 
+  _factionReputation:
+  - {fileID: 11400000, guid: 1c3771c6625acfd479d5926d540ed9d7, type: 2}
+  - {fileID: 11400000, guid: cf39ad740695f964ebc482b6124969f5, type: 2}
+  - {fileID: 11400000, guid: d719ad5ca4a4fe642915590845855a59, type: 2}
+  - {fileID: 11400000, guid: 98ae1fa3b25668b4591fac18a5a33f46, type: 2}
+  _factionInfluence:
+  - {fileID: 11400000, guid: 8668db528167ec149a31d8c07025937b, type: 2}
+  - {fileID: 11400000, guid: 122357a0c1230c5438ef4579d54c5d80, type: 2}
+  - {fileID: 11400000, guid: 1dcf4f8222873714abec0b6fa72d3562, type: 2}
+  - {fileID: 11400000, guid: 51f0803b4d6aecb4da10f81b4a3b3dc0, type: 2}

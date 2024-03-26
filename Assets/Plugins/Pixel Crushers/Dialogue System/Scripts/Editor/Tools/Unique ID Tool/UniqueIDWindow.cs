@@ -13,18 +13,20 @@ namespace PixelCrushers.DialogueSystem
     {
 
         [MenuItem("Tools/Pixel Crushers/Dialogue System/Tools/Unique ID Tool", false, 3)]
-        public static void Init()
+        public static void OpenUniqueIDWindow()
         {
-            EditorWindow.GetWindow(typeof(UniqueIDWindow), false, "Unique IDs");
+            instance = EditorWindow.GetWindow<UniqueIDWindow>(false, "Unique IDs");
         }
+
+        public static UniqueIDWindow instance = null;
 
         // Private fields for the window:
 
-        private UniqueIDWindowPrefs prefs = null;
+        public UniqueIDWindowPrefs prefs = null;
         private Template template = null;
 
         private bool verbose = false;
-        private string report;
+        public string report;
 
         private Vector2 scrollPosition = Vector2.zero;
 
@@ -125,14 +127,14 @@ namespace PixelCrushers.DialogueSystem
             if (EditorGUI.EndChangeCheck()) prefs.Save();
         }
 
-        private void AddAllDatabasesInProject()
+        public void AddAllDatabasesInProject()
         {
             prefs.databases.Clear();
             AddAllDatabasesInFolder("Assets", true);
             prefs.Save();
         }
 
-        private void AddAllDatabasesInFolder(string folderPath, bool recursive)
+        public void AddAllDatabasesInFolder(string folderPath, bool recursive)
         {
             string[] filePaths = Directory.GetFiles(folderPath, "*.asset", recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
             foreach (string filePath in filePaths)

@@ -23,7 +23,7 @@ public static class SimpleEditorUtils
         }
         EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
         EditorSceneManager.OpenScene(
-                    "Assets/Scenes/Game Scenes/Background Elements/BootStraps.unity");
+                    "Assets/Scenes/Game Scenes/Background/Bootstraps.unity");
         EditorApplication.isPlaying = true;
     }
 }

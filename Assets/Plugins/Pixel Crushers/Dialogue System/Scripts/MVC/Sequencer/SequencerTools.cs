@@ -108,6 +108,10 @@ namespace PixelCrushers.DialogueSystem
             {
                 return GetPortraitImage(listener);
             }
+            else if (specifier.StartsWith(SequencerKeywords.ActorPrefix))
+            {
+                return CharacterInfo.GetRegisteredActorTransform(specifier.Substring(SequencerKeywords.ActorPrefix.Length));
+            }
             else
             {
                 GameObject go = FindSpecifier(specifier);

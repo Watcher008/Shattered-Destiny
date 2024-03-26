@@ -11,6 +11,7 @@ namespace PixelCrushers.DialogueSystem
 
         public const string Speaker = "speaker";
         public const string Listener = "listener";
+        public const string ActorPrefix = "actor:";
 
         public const string SpeakerPortrait = "speakerportrait";
         public const string ListenerPortrait = "listenerportrait";

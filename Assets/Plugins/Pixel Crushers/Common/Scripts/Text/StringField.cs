@@ -165,6 +165,14 @@ namespace PixelCrushers
             }
         }
 
+        public void SetDefaultTextTable(TextTable textTable)
+        {
+            if (string.IsNullOrEmpty(this.text) && this.stringAsset == null && this.textTable == null)
+            {
+                this.textTable = textTable;
+            }
+        }
+
         public static bool operator ==(StringField obj1, StringField obj2)
         {
             if (ReferenceEquals(obj1, obj2)) return true;

@@ -66,6 +66,12 @@ namespace PixelCrushers
             set { m_sceneName = value; }
         }
 
+        /// <summary>
+        /// Provides direct access to the dictionary of save records.
+        /// Use with caution.
+        /// </summary>
+        public Dictionary<string, SaveRecord> Dict { get { return m_dict; } }
+
         public void OnBeforeSerialize()
         {
             m_list.Clear();

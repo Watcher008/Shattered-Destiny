@@ -154,7 +154,7 @@ namespace PixelCrushers.DialogueSystem
         }
 
         /// <summary>
-        /// Gets the type of the character (PC or NPC) of an actor.
+        /// Gets the type of the character (PC or NPC) of an actor based on the actor's IsPlayer value.
         /// </summary>
         /// <returns>
         /// The character type (PC or NPC)
@@ -162,10 +162,6 @@ namespace PixelCrushers.DialogueSystem
         /// <param name='actorID'>
         /// The Actor ID to check.
         /// </param>
-        /// <remarks>
-        /// The comparison is based on the value of playerID, not the actor's IsPlayer field. If more than one actor's
-        /// IsPlayer field is true, this will only identify the first one.
-        /// </remarks>
         public CharacterType GetCharacterType(int actorID)
         {
             return IsPlayerID(actorID) ? CharacterType.PC : CharacterType.NPC;
@@ -213,6 +209,18 @@ namespace PixelCrushers.DialogueSystem
         }
 
         #endregion
+
+        public delegate string GetCustomEntrytagDelegate(Conversation conversation, DialogueEntry entry);
+        public static GetCustomEntrytagDelegate getCustomEntrytag = null;
+
+#if UNITY_2019_3_OR_NEWER && UNITY_EDITOR
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        static void InitStaticVariables()
+        {
+            getCustomEntrytag = null;
+        }
+#endif
+
 
         /// <summary>
         /// Gets the actor by name.
@@ -463,7 +471,13 @@ namespace PixelCrushers.DialogueSystem
             for (int i = 0; i < assetsToAdd.Count; i++)
             {
                 var asset = assetsToAdd[i];
+                if (asset == null) continue;
                 var key = useTitle ? (asset as Conversation).Title : asset.Name;
+                if (key == null)
+                {
+                    if (DialogueDebug.logWarnings) Debug.LogWarning($"Dialogue System: A {typeof(T).Name} has an invalid name.");
+                    continue;
+                }
                 if (!cache.ContainsKey(key))
                 {
                     cache.Add(key, asset);
@@ -654,11 +668,11 @@ namespace PixelCrushers.DialogueSystem
                     {
                         var oldLuaIndex = kvp.Key;
                         var newLuaIndex = kvp.Value;
-                        if (entry.conditionsString.Contains(oldLuaIndex))
+                        if (!string.IsNullOrEmpty(entry.conditionsString) && entry.conditionsString.Contains(oldLuaIndex))
                         {
                             entry.conditionsString = ReplaceLuaIndex(entry.conditionsString, "Actor", oldLuaIndex, newLuaIndex);
                         }
-                        if (entry.userScript.Contains(oldLuaIndex))
+                        if (!string.IsNullOrEmpty(entry.userScript) && entry.userScript.Contains(oldLuaIndex))
                         {
                             entry.userScript = ReplaceLuaIndex(entry.userScript, "Actor", oldLuaIndex, newLuaIndex);
                         }
@@ -702,11 +716,11 @@ namespace PixelCrushers.DialogueSystem
                     {
                         var oldLuaIndex = kvp.Key;
                         var newLuaIndex = kvp.Value;
-                        if (entry.conditionsString.Contains(oldLuaIndex))
+                        if (!string.IsNullOrEmpty(entry.conditionsString) && entry.conditionsString.Contains(oldLuaIndex))
                         {
                             entry.conditionsString = ReplaceLuaIndex(entry.conditionsString, "Item", oldLuaIndex, newLuaIndex);
                         }
-                        if (entry.userScript.Contains(oldLuaIndex))
+                        if (!string.IsNullOrEmpty(entry.userScript) && entry.userScript.Contains(oldLuaIndex))
                         {
                             entry.userScript = ReplaceLuaIndex(entry.userScript, "Item", oldLuaIndex, newLuaIndex);
                         }
@@ -750,11 +764,11 @@ namespace PixelCrushers.DialogueSystem
                     {
                         var oldLuaIndex = kvp.Key;
                         var newLuaIndex = kvp.Value;
-                        if (entry.conditionsString.Contains(oldLuaIndex))
+                        if (!string.IsNullOrEmpty(entry.conditionsString) && entry.conditionsString.Contains(oldLuaIndex))
                         {
                             entry.conditionsString = ReplaceLuaIndex(entry.conditionsString, "Location", oldLuaIndex, newLuaIndex);
                         }
-                        if (entry.userScript.Contains(oldLuaIndex))
+                        if (!string.IsNullOrEmpty(entry.userScript) && entry.userScript.Contains(oldLuaIndex))
                         {
                             entry.userScript = ReplaceLuaIndex(entry.userScript, "Location", oldLuaIndex, newLuaIndex);
                         }
@@ -798,11 +812,11 @@ namespace PixelCrushers.DialogueSystem
                     {
                         var oldLuaIndex = kvp.Key;
                         var newLuaIndex = kvp.Value;
-                        if (entry.conditionsString.Contains(oldLuaIndex))
+                        if (!string.IsNullOrEmpty(entry.conditionsString) && entry.conditionsString.Contains(oldLuaIndex))
                         {
                             entry.conditionsString = ReplaceLuaIndex(entry.conditionsString, "Variable", oldLuaIndex, newLuaIndex);
                         }
-                        if (entry.userScript.Contains(oldLuaIndex))
+                        if (!string.IsNullOrEmpty(entry.userScript) && entry.userScript.Contains(oldLuaIndex))
                         {
                             entry.userScript = ReplaceLuaIndex(entry.userScript, "Variable", oldLuaIndex, newLuaIndex);
                         }
@@ -963,8 +977,9 @@ namespace PixelCrushers.DialogueSystem
         public const string InvalidEntrytag = "invalid_entrytag";
         public const string VoiceOverFileFieldName = DialogueSystemFields.VoiceOverFile;
 
-        public delegate string GetCustomEntrytagDelegate(Conversation conversation, DialogueEntry entry);
-        public static GetCustomEntrytagDelegate getCustomEntrytag = null;
+        //--- Was manually specifying invalid filename chars: private static Regex entrytagRegex = new Regex("[;:,!\'\"\t\r\n\\/\\?\\[\\] ]");
+        private static Regex entrytagRegex = new Regex(string.Format("[{0}]", Regex.Escape(" " + new string(System.IO.Path.GetInvalidFileNameChars()) + new string(System.IO.Path.GetInvalidPathChars()))));
+        private static Regex actorNameLineNumberEntrytagRegex = new Regex("[,\"\t\r\n\\/<>?]");
 
         /// <summary>
         /// Gets the entrytag string of a dialogue entry.
@@ -977,32 +992,37 @@ namespace PixelCrushers.DialogueSystem
         {
             if (conversation == null || entry == null) return InvalidEntrytag;
             Actor actor = null;
-            Regex regex = new Regex("[;:,!\'\"\t\r\n\\/\\?\\[\\] ]");
             switch (entrytagFormat)
             {
                 case EntrytagFormat.ActorName_ConversationID_EntryID:
                     actor = GetActor(entry.ActorID);
                     if (actor == null) return InvalidEntrytag;
-                    return string.Format("{0}_{1}_{2}", regex.Replace(actor.Name, "_"), conversation.id, entry.id);
+                    return string.Format("{0}_{1}_{2}", entrytagRegex.Replace(actor.Name, "_"), conversation.id, entry.id);
                 case EntrytagFormat.ConversationTitle_EntryID:
-                    return string.Format("{0}_{1}", regex.Replace(conversation.Title, "_"), entry.id);
+                    return string.Format("{0}_{1}", entrytagRegex.Replace(conversation.Title, "_"), entry.id);
                 case EntrytagFormat.ActorNameLineNumber:
                     actor = GetActor(entry.ActorID);
                     if (actor == null) return InvalidEntrytag;
                     int lineNumber = (conversation.id * 500) + entry.id;
-                    return string.Format("{0}{1}", new Regex("[,\"\t\r\n\\/<>?]").Replace(actor.Name, "_"), lineNumber);
+                    return string.Format("{0}{1}", actorNameLineNumberEntrytagRegex.Replace(actor.Name, "_"), lineNumber);
                 case EntrytagFormat.ConversationID_ActorName_EntryID:
                     actor = GetActor(entry.ActorID);
                     if (actor == null) return InvalidEntrytag;
-                    return string.Format("{0}_{1}_{2}", conversation.id, regex.Replace(actor.Name, "_"), entry.id);
+                    return string.Format("{0}_{1}_{2}", conversation.id, entrytagRegex.Replace(actor.Name, "_"), entry.id);
                 case EntrytagFormat.ActorName_ConversationTitle_EntryDescriptor:
                     actor = GetActor(entry.ActorID);
                     if (actor == null) { return InvalidEntrytag; }
                     var entryDesc = !string.IsNullOrEmpty(entry.Title) ? entry.Title
                         : (!string.IsNullOrEmpty(entry.currentMenuText) ? entry.currentMenuText : entry.id.ToString());
-                    return string.Format("{0}_{1}_{2}", regex.Replace(actor.Name, "_"), regex.Replace(conversation.Title, "_"), regex.Replace(entryDesc, "_"));
+                    return string.Format("{0}_{1}_{2}", entrytagRegex.Replace(actor.Name, "_"), entrytagRegex.Replace(conversation.Title, "_"), entrytagRegex.Replace(entryDesc, "_"));
                 case EntrytagFormat.VoiceOverFile:
-                    return (entry == null) ? InvalidEntrytag : Field.LookupValue(entry.fields, VoiceOverFileFieldName);
+                    if (entry == null) return InvalidEntrytag;
+                    var voiceOverFile = Field.LookupValue(entry.fields, VoiceOverFileFieldName);
+                    return (voiceOverFile == null) ? InvalidEntrytag : entrytagRegex.Replace(voiceOverFile, "_");
+                case EntrytagFormat.Title:
+                    if (entry == null) return InvalidEntrytag;
+                    var title = Field.LookupValue(entry.fields, DialogueSystemFields.Title);
+                    return (title == null) ? InvalidEntrytag : entrytagRegex.Replace(title, "_");
                 case EntrytagFormat.Custom:
                     return (getCustomEntrytag != null) ? getCustomEntrytag(conversation, entry) : InvalidEntrytag;
                 default:

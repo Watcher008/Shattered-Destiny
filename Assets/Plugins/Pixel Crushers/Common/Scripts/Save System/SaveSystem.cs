@@ -2,6 +2,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace PixelCrushers
@@ -30,9 +31,13 @@ namespace PixelCrushers
         [SerializeField]
         private bool m_saveCurrentScene = true;
 
+        [Tooltip("Highest save slot number allowed.")]
+        [SerializeField]
+        private int m_maxSaveSlot = 99999;
+
         [Tooltip("When loading a game/scene, wait this many frames before applying saved data to allow other scripts to initialize first.")]
         [SerializeField]
-        private int m_framesToWaitBeforeApplyData = 1;
+        private int m_framesToWaitBeforeApplyData = 0;
 
         [Tooltip("Log debug info.")]
         [SerializeField]
@@ -42,7 +47,7 @@ namespace PixelCrushers
 
         private static SaveSystem m_instance = null;
 
-        private static List<Saver> m_savers = new List<Saver>();
+        private static HashSet<Saver> m_savers = new HashSet<Saver>();
 
         private static List<Saver> m_tmpSavers = new List<Saver>();
 
@@ -54,6 +59,8 @@ namespace PixelCrushers
 
         private static SceneTransitionManager m_sceneTransitionManager = null;
 
+        private static bool m_allowNegativeSlotNumbers = false;
+
         private static GameObject m_playerSpawnpoint = null;
 
         private static int m_currentSceneIndex = NoSceneIndex;
@@ -64,9 +71,11 @@ namespace PixelCrushers
 
         private static AsyncOperation m_currentAsyncOperation = null;
 
-        private static int m_framesToWaitBeforeSaveDataAppliedEvent = 0;
+#if USE_ADDRESSABLES
+        private static UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<UnityEngine.ResourceManagement.ResourceProviders.SceneInstance> m_currentAsyncOperationHandle;
+#endif
 
-        private static WaitForEndOfFrame endOfFrame = new WaitForEndOfFrame();
+        private static int m_framesToWaitBeforeSaveDataAppliedEvent = 0;
 
         private static bool m_isQuitting = false;
 
@@ -75,7 +84,7 @@ namespace PixelCrushers
         static void InitStaticVariables()
         {
             m_instance = null;
-            m_savers = new List<Saver>();
+            m_savers = new HashSet<Saver>();
             m_tmpSavers = new List<Saver>();
             m_savedGameData = new SavedGameData();
             m_serializer = null;
@@ -86,7 +95,6 @@ namespace PixelCrushers
             m_addedScenes = new List<string>();
             m_currentAsyncOperation = null;
             m_framesToWaitBeforeSaveDataAppliedEvent = 0;
-            endOfFrame = new WaitForEndOfFrame();
             m_isQuitting = false;
         }
 #endif
@@ -122,6 +130,21 @@ namespace PixelCrushers
         }
 
         /// <summary>
+        /// Highest save slot number allowed.
+        /// </summary>
+        public static int maxSaveSlot
+        {
+            get
+            {
+                return (m_instance != null) ? m_instance.m_maxSaveSlot : int.MaxValue;
+            }
+            set
+            {
+                if (m_instance != null) m_instance.m_maxSaveSlot = value;
+            }
+        }
+
+        /// <summary>
         /// When loading a game/scene, wait this many frames before applying saved data to allow other scripts to initialize first.
         /// </summary>
         public static int framesToWaitBeforeApplyData
@@ -143,7 +166,7 @@ namespace PixelCrushers
         /// Note: This value is reset to zero after every call to ApplySavedGameData.
         /// </summary>
         public static int framesToWaitBeforeSaveDataAppliedEvent
-        { 
+        {
             get { return m_framesToWaitBeforeSaveDataAppliedEvent; }
             set { m_framesToWaitBeforeSaveDataAppliedEvent = value; }
         }
@@ -174,7 +197,7 @@ namespace PixelCrushers
             {
                 if (m_instance == null && !m_isQuitting)
                 {
-                    m_instance = FindObjectOfType<SaveSystem>();
+                    m_instance = GameObjectUtility.FindFirstObjectByType<SaveSystem>();
                     if (m_instance == null)
                     {
                         m_instance = new GameObject("Save System", typeof(SaveSystem)).GetComponent<SaveSystem>();
@@ -184,6 +207,10 @@ namespace PixelCrushers
             }
         }
 
+        /// <summary>
+        /// Reference to the DataSerializer in the SaveSystem's hierarchy.
+        /// SaveSystem will use it to serialize and deserialize saved game data.
+        /// </summary>
         public static DataSerializer serializer
         {
             get
@@ -201,6 +228,10 @@ namespace PixelCrushers
             }
         }
 
+        /// <summary>
+        /// Reference to the SavedGameDataStorer in the SaveSystem's hierarchy. 
+        /// SaveSystem will use it to store and retrieve saved game data.
+        /// </summary>
         public static SavedGameDataStorer storer
         {
             get
@@ -218,6 +249,9 @@ namespace PixelCrushers
             }
         }
 
+        /// <summary>
+        /// Reference to the SceneTransitionManager in the SaveSystem's hierarchy, if present.
+        /// </summary>
         public static SceneTransitionManager sceneTransitionManager
         {
             get
@@ -228,6 +262,15 @@ namespace PixelCrushers
                 }
                 return m_sceneTransitionManager;
             }
+        }
+
+        /// <summary>
+        /// Allow the use of negative slot numbers.
+        /// </summary>
+        public bool allowNegativeSlotNumbers
+        {
+            get { return m_allowNegativeSlotNumbers; }
+            set { m_allowNegativeSlotNumbers = value; }
         }
 
         /// <summary>
@@ -288,6 +331,15 @@ namespace PixelCrushers
             }
         }
 
+        public delegate string ValidateSceneNameDelegate(string sceneName, SceneValidationMode sceneValidationMode);
+
+        /// <summary>
+        /// Invoked before loading a scene by name. Should return the sceneName, or a different
+        /// scene if the sceneName isn't valid (e.g., was renamed or removed from build settings),
+        /// or a blank string to not load any scene.
+        /// </summary>
+        public static ValidateSceneNameDelegate validateNameScene = null;
+
         public delegate void SceneLoadedDelegate(string sceneName, int sceneIndex);
 
         /// <summary>
@@ -327,6 +379,12 @@ namespace PixelCrushers
             if (m_instance == null)
             {
                 m_instance = this;
+#if UNITY_EDITOR
+                if (Application.isPlaying)
+                { // If GameObject is hidden in Scene view, DontDestroyOnLoad will report (harmless) error.
+                    UnityEditor.SceneVisibilityManager.instance.Show(gameObject, true);
+                }
+#endif
                 if (transform.parent != null) transform.SetParent(null);
                 DontDestroyOnLoad(gameObject);
             }
@@ -377,8 +435,75 @@ namespace PixelCrushers
             return UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex;
         }
 
-        private static IEnumerator LoadSceneInternal(string sceneName)
+        public static bool IsSceneInBuildSettings(string sceneName)
         {
+            for (var n = 0; n < UnityEngine.SceneManagement.SceneManager.sceneCountInBuildSettings; ++n)
+            {
+                var scenePath = UnityEngine.SceneManagement.SceneUtility.GetScenePathByBuildIndex(n);
+                if (string.IsNullOrEmpty(scenePath)) continue;
+                if (string.Equals(System.IO.Path.GetFileNameWithoutExtension(scenePath), sceneName, System.StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private static void SceneManagerOrAddressablesLoadScene(string sceneName)
+        {
+            if (IsSceneInBuildSettings(sceneName))
+            {
+                UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
+                return;
+            }
+#if USE_ADDRESSABLES
+            // If not in build settings, try loading an Addressable scene:
+            m_currentAsyncOperationHandle = UnityEngine.AddressableAssets.Addressables.LoadSceneAsync(sceneName);
+#else
+            Debug.LogError("Can't load scene. Scene is not in build settings: " + sceneName);
+#endif
+        }
+
+        private static void SceneManagerOrAddressablesLoadSceneAsync(string sceneName)
+        {
+            m_currentAsyncOperation = null;
+            if (IsSceneInBuildSettings(sceneName))
+            {
+                m_currentAsyncOperation = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName);
+                return;
+            }
+#if USE_ADDRESSABLES
+            // If not in build settings, try loading an Addressable scene:
+            m_currentAsyncOperationHandle = UnityEngine.AddressableAssets.Addressables.LoadSceneAsync(sceneName);
+#else
+            Debug.LogError("Can't load scene. Scene is not in build settings: " + sceneName);
+#endif
+        }
+
+        private static IEnumerator SceneManagerOrAddressablesLoadSceneAdditiveAsync(string sceneName)
+        {
+            if (IsSceneInBuildSettings(sceneName))
+            {
+                yield return UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName, UnityEngine.SceneManagement.LoadSceneMode.Additive);
+            }
+            else
+            {
+#if USE_ADDRESSABLES
+                // If not in build settings, try loading an Addressable scene:
+                m_currentAsyncOperationHandle = UnityEngine.AddressableAssets.Addressables.LoadSceneAsync(sceneName, UnityEngine.SceneManagement.LoadSceneMode.Additive);
+                while (!m_currentAsyncOperation.isDone)
+                {
+                    yield return null;
+                }
+#else
+                Debug.LogError("Can't load additive scene. Scene is not in build settings: " + sceneName);
+#endif
+            }
+        }
+
+        private static IEnumerator LoadSceneInternal(string sceneName, SceneValidationMode sceneValidationMode)
+        {
+            m_addedScenes.Clear();
             if (sceneTransitionManager == null)
             {
                 if (sceneName.StartsWith("index:"))
@@ -388,18 +513,25 @@ namespace PixelCrushers
                 }
                 else
                 {
-                    UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
+                    if (validateNameScene != null) sceneName = validateNameScene(sceneName, sceneValidationMode);
+                    if (string.IsNullOrEmpty(sceneName))
+                    {
+                        if (debug) Debug.LogWarning("Scene '" + sceneName + "' is not a valid scene to load.");
+                        yield break;
+                    }
+                    SceneManagerOrAddressablesLoadScene(sceneName);
                 }
                 yield break;
             }
             else
             {
-                yield return instance.StartCoroutine(LoadSceneInternalTransitionCoroutine(sceneName));
+                yield return instance.StartCoroutine(LoadSceneInternalTransitionCoroutine(sceneName, sceneValidationMode));
             }
         }
 
-        private static IEnumerator LoadSceneInternalTransitionCoroutine(string sceneName)
+        private static IEnumerator LoadSceneInternalTransitionCoroutine(string sceneName, SceneValidationMode sceneValidationMode)
         {
+            m_addedScenes.Clear();
             yield return instance.StartCoroutine(sceneTransitionManager.LeaveScene());
             if (sceneName.StartsWith("index:"))
             {
@@ -408,21 +540,42 @@ namespace PixelCrushers
             }
             else
             {
-                m_currentAsyncOperation = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName);
+                if (validateNameScene != null) sceneName = validateNameScene(sceneName, sceneValidationMode);
+                if (string.IsNullOrEmpty(sceneName))
+                {
+                    if (debug) Debug.LogWarning("Scene '" + sceneName + "' is not a valid scene to load.");
+                    yield break;
+                }
+                SceneManagerOrAddressablesLoadSceneAsync(sceneName);
             }
-            while (m_currentAsyncOperation != null && !m_currentAsyncOperation.isDone)
+            if (m_currentAsyncOperation != null)
             {
-                sceneTransitionManager.OnLoading(m_currentAsyncOperation.progress);
-                yield return null;
+                while (m_currentAsyncOperation != null && !m_currentAsyncOperation.isDone)
+                {
+                    sceneTransitionManager.OnLoading(m_currentAsyncOperation.progress);
+                    yield return null;
+                }
             }
+#if USE_ADDRESSABLES
+            else
+            {
+                while (!m_currentAsyncOperationHandle.IsDone)
+                {
+                    sceneTransitionManager.OnLoading(m_currentAsyncOperationHandle.PercentComplete);
+                    yield return null;
+                }
+            }
+#endif
             sceneTransitionManager.OnLoading(1);
             m_currentAsyncOperation = null;
             instance.StartCoroutine(sceneTransitionManager.EnterScene());
         }
 
-        public static IEnumerator LoadAdditiveSceneInternal(string sceneName)
+        public static IEnumerator LoadAdditiveSceneInternal(string sceneName, SceneValidationMode sceneValidationMode)
         {
-            yield return UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName, UnityEngine.SceneManagement.LoadSceneMode.Additive);
+            if (validateNameScene != null) sceneName = validateNameScene(sceneName, sceneValidationMode);
+            if (string.IsNullOrEmpty(sceneName)) yield break;
+            yield return SceneManagerOrAddressablesLoadSceneAdditiveAsync(sceneName);
             var scene = UnityEngine.SceneManagement.SceneManager.GetSceneByName(sceneName);
             if (!scene.IsValid()) yield break;
             var rootGOs = scene.GetRootGameObjects();
@@ -443,11 +596,27 @@ namespace PixelCrushers
                 var rootGOs = scene.GetRootGameObjects();
                 for (int i = 0; i < rootGOs.Length; i++)
                 {
-                    RecursivelyInformBeforeSceneChange(rootGOs[i].transform);
+                    var rootGO = rootGOs[i].transform;
+                    RecursivelyRecordSavers(rootGO, scene.buildIndex);
+                    RecursivelyInformBeforeSceneChange(rootGO);
                 }
             }
             UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(sceneName);
 #endif
+        }
+
+        /// <summary>
+        /// Records the data of all saver components on the transform and its children.
+        /// </summary>
+        public static void RecursivelyRecordSavers(Transform t, int sceneIndex)
+        {
+            if (t == null) return;
+            var saver = t.GetComponent<Saver>();
+            if (saver != null) currentSavedGameData.SetData(saver.key, saver.saveAcrossSceneChanges ? -1 : sceneIndex, saver.RecordData());
+            foreach (Transform child in t)
+            {
+                RecursivelyRecordSavers(child, sceneIndex);
+            }
         }
 
         /// <summary>
@@ -483,7 +652,7 @@ namespace PixelCrushers
 
 #else
 
-        public static string GetCurrentSceneName()
+            public static string GetCurrentSceneName()
         {
             return Application.loadedLevelName;
         }
@@ -509,6 +678,30 @@ namespace PixelCrushers
             Application.UnloadLevel(sceneName);
         }
 #endif
+
+        /// <summary>
+        /// If slotNumber is negative and allowNegativeSlotNumbers is false, 
+        /// choose an empty positive slot up to maxSlots. If none are empty,
+        /// return false;
+        /// </summary>
+        private static bool SanitizeSlotNumberForSave(int slotNumber, out int sanitizedSlotNumber)
+        {
+            if (slotNumber >= 0 || m_instance == null || m_instance.allowNegativeSlotNumbers)
+            {
+                sanitizedSlotNumber = slotNumber;
+                return true;
+            }
+            for (int i = 0; i <= maxSaveSlot; i++)
+            {
+                if (!HasSavedGameInSlot(i))
+                {
+                    sanitizedSlotNumber = i;
+                    return true;
+                }
+            }
+            sanitizedSlotNumber = 0;
+            return false;
+        }
 
         /// <summary>
         /// Saves a game into a slot using the storage provider on the 
@@ -571,6 +764,11 @@ namespace PixelCrushers
 
         private static IEnumerator SaveToSlotCoroutine(int slotNumber)
         {
+            if (!SanitizeSlotNumberForSave(slotNumber, out slotNumber))
+            {
+                Debug.LogError("Can't save game. Invalid save slot: " + slotNumber);
+                yield break;
+            }
             saveStarted();
             yield return null;
             PlayerPrefs.SetInt(LastSavedGameSlotPlayerPrefsKey, slotNumber);
@@ -583,6 +781,11 @@ namespace PixelCrushers
         /// </summary>
         public static void SaveToSlotImmediate(int slotNumber)
         {
+            if (!SanitizeSlotNumberForSave(slotNumber, out slotNumber))
+            {
+                Debug.LogError("Can't save game. Invalid save slot: " + slotNumber);
+                return;
+            }
             saveStarted();
             PlayerPrefs.SetInt(LastSavedGameSlotPlayerPrefsKey, slotNumber);
             storer.StoreSavedGameData(slotNumber, RecordSavedGameData());
@@ -614,9 +817,6 @@ namespace PixelCrushers
             loadStarted();
             yield return null;
             LoadFromSlotNow(slotNumber);
-            //--- Always notify, in case loadEnded listeners are added via code:
-            //--- if (loadEnded.GetInvocationList().Length > 1)
-            sceneLoaded += NotifyLoadEndedWhenSceneLoaded;
         }
 
         private static void NotifyLoadEndedWhenSceneLoaded(string sceneName, int sceneIndex)
@@ -627,6 +827,7 @@ namespace PixelCrushers
 
         private static void LoadFromSlotNow(int slotNumber)
         {
+            sceneLoaded += NotifyLoadEndedWhenSceneLoaded;
             LoadGame(storer.RetrieveSavedGameData(slotNumber));
         }
 
@@ -658,11 +859,10 @@ namespace PixelCrushers
         {
             m_savedGameData.version = version;
             m_savedGameData.sceneName = GetCurrentSceneName();
-            for (int i = 0; i < m_savers.Count; i++)
+            foreach (var saver in m_savers)
             {
                 try
                 {
-                    var saver = m_savers[i];
                     m_savedGameData.SetData(saver.key, GetSaverSceneIndex(saver), saver.RecordData());
                 }
                 catch (System.Exception e)
@@ -732,7 +932,7 @@ namespace PixelCrushers
             {
                 yield return null;
             }
-            yield return endOfFrame;
+            yield return CoroutineUtility.endOfFrame;
             saveDataApplied();
         }
 
@@ -752,11 +952,10 @@ namespace PixelCrushers
         public static void BeforeSceneChange()
         {
             // Notify savers:
-            for (int i = 0; i < m_savers.Count; i++)
+            foreach (var saver in m_savers)
             {
                 try
                 {
-                    var saver = m_savers[i];
                     saver.OnBeforeSceneChange();
                 }
                 catch (System.Exception e)
@@ -788,7 +987,7 @@ namespace PixelCrushers
             }
             else if (saveCurrentScene)
             {
-                instance.StartCoroutine(LoadSceneCoroutine(savedGameData, null));
+                instance.StartCoroutine(LoadSceneCoroutine(savedGameData, null, SceneValidationMode.LoadingSavedGame));
             }
             else
             {
@@ -815,10 +1014,10 @@ namespace PixelCrushers
             }
             var savedGameData = RecordSavedGameData();
             savedGameData.sceneName = sceneName;
-            instance.StartCoroutine(LoadSceneCoroutine(savedGameData, spawnpointName));
+            instance.StartCoroutine(LoadSceneCoroutine(savedGameData, spawnpointName, SceneValidationMode.LoadingScene));
         }
 
-        private static IEnumerator LoadSceneCoroutine(SavedGameData savedGameData, string spawnpointName)
+        private static IEnumerator LoadSceneCoroutine(SavedGameData savedGameData, string spawnpointName, SceneValidationMode sceneValidationMode)
         {
             if (savedGameData == null) yield break;
             if (debug) Debug.Log("Save System: Loading scene " + savedGameData.sceneName +
@@ -826,14 +1025,14 @@ namespace PixelCrushers
             m_savedGameData = savedGameData;
             BeforeSceneChange();
             if (autoUnloadAdditiveScenes) UnloadAllAdditiveScenes();
-            yield return LoadSceneInternal(savedGameData.sceneName);
+            yield return LoadSceneInternal(savedGameData.sceneName, sceneValidationMode);
             ApplyDataImmediate();
             // Allow other scripts to spin up scene first:
             for (int i = 0; i < framesToWaitBeforeApplyData; i++)
             {
                 yield return null;
             }
-            yield return endOfFrame;
+            yield return CoroutineUtility.endOfFrame;
             m_playerSpawnpoint = !string.IsNullOrEmpty(spawnpointName) ? GameObject.Find(spawnpointName) : null;
             if (!string.IsNullOrEmpty(spawnpointName) && m_playerSpawnpoint == null) Debug.LogWarning("Save System: Can't find spawnpoint '" + spawnpointName + "'. Is spelling and capitalization correct?");
             ApplySavedGameData(savedGameData);
@@ -882,7 +1081,7 @@ namespace PixelCrushers
             if (string.IsNullOrEmpty(sceneName) || m_addedScenes.Contains(sceneName)) return;
             m_addedScenes.Add(sceneName);
             instance.m_isLoadingAdditiveScene = true;
-            instance.StartCoroutine(LoadAdditiveSceneInternal(sceneName));
+            instance.StartCoroutine(LoadAdditiveSceneInternal(sceneName, SceneValidationMode.LoadingScene));
         }
 
         /// <summary>
@@ -915,7 +1114,7 @@ namespace PixelCrushers
         public static void RestartGame(string startingSceneName)
         {
             ResetGameState();
-            instance.StartCoroutine(LoadSceneInternal(startingSceneName));
+            instance.StartCoroutine(LoadSceneInternal(startingSceneName, SceneValidationMode.RestartingGame));
         }
 
         /// <summary>
@@ -936,15 +1135,11 @@ namespace PixelCrushers
         public static void SaversRestartGame()
         {
             if (m_savers.Count <= 0) return;
-            for (int i = m_savers.Count - 1; i >= 0; i--) // A saver may remove itself from list during restart.
+            foreach (var saver in m_savers.ToList()) // A saver may remove itself from list during restart.
             {
                 try
                 {
-                    if (0 <= i && i < m_savers.Count)
-                    {
-                        var saver = m_savers[i];
-                        if (saver != null) saver.OnRestartGame();
-                    }
+                    if (saver != null) saver.OnRestartGame();
                 }
                 catch (System.Exception e)
                 {
