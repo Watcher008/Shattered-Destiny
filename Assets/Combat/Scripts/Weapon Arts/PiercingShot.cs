@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
-using SD.PathingSystem;
+using SD.Grids;
 
 namespace SD.Combat
 {

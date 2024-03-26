@@ -7,4 +7,5 @@ public class Weapon
     public int Damage;
     public int Range;
     public Attributes Attribute;
+    public string Sprite;
 }

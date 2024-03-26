@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
-using SD.PathingSystem;
+using SD.Grids;
 using SD.Characters;
 using SD.Combat;
 

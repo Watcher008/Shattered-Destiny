@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using TMPro;
-using SD.PathingSystem;
+using SD.Grids;
 using SD.Characters;
 using SD.Combat;
 
