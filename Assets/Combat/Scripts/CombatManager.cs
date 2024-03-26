@@ -13,7 +13,7 @@ using SD.Combat;
 public class CombatManager : MonoBehaviour
 { 
     private const int CELL_SIZE = 1;
-    private const int GRID_SIZE = 10;
+    public const int GRID_SIZE = 10;
 
     public static CombatManager Instance;
     private bool _combatActive = true;
@@ -402,6 +402,20 @@ public class CombatManager : MonoBehaviour
 
     }
     #endregion
+
+    public bool CheckNode(PathNode node, out Combatant combatant)
+    {
+        combatant = null;
+        foreach(var c in _combatants)
+        {
+            if (c.Node == node)
+            {
+                combatant = c;
+                return true;
+            }
+        }
+        return false;
+    }
 
     public void OnCombatantDefeated(Combatant combatant)
     {

@@ -7,6 +7,7 @@ namespace SD.Combat
         [SerializeField] protected int _actionPointCost;
         [SerializeField] private string _description;
 
-        public abstract void OnUse(Combatant combatant);
+        //public abstract void OnUse(Combatant combatant);
+        public abstract void OnUse(Combatant combatant, Combatant target);
     }
 }

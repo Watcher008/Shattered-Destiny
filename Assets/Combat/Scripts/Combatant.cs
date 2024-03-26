@@ -54,6 +54,7 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
     // Prevents further input until current action has resolved
     public bool IsActing { get; private set; }
     private List<StatusEffects> _statusEffects = new();
+    private List<ActiveEffect> _activeEffects = new();
 
     #region - Stats -
     private int _initiative;
@@ -144,6 +145,7 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
         {
             // Regain action points, up to max
             ActionPoints = Mathf.Clamp(ActionPoints + _refreshedActionPoints, 0, MaxActionPoints);
+            onActionPointChange?.Invoke();
         }
 
         // Regain all movement
@@ -151,7 +153,15 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
 
         Block = 0;
 
-        onActionPointChange?.Invoke();
+        for (int i = _activeEffects.Count - 1; i >= 0; i--)
+        {
+            _activeEffects[i].Duration--;
+            if (_activeEffects[i].Duration <= 0)
+            {
+                _activeEffects.RemoveAt(i);
+            }
+        }
+       
         onTurnStart?.Invoke();
     }
 
@@ -163,11 +173,22 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
 
     private bool HasEffect<T>() where T : StatusEffects
     {
-        foreach (var item in _statusEffects)
+        foreach(var item in _activeEffects)
         {
-            if (item is T) return true;
+            if (item.Effect is T) return true;
         }
         return false;
+    }
+
+    public void AddEffect(StatusEffects effect, int duration = 1)
+    {
+        // Need to check if the effect already exists
+
+        // Do they stack?
+
+        // If higher, just set duration to new value
+
+        _activeEffects.Add(new ActiveEffect(effect, duration));
     }
 
     public void TakeDamage(int damage)
@@ -195,6 +216,12 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
     {
         if (_characterSheet != null) return _characterSheet.GetAttribute(attribute);
         else return _statBlock.Attributes[(int)attribute];
+    }
+
+    public int GetAttributeBonus(Attributes attribute)
+    {
+        if (_characterSheet != null) return _characterSheet.GetAttributeBonus(attribute);
+        else return _statBlock.Attributes[(int)attribute] / 10;
     }
 
     #region - Actions - 

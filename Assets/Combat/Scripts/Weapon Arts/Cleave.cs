@@ -7,20 +7,20 @@ namespace SD.Combat
     [CreateAssetMenu(menuName = "Combat/Weapon Arts/Cleave")]
     public class Cleave : WeaponArt
     {
-        public override void OnUse(Combatant combatant)
+        public override void OnUse(Combatant combatant, Combatant target)
         {
-            int dmg = Mathf.RoundToInt(combatant.GetAttribute(Attributes.Physicality) / 20);
+            int dmg = combatant.GetAttributeBonus(Attributes.Physicality);
             if (dmg == 0) dmg = 1; // minimum value
             dmg *= 3;
 
             var targets = new List<Combatant>();
             var targetList = combatant.IsPlayer ? CombatManager.Instance.EnemyCombatants : CombatManager.Instance.PlayerCombatants;
 
-            foreach (var target in targetList)
+            foreach (var unit in targetList)
             {
-                if (Mathf.Abs(target.Node.X - combatant.Node.X) > 1) continue;
-                if (Mathf.Abs(target.Node.Y - combatant.Node.Y) > 1) continue;
-                targets.Add(target);
+                if (Mathf.Abs(unit.Node.X - combatant.Node.X) > 1) continue;
+                if (Mathf.Abs(unit.Node.Y - combatant.Node.Y) > 1) continue;
+                targets.Add(unit);
             }
 
             for (int i = targets.Count - 1; i >= 0; i--)

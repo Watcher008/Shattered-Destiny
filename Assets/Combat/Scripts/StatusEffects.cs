@@ -4,6 +4,18 @@ namespace SD.Combat
 {
     public abstract class StatusEffects { }
 
+    public class ActiveEffect
+    {
+        public StatusEffects Effect;
+        public int Duration;
+
+        public ActiveEffect(StatusEffects effect, int duration)
+        {
+            Effect = effect;
+            Duration = duration;
+        }
+    }
+
     #region - Debuffs - 
     /// <summary>
     /// The unit's control switches to the opposing side.
