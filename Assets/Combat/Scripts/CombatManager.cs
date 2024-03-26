@@ -8,6 +8,7 @@ using UnityEngine.InputSystem;
 using TMPro;
 using SD.PathingSystem;
 using SD.Characters;
+using SD.Combat;
 
 public class CombatManager : MonoBehaviour
 { 
@@ -48,6 +49,7 @@ public class CombatManager : MonoBehaviour
     [SerializeField] private Button _moveButton;
     [SerializeField] private Button _sprintButton;
     [SerializeField] private Button _attackButton;
+    [SerializeField] private Button _weaponArtButton;
 
     [Header("Overlay")]
     [SerializeField] private RuleTile _moveHighlight;
@@ -109,6 +111,7 @@ public class CombatManager : MonoBehaviour
         _moveButton.onClick.AddListener(OnMoveSelected);
         _sprintButton.onClick.AddListener(OnSprintSelected);
         _attackButton.onClick.AddListener(OnAttackSelected);
+        _weaponArtButton.onClick.AddListener(OnWeaponArtSelected);
 
         _endCombatButton.onClick.AddListener(OnVictory);
 
@@ -141,6 +144,8 @@ public class CombatManager : MonoBehaviour
         _moveButton.onClick.RemoveAllListeners();
         _sprintButton.onClick.RemoveAllListeners();
         _attackButton.onClick.RemoveAllListeners();
+        _weaponArtButton.onClick.RemoveAllListeners();
+
         _endCombatButton.onClick.RemoveAllListeners();
 
         var obj = GameObject.FindGameObjectWithTag("PlayerInput");
@@ -387,6 +392,14 @@ public class CombatManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void OnWeaponArtSelected()
+    {
+        if (!_currentActor.IsPlayer) return;
+        else if (_currentActor.IsActing) return;
+
+
     }
     #endregion
 

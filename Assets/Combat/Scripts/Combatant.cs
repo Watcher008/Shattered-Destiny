@@ -4,6 +4,7 @@ using System.Collections;
 using UnityEngine;
 using SD.PathingSystem;
 using SD.Characters;
+using SD.Combat;
 
 public class Combatant : MonoBehaviour, IComparable<Combatant>
 {
@@ -50,14 +51,22 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
     public bool IsPlayer => _isPlayer;
     public PathNode Node => _currentNode;
 
-    private bool _isActing; // Prevents further input until current action has resolved
-    public bool IsActing => _isActing;
+    // Prevents further input until current action has resolved
+    public bool IsActing { get; private set; }
+    private List<StatusEffects> _statusEffects = new();
 
     #region - Stats -
     private int _initiative;
-    private int _initiativeBonus => _characterSheet != null ? _characterSheet.Initiative : _statBlock.Initiative;
+    private int _initiativeBonus
+    {
+        get
+        {
+             return _characterSheet != null ? _characterSheet.Initiative : _statBlock.Initiative;
+        }
+    }
 
-    public int MovementRemaining { get; private set; } // How many spaces more the unit can move this turn
+    // How many spaces more the unit can move this turn
+    public int MovementRemaining { get; private set; }
     private int _movement => _characterSheet != null ? _characterSheet.Movement : _statBlock.Movement;
     public int AttackRange => _weapon == null ? 1 : _weapon.Range;
 
@@ -66,9 +75,23 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
 
     // Action Points
     public int ActionPoints { get; private set; }
-    public int MaxActionPoints => _characterSheet != null ? _characterSheet.MaxActionPoints : _statBlock.MaxActionPoints;
-    private int _refreshedActionPoints => _characterSheet != null ? _characterSheet.RefreshActionPoints : _statBlock.RefreshActionPoints;
+    public int MaxActionPoints
+    {
+        get
+        {
+            return _characterSheet != null ? _characterSheet.MaxActionPoints : _statBlock.MaxActionPoints;
+        }
+    }
+    private int _refreshedActionPoints
+    {
+        get
+        {
+            return _characterSheet != null ? _characterSheet.RefreshActionPoints : _statBlock.RefreshActionPoints;
+        }
+    }
     #endregion
+
+    public int Block;
 
     private Coroutine _movementCoroutine;
 
@@ -117,23 +140,44 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
 
     public void OnTurnStart()
     {
-        // Regain action points, up to max
-        ActionPoints = Mathf.Clamp(ActionPoints + _refreshedActionPoints, 0, MaxActionPoints);
+        if (!HasEffect<Stun>())
+        {
+            // Regain action points, up to max
+            ActionPoints = Mathf.Clamp(ActionPoints + _refreshedActionPoints, 0, MaxActionPoints);
+        }
+
         // Regain all movement
         MovementRemaining = _movement;
+
+        Block = 0;
 
         onActionPointChange?.Invoke();
         onTurnStart?.Invoke();
     }
 
-    private void SpendActionPoints(int points = 1)
+    public void SpendActionPoints(int points = 1)
     {
         ActionPoints -= points;
         onActionPointChange?.Invoke();
     }
 
+    private bool HasEffect<T>() where T : StatusEffects
+    {
+        foreach (var item in _statusEffects)
+        {
+            if (item is T) return true;
+        }
+        return false;
+    }
+
     public void TakeDamage(int damage)
     {
+        if (HasEffect<Vulnerable>()) damage = Mathf.RoundToInt(damage * 1.25f);
+        if (HasEffect<Reinforced>()) damage = Mathf.RoundToInt(damage * 0.75f);
+
+        damage -= Block;
+        if (damage <= 0) return;
+
         _characterSheet?.TakeDamage(damage);
 
         Health -= damage;
@@ -145,6 +189,12 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
             _currentNode.SetOccupant(Occupant.None);
             CombatManager.Instance.OnCombatantDefeated(this);
         }
+    }
+
+    public int GetAttribute(Attributes attribute)
+    {
+        if (_characterSheet != null) return _characterSheet.GetAttribute(attribute);
+        else return _statBlock.Attributes[(int)attribute];
     }
 
     #region - Actions - 
@@ -174,7 +224,7 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
 
     private IEnumerator FollowPath(List<PathNode> path)
     {
-        _isActing = true;
+        IsActing = true;
         while (path.Count > 0)
         {
             // Abandon current node
@@ -205,7 +255,7 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
             MovementRemaining--;
             yield return null;
         }
-        _isActing = false;
+        IsActing = false;
     }
 
     public void Attack(Combatant target)
@@ -216,9 +266,17 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
         // Deal damage to target
         var dmg = _weapon != null ? _weapon.Damage : 1;
         dmg += GetDamageBonus();
-        target.TakeDamage(dmg);
+        DealDamage(dmg, target);
 
         SpendActionPoints();
+    }
+
+    public void DealDamage(int dmg, Combatant target)
+    {
+        if (HasEffect<Weaken>()) dmg = Mathf.RoundToInt(dmg * 0.75f);
+        if (HasEffect<Empowered>()) dmg = Mathf.RoundToInt(dmg * 1.25f);
+
+        target.TakeDamage(dmg);
     }
 
     private int GetDamageBonus()
@@ -237,7 +295,7 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
 
     private IEnumerator Stab(Combatant target)
     {
-        _isActing = true;
+        IsActing = true;
         var start = transform.position;
         var end = (transform.position + target.transform.position) / 2;
         float t = 0, timeToAct = 0.25f;
@@ -253,9 +311,8 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
         }
         transform.position = start;
 
-        // End Turn
         CombatManager.Instance.EndTurn(this);
-        _isActing = false;
+        IsActing = false;
     }
     #endregion
 }
