@@ -9,6 +9,7 @@ namespace SD.Combat.WeaponArts
         [SerializeField] protected int _range;
         [SerializeField] private string _description;
 
+        public int Cost => _actionPointCost;
         public int Range => _range;
 
         public abstract void OnUse(Combatant combatant, PathNode node);

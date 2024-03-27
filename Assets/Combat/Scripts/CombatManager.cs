@@ -74,6 +74,7 @@ namespace SD.Combat
         [SerializeField] private Sprite _enemy;
         [SerializeField] private GameObject _tree;
         [SerializeField] private GameObject _rock;
+        [SerializeField] private GameObject _blood;
         #endregion
 
         #region - Input -
@@ -218,6 +219,9 @@ namespace SD.Combat
 
             // If on a road, there should be a road going through the middle of the map
 
+            // The type/density of terrain placement should be based on the world terrain the player is in
+            // Forest = more forests, etc.
+
             // Randomly place down obstacles - trees, rocks, etc.
             var points = Poisson.GeneratePoints(0, _treeSpacing, new Vector2(GRID_SIZE - 1, GRID_SIZE - 1));
 
@@ -229,8 +233,16 @@ namespace SD.Combat
                 var node = Pathfinding.instance.GetNode(x, y);
                 if (node != null)
                 {
-                    Instantiate(_tree, new Vector3(x, 0, y), Quaternion.identity, transform);
-                    //node.SetOccupant(Occupant.Object);
+                    if (Random.value <= 0.5f)
+                    {
+                        Instantiate(_tree, new Vector3(x, 0, y), Quaternion.identity, transform);
+                        node.SetTerrain(TerrainType.Forest);
+                    }
+                    else
+                    {
+                        Instantiate(_rock, new Vector3(x, 0, y), Quaternion.identity, transform);
+                        node.SetTerrain(TerrainType.Mountain);
+                    }                    
                 }
             }
         }
@@ -364,6 +376,7 @@ namespace SD.Combat
         {
             if (!_currentActor.IsPlayer) return;
             else if (_currentActor.IsActing) return;
+            _overlay.ClearAllTiles();
             _currentActor.OnSprint();
         }
 
@@ -449,6 +462,8 @@ namespace SD.Combat
                 int index = i;
                 _weaponArtButtons[index].gameObject.SetActive(true);
                 _weaponArtText[index].text = _currentActor.WeaponArts[index].name;
+                _weaponArtButtons[index].interactable = _currentActor.ActionPoints >= _currentActor.WeaponArts[index].Cost;
+
                 _weaponArtButtons[index].onClick.AddListener(delegate
                 {
                     BeginWeaponArtTargeting(_currentActor.WeaponArts[index]);
@@ -542,6 +557,11 @@ namespace SD.Combat
 
             // I think this is clear? low value = good for the attacker
             return Random.value <= chanceToHit;
+        }
+
+        public void OnDamageTaken(Combatant combatant)
+        {
+            Instantiate(_blood, combatant.transform.position, Quaternion.identity);
         }
 
         public void OnCombatantDefeated(Combatant combatant)

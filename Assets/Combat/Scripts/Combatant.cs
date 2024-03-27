@@ -186,6 +186,8 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
         damage -= Block;
         if (damage <= 0) return;
 
+        CombatManager.Instance.OnDamageTaken(this);
+
         _characterSheet?.TakeDamage(damage);
 
         Health -= damage;
