@@ -107,6 +107,7 @@ public class CombatManager : MonoBehaviour
     }
 
     private WeaponArt _currentArt;
+    private Coroutine _delayCoroutine;
     #endregion
 
     private void ForTestingOnly()
@@ -470,6 +471,18 @@ public class CombatManager : MonoBehaviour
             _weaponArtButtons[i].onClick.RemoveAllListeners();
             _weaponArtButtons[i].gameObject.SetActive(false);
         }
+    }
+
+    public void WaitToStopActing(WeaponArt art, Combatant combatant)
+    {
+        if (_delayCoroutine != null) StopCoroutine(_delayCoroutine);
+        _delayCoroutine = StartCoroutine(DelayCoroutine(art, combatant));
+    }
+
+    private IEnumerator DelayCoroutine(WeaponArt art, Combatant combatant)
+    {
+        while(combatant.IsActing) yield return null;
+        art.OnComplete(combatant);
     }
     #endregion
 

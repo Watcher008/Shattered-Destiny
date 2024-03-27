@@ -12,5 +12,10 @@ namespace SD.Combat
         public int Range => _range;
 
         public abstract void OnUse(Combatant combatant, PathNode node);
+
+        /// <summary>
+        /// Handles timing separation between the start of the action and a second half.
+        /// </summary>
+        public virtual void OnComplete(Combatant combatant) { }
     }
 }
