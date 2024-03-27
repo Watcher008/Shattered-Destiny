@@ -1,4 +1,4 @@
-namespace SD.PathingSystem
+namespace SD.Grids
 {
     public class PathNode
     {

@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace SD.PathingSystem
+namespace SD.Grids
 {
     public class Grid<TGridObject>
     {

@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using SD.PathingSystem;
+using SD.Grids;
 
 public class GridManager : MonoBehaviour
 {

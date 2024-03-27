@@ -6,13 +6,14 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using TMPro;
-using SD.PathingSystem;
+using SD.Grids;
 using SD.Characters;
+using SD.Combat;
 
 public class CombatManager : MonoBehaviour
 { 
     private const int CELL_SIZE = 1;
-    private const int GRID_SIZE = 10;
+    public const int GRID_SIZE = 10;
 
     public static CombatManager Instance;
     private bool _combatActive = true;
@@ -48,6 +49,9 @@ public class CombatManager : MonoBehaviour
     [SerializeField] private Button _moveButton;
     [SerializeField] private Button _sprintButton;
     [SerializeField] private Button _attackButton;
+    [SerializeField] private Button _weaponArtButton;
+    [SerializeField] private Button[] _weaponArtButtons;
+    private TMP_Text[] _weaponArtText;
 
     [Header("Overlay")]
     [SerializeField] private RuleTile _moveHighlight;
@@ -76,6 +80,7 @@ public class CombatManager : MonoBehaviour
         None,
         Move,
         Attack,
+        WeaponArt
     }
 
     private Action _action;
@@ -84,10 +89,15 @@ public class CombatManager : MonoBehaviour
         get => _action;
         set
         {
+            _currentArt = null;
             _overlay.ClearAllTiles();
+            HideAllWeaponArts();
+
             if (_action == value || value == Action.None)
             {
+                // sets to none when clicking same button
                 _action = Action.None;
+                
             }
             else
             {
@@ -95,7 +105,15 @@ public class CombatManager : MonoBehaviour
             }
         }
     }
+
+    private WeaponArt _currentArt;
     #endregion
+
+    private void ForTestingOnly()
+    {
+        _playerData.PlayerStats.EquipWeapon(_itemCodex.GetWeapon("Sword"));
+        _playerData.PlayerStats.WeaponArts.AddRange(_playerData.WeaponArts);
+    }
 
     private void Awake()
     {
@@ -109,6 +127,13 @@ public class CombatManager : MonoBehaviour
         _moveButton.onClick.AddListener(OnMoveSelected);
         _sprintButton.onClick.AddListener(OnSprintSelected);
         _attackButton.onClick.AddListener(OnAttackSelected);
+        _weaponArtButton.onClick.AddListener(OnWeaponArtSelected);
+
+        _weaponArtText = new TMP_Text[_weaponArtButtons.Length];
+        for (int i = 0; i < _weaponArtButtons.Length; i++)
+        {
+            _weaponArtText[i] = _weaponArtButtons[i].GetComponentInChildren<TMP_Text>();
+        }
 
         _endCombatButton.onClick.AddListener(OnVictory);
 
@@ -141,6 +166,8 @@ public class CombatManager : MonoBehaviour
         _moveButton.onClick.RemoveAllListeners();
         _sprintButton.onClick.RemoveAllListeners();
         _attackButton.onClick.RemoveAllListeners();
+        _weaponArtButton.onClick.RemoveAllListeners();
+
         _endCombatButton.onClick.RemoveAllListeners();
 
         var obj = GameObject.FindGameObjectWithTag("PlayerInput");
@@ -165,6 +192,10 @@ public class CombatManager : MonoBehaviour
                 break;
             case Action.Attack:
                 OnAttackTarget(hit, node);
+                break;
+            case Action.WeaponArt:
+                // I feel like I probably need to make a check first?
+                _currentArt.OnUse(_currentActor, node);
                 break;
         }
 
@@ -211,13 +242,13 @@ public class CombatManager : MonoBehaviour
         {
             var newEnemy = Instantiate(_prefab, transform);
             newEnemy.name = $"Enemy {i + 1}";
-            var weapon = _itemCodex.GetWeapon(bandit.DefaultWeapon);
+            var weapon = _itemCodex.GetWeapon(bandit.Weapon);
             newEnemy.SetInitialValues(_enemy, bandit, weapon);
             _combatants.Add(newEnemy);
             EnemyCombatants.Add(newEnemy);
         }
 
-        _playerData.PlayerStats.EquipWeapon(_itemCodex.GetWeapon("Basic Sword"));
+        ForTestingOnly();
 
         // Spawn player
         var player = Instantiate(_prefab, transform);
@@ -295,6 +326,22 @@ public class CombatManager : MonoBehaviour
     }
     #endregion
 
+    private void HighlightArea(PathNode from, int range, RuleTile tile)
+    {
+        var nodes = Pathfinding.instance.GetArea(from, range);
+        if (nodes == null) return;
+
+        // I'm going to have to add some more logic here, don't show movement for occupied nodes
+        // Don't highlight nodes for attacking if occupied by allies, etc.
+        foreach(var node in nodes)
+        {
+            if (node.Occupant == Occupant.Player) continue;
+
+            var pos = new Vector3Int(node.X, node.Y, 0);
+            _overlay.SetTile(pos, tile);
+        }
+    }
+
     #region - Actions -
     /// <summary>
     /// Current actor chooses to rest.
@@ -323,6 +370,7 @@ public class CombatManager : MonoBehaviour
         CurrentAction = Action.Move;
         if (CurrentAction == Action.None) return;
 
+        // Actually this won't even work because terrain is going to fuck with things a lot
         var range = Pathfinding.instance.GetNodesInRange(_currentActor.Node, _currentActor.MovementRemaining);
         if (range == null) return;
 
@@ -360,16 +408,8 @@ public class CombatManager : MonoBehaviour
         CurrentAction = Action.Attack;
         if (CurrentAction == Action.None) return;
 
-        var range = Pathfinding.instance.GetNodesInRange(_currentActor.Node, _currentActor.AttackRange);
-        if (range == null) return;
 
-        foreach (var node in range)
-        {
-            if (node.Occupant == Occupant.Player) continue;
-
-            var pos = new Vector3Int(node.X, node.Y, 0);
-            _overlay.SetTile(pos, _attackHighlight);
-        }
+        HighlightArea(_currentActor.Node, _currentActor.AttackRange, _attackHighlight);
     }
 
     private void OnAttackTarget(RaycastHit hit, PathNode node)
@@ -388,7 +428,103 @@ public class CombatManager : MonoBehaviour
             }
         }
     }
+
+    private void OnWeaponArtSelected()
+    {
+        if (!_currentActor.IsPlayer) return;
+        else if (_currentActor.IsActing) return;
+
+        CurrentAction = Action.WeaponArt;
+        if (CurrentAction == Action.None) return;
+
+        // Display a new panel with buttons for each weapon art
+        for (int i = 0; i < _currentActor.WeaponArts.Count; i++)
+        {
+            int index = i;
+            _weaponArtButtons[index].gameObject.SetActive(true);
+            _weaponArtText[index].text = _currentActor.WeaponArts[index].name;
+            _weaponArtButtons[index].onClick.AddListener(delegate
+            {
+                BeginWeaponArtTargeting(_currentActor.WeaponArts[index]);
+            });
+        }
+    }
+
+    private void BeginWeaponArtTargeting(WeaponArt art)
+    {
+        //HideAllWeaponArts();
+        _currentArt = art;
+        _overlay.ClearAllTiles();
+        HighlightArea(_currentActor.Node, art.Range, _attackHighlight);
+
+        // Pressing a button for a weapon art should then switch to targeting mode
+        // Do I just highlight all nodes within range? That would be easiest...
+        // Use red for attacks, green for buffs
+
+    }
+
+    private void HideAllWeaponArts()
+    {
+        for (int i = 0; i < _weaponArtButtons.Length; i++)
+        {
+            _weaponArtButtons[i].onClick.RemoveAllListeners();
+            _weaponArtButtons[i].gameObject.SetActive(false);
+        }
+    }
     #endregion
+
+    public bool CheckNode(PathNode node, out Combatant combatant)
+    {
+        combatant = null;
+        foreach(var c in _combatants)
+        {
+            if (c.Node == node)
+            {
+                combatant = c;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// Calculates chance to hit based on terrain and status effect variables.
+    /// </summary>
+    /// <returns>True if the attack hits.</returns>
+    public bool AttackHits(Combatant attacker, Combatant target)
+    {
+        // OP Auto-hit
+        if (attacker.HasEffect<Focused>()) return true;
+
+        float chanceToHit = 0.8f; // - 0.05f * attacker.Weapon.Tier
+
+        // Bonus to hit if attacker is in a Mountain tile
+        if (attacker.Node.Terrain == TerrainType.Mountain) chanceToHit += 0.2f;
+
+        // Penalty to hit if target is in a Forest tile
+        if (target.Node.Terrain == TerrainType.Forest) chanceToHit -= 0.2f;
+
+        // Apply Penalty if target is Hard ;)
+        if (target.HasEffect<Hardened>()) chanceToHit -= 0.25f;
+
+        // Lastly check for terrain between the two
+        var points = Bresenham.PlotLine(attacker.Node.X, attacker.Node.Y, target.Node.X, target.Node.Y);
+        var nodes = Pathfinding.instance.ConvertToNodes(points);
+        nodes.Remove(attacker.Node);
+        nodes.Remove(target.Node);
+
+        foreach(var node in nodes)
+        {
+            if (node.Terrain == TerrainType.Mountain || node.Terrain == TerrainType.Forest)
+            {
+                chanceToHit /= 2;
+                break;
+            }
+        }
+
+        // I think this is clear? low value = good for the attacker
+        return Random.value <= chanceToHit;
+    }
 
     public void OnCombatantDefeated(Combatant combatant)
     {

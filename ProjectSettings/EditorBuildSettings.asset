@@ -30,6 +30,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Game Scenes/UI/PlayerHUD.unity
     guid: 0ec0d631d76161145a10d065eccaf49b
   - enabled: 1
+    path: Assets/Scenes/Game Scenes/UI/Inventory.unity
+    guid: 1ec4cde08643c1c43802b61c9b0276ca
+  - enabled: 1
     path: Assets/Scenes/Game Scenes/UI/PlayerMenu.unity
     guid: 5aabc6e3b7e429149b626d8fc5bab9ab
   - enabled: 1

@@ -1,3 +1,5 @@
+using SD.Combat;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace SD.Characters
@@ -19,6 +21,7 @@ namespace SD.Characters
         private int _refreshActionPoints;
 
         private Weapon _weapon;
+        private List<WeaponArt> _weaponArts;
 
         public int MaxHealth => _maxHealth;
         public int Health => _currentHealth;
@@ -30,6 +33,8 @@ namespace SD.Characters
         public int RefreshActionPoints => _refreshActionPoints;
 
         public Weapon Weapon => _weapon;
+        public List<WeaponArt> WeaponArts => _weaponArts;
+
 
         public CharacterSheet(int[] attributes, int[] attributeXP, int maxHp, int hp, int move, int init, int maxAP = 5, int startAP = 3, int refreshAP = 1)
         {
@@ -47,6 +52,8 @@ namespace SD.Characters
             _maxActionPoints = maxAP;
             _startingActionPoints = startAP;
             _refreshActionPoints = refreshAP;
+
+            _weaponArts = new();
         }
 
         /// <summary>
@@ -58,11 +65,12 @@ namespace SD.Characters
         }
 
         /// <summary>
-        /// Returns the 10th place value of the requested attribute.
+        /// Returns the 10th place value of the requested attribute, minimum 1.
         /// </summary>
         public int GetAttributeBonus(Attributes attribute)
         {
-            return Mathf.RoundToInt(_attributes[(int)attribute].Value / 10);
+            var value = Mathf.Clamp(Mathf.RoundToInt(_attributes[(int)attribute].Value / 10), 1, 10);
+            return value;
         }
 
         public void GainXP(Attributes attribute, int xp)

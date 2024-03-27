@@ -1,12 +1,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 using SD.Primitives;
+using SD.Inventories;
+using SD.Combat;
 
 namespace SD.Characters
 {
     [CreateAssetMenu(menuName = "Scriptable Objects/Player Data", fileName = "Player Data")]
     public class PlayerData : ScriptableObject
     {
+        public delegate void OnEquipmentChanged();
+        public OnEquipmentChanged onEquipmentChanged;
+
+        public List<WeaponArt> WeaponArts = new List<WeaponArt>();
+
         #region - World Map Location
         private int x, y;
         public int X
@@ -27,6 +34,9 @@ namespace SD.Characters
         private CharacterSheet _playerStats = new CharacterSheet(defaultStats, defaultXP, 5, 5, 3, 1);
         private List<CharacterSheet> _companions = new();
 
+        private Inventory _inventory = new(new Vector2Int(10, 10));
+        private InventoryItem[] _equipment = new InventoryItem[System.Enum.GetNames(typeof(EquipmentType)).Length];
+
         private int _travelSpeed;
         private int _exhaustion;
 
@@ -46,6 +56,9 @@ namespace SD.Characters
             get => _exhaustion;
             set => _exhaustion = Mathf.Clamp(value, 0, 10);
         }
+
+        public Inventory Inventory => _inventory;
+        public InventoryItem[] Equipment => _equipment;
 
         #region - Reputation & Influence - 
         [SerializeField] private IntReference[] _factionReputation;
@@ -74,6 +87,23 @@ namespace SD.Characters
         {
             return _factionReputation[(int)faction].Value;
         }
+
+
+
+        #region - Equipment -
+        public bool TryEquipItem(EquipmentType slot, Item item)
+        {
+            Debug.LogWarning("This functionality has not been added yet.");
+
+            // Is it the same item that was already there?
+
+            // is it the correct slot?
+
+            // is there an item already there? Need to unequip it and add to inventory
+
+            return false;
+        }
+        #endregion
     }
 }
 

@@ -26,6 +26,10 @@ public class TownManager : MonoBehaviour
     [SerializeField] private Button _quickTalk02Button;
     [SerializeField] private Button _quickTalk03Button;
 
+    [SerializeField] private string _conversation01;
+    [SerializeField] private string _conversation02;
+    [SerializeField] private string _conversation03;
+
     private void Awake()
     {
         _marketButton.onClick.AddListener(OnMarket);
@@ -79,7 +83,17 @@ public class TownManager : MonoBehaviour
 
     private void OnQuickTalk01()
     {
-        _startDialogueCommand.StartConversation("Test Conversation 1");
+        _startDialogueCommand.StartConversation(_conversation01);
+    }
+
+    private void OnQuickTalk02()
+    {
+        _startDialogueCommand.StartConversation(_conversation02);
+    }
+
+    private void OnQuickTalk03()
+    {
+        _startDialogueCommand.StartConversation(_conversation03);
     }
 
     private void OnLeaveTown()

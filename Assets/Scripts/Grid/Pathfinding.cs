@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SD.PathingSystem
+namespace SD.Grids
 {
     public class Pathfinding
     {
@@ -240,6 +240,9 @@ namespace SD.PathingSystem
             return Mathf.Sqrt(Mathf.Pow(fromNode.X - toNode.X, 2) + Mathf.Pow(fromNode.Y - toNode.Y, 2));
         }
 
+        /// <summary>
+        /// Returns a list of nodes within the given range, not allowing diagonals.
+        /// </summary>
         public List<PathNode> GetNodesInRange(PathNode from, int range)
         {
             var nodes = new List<PathNode>();
@@ -260,6 +263,42 @@ namespace SD.PathingSystem
                 }
             }
 
+            return nodes;
+        }
+
+        /// <summary>
+        /// Returns a list of nodes within the given range, allowing diagonals.
+        /// </summary>
+        public List<PathNode> GetArea(PathNode from, int range)
+        {
+            var nodes = new List<PathNode>();
+
+            for (int x = from.X - range; x < from.X + range + 1; x++)
+            {
+                for (int y = from.Y - range; y < from.Y + range + 1; y++)
+                {
+                    if (x < 0 || x > grid.GetWidth() - 1) continue;
+                    if (y < 0 || y > grid.GetHeight() - 1) continue;
+
+                    var toNode = grid.GetGridObject(x, y);
+                    nodes.Add(toNode);
+                }
+            }
+
+            return nodes;
+        }
+
+        /// <summary>
+        /// Converts a set of Vector2Int to PathNodes. For use with Bresenham.
+        /// </summary>
+        public List<PathNode> ConvertToNodes(HashSet<Vector2Int> points)
+        {
+            var nodes = new List<PathNode>();
+            foreach(var point in points)
+            {
+                var node = grid.GetGridObject(point.x, point.y);
+                if (node != null) nodes.Add(node);
+            }
             return nodes;
         }
     }

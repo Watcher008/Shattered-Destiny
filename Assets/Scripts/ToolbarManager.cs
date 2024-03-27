@@ -34,6 +34,18 @@ public class ToolbarManager : MonoBehaviour
         _campButton.onClick.RemoveAllListeners();
     }
 
+    // Prevents player from accidentally moving when pressing a button
+    public void OnPointerEnter()
+    {
+        //WorldMapManager.Instance.onPauseInput?.Invoke();
+    }
+
+    public void OnPointerExit()
+    {
+        //WorldMapManager.Instance.onResumeInput?.Invoke();
+    }
+
+
     private void OnCharacterSelected()
     {
         // is the panel open? close it

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using SD.PathingSystem;
+using SD.Grids;
 using SD.EventSystem;
 
 public class LocationManager : MonoBehaviour
