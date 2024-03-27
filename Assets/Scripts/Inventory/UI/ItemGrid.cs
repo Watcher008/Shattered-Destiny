@@ -37,14 +37,17 @@ namespace SD.Inventories
         {
             _rect.sizeDelta = new Vector2(_inventory.Dimensions.x * InventoryManager.CELL_SIZE, 
                 _inventory.Dimensions.y * InventoryManager.CELL_SIZE);
+
+            _rect.anchorMin = Vector2.zero;
+            _rect.anchorMax = Vector2.zero;
         }
 
         public Vector2Int GetGridPosition(Vector2 mousPosition)
         {
             return new Vector2Int(
                 // Compare to the bottom left corner of the rect transform
-                Mathf.FloorToInt((mousPosition.x - _rect.rect.xMin) / InventoryManager.CELL_SIZE),
-                Mathf.FloorToInt((mousPosition.y - _rect.rect.yMin) / InventoryManager.CELL_SIZE)
+                Mathf.FloorToInt((mousPosition.x - _rect.position.x) / InventoryManager.CELL_SIZE),
+                Mathf.FloorToInt((mousPosition.y - _rect.position.y) / InventoryManager.CELL_SIZE)
             );
         }
 

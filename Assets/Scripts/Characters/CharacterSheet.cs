@@ -58,11 +58,12 @@ namespace SD.Characters
         }
 
         /// <summary>
-        /// Returns the 10th place value of the requested attribute.
+        /// Returns the 10th place value of the requested attribute, minimum 1.
         /// </summary>
         public int GetAttributeBonus(Attributes attribute)
         {
-            return Mathf.RoundToInt(_attributes[(int)attribute].Value / 10);
+            var value = Mathf.Clamp(Mathf.RoundToInt(_attributes[(int)attribute].Value / 10), 1, 10);
+            return value;
         }
 
         public void GainXP(Attributes attribute, int xp)

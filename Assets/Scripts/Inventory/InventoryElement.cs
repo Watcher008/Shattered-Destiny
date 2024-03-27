@@ -37,7 +37,7 @@ namespace SD.Inventories
         public void SetItem(InventoryItem item)
         {
             _item = item;
-            _image.sprite = InventoryManager.Instance.GetSprite(item.Weapon.Sprite);
+            _image.sprite = InventoryManager.Instance.GetSprite(item.Item.Sprite);
             _itemCountText.text = GetCountText();
         }
 

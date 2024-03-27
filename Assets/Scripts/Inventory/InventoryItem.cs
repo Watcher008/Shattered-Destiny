@@ -3,14 +3,14 @@ using UnityEngine;
 
 public class InventoryItem
 {
-    public Weapon Weapon;
+    public Item Item;
     public Vector2Int Origin;
     public Vector2Int Size;
     public bool IsRotated;
 
-    public InventoryItem(Weapon weapon, Vector2Int origin, Vector2Int size, bool isRotated)
+    public InventoryItem(Item weapon, Vector2Int origin, Vector2Int size, bool isRotated)
     {
-        Weapon = weapon;
+        Item = weapon;
         Origin = origin;
         Size = size;
         IsRotated = isRotated;
@@ -19,7 +19,6 @@ public class InventoryItem
     public List<Vector2Int> GetGridPositionList(Vector2Int origin)
     {
         List<Vector2Int> gridPositions = new List<Vector2Int>();
-
 
         if (IsRotated)
         {

@@ -2,31 +2,39 @@
     "Weapons":[
         {
             "Name": "Basic Sword",
+            "Value": 5,
+            "Sprite": "misc/sword",
+
             "Damage": 1,
             "Range": 1,
-            "Attribute": 1,
-            "Sprite": "misc/sword"
+            "Attribute": 1
         },
         {
             "Name": "Basic Warhammer",
+            "Value": 1,
+            "Sprite": "misc/sword",
+
             "Damage": 1,
             "Range": 1,
-            "Attribute": 1,
-            "Sprite": "misc/sword"
+            "Attribute": 1
         },
         {
             "Name": "Basic Bow",
+            "Value": 1,
+            "Sprite": "misc/sword",
+
             "Damage": 1,
             "Range": 2,
-            "Attribute": 1,
-            "Sprite": "misc/sword"
+            "Attribute": 1
         },
         {
             "Name": "Basic Staff",
+            "Value": 1,
+            "Sprite": "misc/sword",
+
             "Damage": 1,
             "Range": 2,
-            "Attribute": 2,
-            "Sprite": "misc/sword"
+            "Attribute": 2
         }
     ]
 }

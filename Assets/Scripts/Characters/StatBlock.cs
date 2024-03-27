@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace SD.Characters
 {
     /// <summary>
@@ -18,5 +20,14 @@ namespace SD.Characters
         public int RefreshActionPoints;
 
         public string DefaultWeapon;
+
+        /// <summary>
+        /// Returns the 10th place value of the requested attribute, minimum 1.
+        /// </summary>
+        public int GetAttributeBonus(Attributes attribute)
+        {
+            var value = Mathf.Clamp(Mathf.RoundToInt(Attributes[(int)attribute] / 10), 1, 10);
+            return value;
+        }
     }
 }

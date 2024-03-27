@@ -8,25 +8,6 @@ using SD.Combat;
 
 public class Combatant : MonoBehaviour, IComparable<Combatant>
 {
-    public int CompareTo(Combatant other)
-    {
-        // -1 places lower in index, 1 places higher in index
-        if (_initiative > other._initiative) return -1;
-        else if (_initiative < other._initiative) return 1;
-        else // Same initiative
-        {
-            // First compare initiative bonus
-            if (_initiativeBonus > other._initiativeBonus) return -1;
-            else if (_initiativeBonus < other._initiativeBonus) return 1;
-
-            // Then give tie breaker to players
-            if (IsPlayer && !other.IsPlayer) return -1;
-            else if (!IsPlayer && other.IsPlayer) return 1;
-
-            return 0; // Then it just doesn't matter
-        }
-    }
-
     #region - Callback Events
     public delegate void OnTurnChanged();
     public OnTurnChanged onTurnStart;
@@ -41,6 +22,7 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
     public OnStatChange onActionPointChange;
     #endregion
 
+    #region - General -
     private bool _isPlayer;
     private PathNode _currentNode;
 
@@ -48,13 +30,16 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
     private StatBlock _statBlock;
     private Weapon _weapon;
 
+    private List<WeaponArt> _weaponArts = new();
+    private List<ActiveEffect> _activeEffects = new();
+
     public bool IsPlayer => _isPlayer;
     public PathNode Node => _currentNode;
+    public List<WeaponArt> WeaponArts => _weaponArts;
 
     // Prevents further input until current action has resolved
     public bool IsActing { get; private set; }
-    private List<StatusEffects> _statusEffects = new();
-    private List<ActiveEffect> _activeEffects = new();
+    #endregion
 
     #region - Stats -
     private int _initiative;
@@ -171,7 +156,7 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
         onActionPointChange?.Invoke();
     }
 
-    private bool HasEffect<T>() where T : StatusEffects
+    public bool HasEffect<T>() where T : StatusEffects
     {
         foreach(var item in _activeEffects)
         {
@@ -221,7 +206,7 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
     public int GetAttributeBonus(Attributes attribute)
     {
         if (_characterSheet != null) return _characterSheet.GetAttributeBonus(attribute);
-        else return _statBlock.Attributes[(int)attribute] / 10;
+        return _statBlock.GetAttributeBonus(attribute);
     }
 
     #region - Actions - 
@@ -342,4 +327,23 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
         IsActing = false;
     }
     #endregion
+
+    public int CompareTo(Combatant other)
+    {
+        // -1 places lower in index, 1 places higher in index
+        if (_initiative > other._initiative) return -1;
+        else if (_initiative < other._initiative) return 1;
+        else // Same initiative
+        {
+            // First compare initiative bonus
+            if (_initiativeBonus > other._initiativeBonus) return -1;
+            else if (_initiativeBonus < other._initiativeBonus) return 1;
+
+            // Then give tie breaker to players
+            if (IsPlayer && !other.IsPlayer) return -1;
+            else if (!IsPlayer && other.IsPlayer) return 1;
+
+            return 0; // Then it just doesn't matter
+        }
+    }
 }

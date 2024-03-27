@@ -76,6 +76,10 @@ namespace SD.Combat
     public class Reinforced : StatusEffects { }
 
     /// <summary>
+    /// Unit has 25% less chance to be affected by any ranged ability.
+    /// </summary>
+    public class Hardened : StatusEffects { }
+    /// <summary>
     /// Doubles the movement of the unit.
     /// </summary>
     public class Hurry : StatusEffects { }

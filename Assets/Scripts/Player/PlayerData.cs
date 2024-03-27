@@ -88,7 +88,7 @@ namespace SD.Characters
 
 
         #region - Equipment -
-        public bool TryEquipItem(EquipmentType slot, Weapon weapon)
+        public bool TryEquipItem(EquipmentType slot, Item item)
         {
             Debug.LogWarning("This functionality has not been added yet.");
 

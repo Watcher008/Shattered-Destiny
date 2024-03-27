@@ -50,6 +50,7 @@ public class CombatManager : MonoBehaviour
     [SerializeField] private Button _sprintButton;
     [SerializeField] private Button _attackButton;
     [SerializeField] private Button _weaponArtButton;
+    [SerializeField] private Button[] _weaponArtButtons;
 
     [Header("Overlay")]
     [SerializeField] private RuleTile _moveHighlight;
@@ -78,6 +79,7 @@ public class CombatManager : MonoBehaviour
         None,
         Move,
         Attack,
+        WeaponArt
     }
 
     private Action _action;
@@ -399,7 +401,38 @@ public class CombatManager : MonoBehaviour
         if (!_currentActor.IsPlayer) return;
         else if (_currentActor.IsActing) return;
 
+        // Display a new panel with buttons for each weapon art
+        for (int i = 0; i < _currentActor.WeaponArts.Count; i++)
+        {
+            int index = i;
+            _weaponArtButtons[index].gameObject.SetActive(true);
+            _weaponArtButtons[index].onClick.AddListener(delegate
+            {
+                BeginWeaponArtTargeting(_currentActor.WeaponArts[index]);
+            });
+        }
 
+        // Pressing any other button will hide this again
+
+        // Pressing a button for a weapon art should then switch to targeting mode
+        // Do I just highlight all nodes within range? That would be easiest...
+        // Use red for attacks, green for buffs
+    }
+
+    private void BeginWeaponArtTargeting(WeaponArt art)
+    {
+        HideAllWeaponArts();
+
+
+    }
+
+    private void HideAllWeaponArts()
+    {
+        for (int i = 0; i < _weaponArtButtons.Length; i++)
+        {
+            _weaponArtButtons[i].onClick.RemoveAllListeners();
+            _weaponArtButtons[i].gameObject.SetActive(false);
+        }
     }
     #endregion
 
@@ -415,6 +448,42 @@ public class CombatManager : MonoBehaviour
             }
         }
         return false;
+    }
+
+    /// <summary>
+    /// Calculates chance to hit based on terrain and status effect variables.
+    /// </summary>
+    /// <returns>True if the attack hits.</returns>
+    public bool AttackHits(Combatant attacker, Combatant target)
+    {
+        // OP Auto-hit
+        if (attacker.HasEffect<Focused>()) return true;
+
+        float chanceToHit = 0.8f; // - 0.05f * attacker.Weapon.Tier
+
+        // Bonus to hit if attacker is in a Mountain tile
+        if (attacker.Node.Terrain == TerrainType.Mountain) chanceToHit += 0.2f;
+
+        // Penalty to hit if target is in a Forest tile
+        if (target.Node.Terrain == TerrainType.Forest) chanceToHit -= 0.2f;
+
+        // Apply Penalty if target is Hard ;)
+        if (target.HasEffect<Hardened>()) chanceToHit -= 0.25f;
+
+        // Lastly check for terrain between the two
+        var points = Bresenham.PlotLine(attacker.Node.X, attacker.Node.Y, target.Node.X, target.Node.Y);
+        var nodes = Pathfinding.instance.ConvertToNodes(points);
+        foreach(var node in nodes)
+        {
+            if (node.Terrain == TerrainType.Mountain || node.Terrain == TerrainType.Forest)
+            {
+                chanceToHit /= 2;
+                break;
+            }
+        }
+
+        // I think this is clear? low value = good for the attacker
+        return Random.value <= chanceToHit;
     }
 
     public void OnCombatantDefeated(Combatant combatant)

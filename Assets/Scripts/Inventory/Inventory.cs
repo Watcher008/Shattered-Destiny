@@ -56,7 +56,7 @@ namespace SD.Inventories
 
         public bool TryPlaceItem(InventoryItem item, Vector2Int origin)
         {
-            Debug.Log("Trying to place item at " + origin);
+            //Debug.Log("Trying to place item at " + origin);
             if (!CanPlaceItem(item, origin)) return false;
             //Debug.Log("Placing item at " + origin);
             item.Origin = origin;

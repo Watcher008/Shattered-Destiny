@@ -137,12 +137,13 @@ public class DragManager : MonoBehaviour
 
         if (hoverGrid == null) // Item was dropped while not over any notable object
         {
+            //Debug.Log("hover grid is null");
             ReturnElementToOrigin(element);
             return;
         }
 
         var origin = hoverGrid.GetGridPosition(Input.mousePosition) - dragOffset;
-        Debug.Log("Origin is " + origin);
+        //Debug.Log("Trying to place item at " + origin);
         if (hoverGrid.Inventory.TryPlaceItem(element.Item, origin))
         {
             element.EquippedSlot = null;
