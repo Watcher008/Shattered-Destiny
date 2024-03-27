@@ -1,7 +1,7 @@
 using UnityEngine;
 using SD.Grids;
 
-namespace SD.Combat
+namespace SD.Combat.WeaponArts
 {
     public abstract class WeaponArt : ScriptableObject
     {

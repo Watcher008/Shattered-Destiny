@@ -1,7 +1,7 @@
 using UnityEngine;
 using SD.Grids;
 
-namespace SD.Combat
+namespace SD.Combat.WeaponArts
 {
     [CreateAssetMenu(menuName = "Combat/Weapon Arts/Warhammer/Warcry")]
     public class Warcry : WeaponArt

@@ -1,7 +1,7 @@
 using UnityEngine;
 using SD.Grids;
 
-namespace SD.Combat
+namespace SD.Combat.WeaponArts
 {
     [CreateAssetMenu(menuName = "Combat/Weapon Arts/Warhammer/Push")]
     public class Push : WeaponArt

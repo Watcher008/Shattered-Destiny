@@ -1,4 +1,4 @@
-using SD.Combat;
+using SD.Combat.WeaponArts;
 using System.Collections.Generic;
 using UnityEngine;
 

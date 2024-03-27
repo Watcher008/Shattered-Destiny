@@ -2,7 +2,7 @@ using UnityEngine;
 using SD.Characters;
 using SD.Grids;
 
-namespace SD.Combat
+namespace SD.Combat.WeaponArts
 {
     [CreateAssetMenu(menuName = "Combat/Weapon Arts/Sword/Pierce")]
     public class Pierce : WeaponArt
