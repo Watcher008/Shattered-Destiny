@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using SD.Primitives;
 using SD.Inventories;
-using SD.Combat;
+using SD.Combat.WeaponArts;
 
 namespace SD.Characters
 {

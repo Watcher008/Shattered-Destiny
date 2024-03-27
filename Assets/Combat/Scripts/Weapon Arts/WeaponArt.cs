@@ -1,7 +1,7 @@
 using UnityEngine;
 using SD.Grids;
 
-namespace SD.Combat
+namespace SD.Combat.WeaponArts
 {
     public abstract class WeaponArt : ScriptableObject
     {
@@ -9,8 +9,14 @@ namespace SD.Combat
         [SerializeField] protected int _range;
         [SerializeField] private string _description;
 
+        public int Cost => _actionPointCost;
         public int Range => _range;
 
         public abstract void OnUse(Combatant combatant, PathNode node);
+
+        /// <summary>
+        /// Handles timing separation between the start of the action and a second half.
+        /// </summary>
+        public virtual void OnComplete(Combatant combatant) { }
     }
 }

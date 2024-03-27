@@ -5,6 +5,7 @@ using UnityEngine;
 using SD.Grids;
 using SD.Characters;
 using SD.Combat;
+using SD.Combat.WeaponArts;
 
 public class Combatant : MonoBehaviour, IComparable<Combatant>
 {
@@ -185,6 +186,8 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
         damage -= Block;
         if (damage <= 0) return;
 
+        CombatManager.Instance.OnDamageTaken(this);
+
         _characterSheet?.TakeDamage(damage);
 
         Health -= damage;
@@ -235,6 +238,12 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
         _movementCoroutine = StartCoroutine(FollowPath(path));
     }
 
+    public void ForceMove(PathNode to)
+    {
+        if (_movementCoroutine != null) StopCoroutine(_movementCoroutine);
+        _movementCoroutine = StartCoroutine(MoveToNode(to));
+    }
+
     private IEnumerator FollowPath(List<PathNode> path)
     {
         IsActing = true;
@@ -268,6 +277,34 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
             MovementRemaining--;
             yield return null;
         }
+        IsActing = false;
+    }
+
+    private IEnumerator MoveToNode(PathNode node)
+    {
+        IsActing = true;
+        // Abandon current node
+        _currentNode.SetOccupant(Occupant.None);
+
+        var temp = Pathfinding.instance.GetNodeWorldPosition(node.X, node.Y);
+        var end = new Vector3(temp.x, 0, temp.y);
+
+        float t = 0f;
+        float timeToMove = 0.5f;
+
+        while (t < timeToMove)
+        {
+            t += Time.deltaTime;
+            transform.position = Vector3.Lerp(transform.position, end, t / timeToMove);
+            yield return null;
+        }
+
+        transform.position = end;
+        _currentNode = node;
+
+        if (_isPlayer) _currentNode.SetOccupant(Occupant.Player);
+        else _currentNode.SetOccupant(Occupant.Enemy);
+        
         IsActing = false;
     }
 

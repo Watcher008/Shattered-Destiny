@@ -2,7 +2,7 @@ using UnityEngine;
 using SD.Characters;
 using SD.Grids;
 
-namespace SD.Combat
+namespace SD.Combat.WeaponArts
 {
     [CreateAssetMenu(menuName = "Combat/Weapon Arts/Shield/Bash")]
     public class Bash : WeaponArt
