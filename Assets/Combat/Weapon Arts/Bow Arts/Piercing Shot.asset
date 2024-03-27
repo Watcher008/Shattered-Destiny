@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77edf0b4e37675142bcb5caf01af5326, type: 3}
   m_Name: Piercing Shot
   m_EditorClassIdentifier: 
-  _actionPointCost: 0
+  _actionPointCost: 3
+  _range: 10
   _description: 

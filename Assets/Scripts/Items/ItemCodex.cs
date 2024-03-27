@@ -23,8 +23,6 @@ public class ItemCodex : ScriptableObject
         foreach(var entry in codex.Weapons)
         {
             _weapons.Add(entry.Name, entry);
-
-            Debug.Log($"{entry.Name} {entry.Value} {entry.Damage} {entry.Sprite}");
         }
     }
 

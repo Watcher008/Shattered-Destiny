@@ -10,24 +10,27 @@ namespace SD.Combat
         private const int RANGE = 1;
         private const int DAMAGE_MOD = 3;
 
-        public override void OnUse(Combatant combatant, Combatant target)
+        public override void OnUse(Combatant combatant, PathNode node)
         {
-            int dmg = DAMAGE_MOD * combatant.GetAttributeBonus(Attributes.Physicality);
-
-            var nodes = Pathfinding.instance.GetArea(combatant.Node, RANGE);
-            foreach(var node in nodes)
+            if (CombatManager.Instance.CheckNode(node, out var target))
             {
-                if (CombatManager.Instance.CheckNode(node, out var nextTarget))
+                int dmg = DAMAGE_MOD * combatant.GetAttributeBonus(Attributes.Physicality);
+
+                var nodes = Pathfinding.instance.GetArea(combatant.Node, RANGE);
+                foreach (var areaNode in nodes)
                 {
-                    if (nextTarget.IsPlayer != combatant.IsPlayer)
+                    if (CombatManager.Instance.CheckNode(areaNode, out var nextTarget))
                     {
-                        Debug.Log($"Dealing {dmg} Cleave dmg to {nextTarget.gameObject.name}");
-                        combatant.DealDamage(dmg, nextTarget);
+                        if (nextTarget.IsPlayer != combatant.IsPlayer)
+                        {
+                            Debug.Log($"Dealing {dmg} Cleave dmg to {nextTarget.gameObject.name}");
+                            combatant.DealDamage(dmg, nextTarget);
+                        }
                     }
                 }
-            }
 
-            combatant.SpendActionPoints(_actionPointCost);
+                combatant.SpendActionPoints(_actionPointCost);
+            }
         }
     }
 }

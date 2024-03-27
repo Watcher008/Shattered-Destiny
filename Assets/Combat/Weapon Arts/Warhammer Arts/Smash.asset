@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 848e1c86a33cf354fadad5498ec8982c, type: 3}
   m_Name: Smash
   m_EditorClassIdentifier: 
-  _actionPointCost: 0
+  _actionPointCost: 2
+  _range: 1
   _description: 

@@ -1,3 +1,4 @@
+using SD.Grids;
 using UnityEngine;
 
 namespace SD.Combat
@@ -7,14 +8,17 @@ namespace SD.Combat
     {
         private const float THRESHOLD = 0.35f;
 
-        public override void OnUse(Combatant combatant, Combatant target)
+        public override void OnUse(Combatant combatant, PathNode node)
         {
-            if ((float)target.Health / target.MaxHealth <= THRESHOLD)
+            if (CombatManager.Instance.CheckNode(node, out var target))
             {
-                combatant.DealDamage(int.MaxValue, target);
+                if ((float)target.Health / target.MaxHealth <= THRESHOLD)
+                {
+                    combatant.DealDamage(int.MaxValue, target);
+                }
+
+                combatant.SpendActionPoints(_actionPointCost);
             }
-            
-            combatant.SpendActionPoints(_actionPointCost);
         }
     }
 }

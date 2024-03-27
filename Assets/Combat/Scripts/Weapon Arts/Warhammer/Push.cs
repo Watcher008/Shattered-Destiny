@@ -6,25 +6,28 @@ namespace SD.Combat
     [CreateAssetMenu(menuName = "Combat/Weapon Arts/Warhammer/Push")]
     public class Push : WeaponArt
     {
-        public override void OnUse(Combatant combatant, Combatant target)
+        public override void OnUse(Combatant combatant, PathNode node)
         {
-            var direction = new Vector2Int(target.Node.X - combatant.Node.X, target.Node.Y - combatant.Node.Y);
-
-            // Make sure to not try to push them out of bounds
-            var node = Pathfinding.instance.GetNode(target.Node.X + direction.x, target.Node.Y + direction.y);
-            if (node != null)
+            if (CombatManager.Instance.CheckNode(node, out var target))
             {
-                // Is the node occupied? Don't know what happens
+                var direction = new Vector2Int(target.Node.X - combatant.Node.X, target.Node.Y - combatant.Node.Y);
 
-                // Force move to that node
-                Debug.LogWarning("This has not been fully implemented.");
-                if ((int)node.Terrain > (int)TerrainType.Road)
+                // Make sure to not try to push them out of bounds
+                var newNode = Pathfinding.instance.GetNode(target.Node.X + direction.x, target.Node.Y + direction.y);
+                if (newNode != null)
                 {
-                    target.AddEffect(new Stun());
-                }
-            }
+                    // Is the node occupied? Don't know what happens
 
-            combatant.SpendActionPoints(_actionPointCost);
+                    // Force move to that node
+                    Debug.LogWarning("This has not been fully implemented.");
+                    if ((int)newNode.Terrain > (int)TerrainType.Road)
+                    {
+                        target.AddEffect(new Stun());
+                    }
+                }
+
+                combatant.SpendActionPoints(_actionPointCost);
+            }
         }
     }
 }

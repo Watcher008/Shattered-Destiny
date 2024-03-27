@@ -1,3 +1,4 @@
+using SD.Grids;
 using UnityEngine;
 
 namespace SD.Combat
@@ -6,7 +7,7 @@ namespace SD.Combat
     public class Block : WeaponArt
     {
         private const int MODIFIER = 5;
-        public override void OnUse(Combatant combatant, Combatant target)
+        public override void OnUse(Combatant combatant, PathNode node)
         {
             combatant.Block = combatant.GetAttributeBonus(Characters.Attributes.Physicality)  * MODIFIER;
             combatant.SpendActionPoints(_actionPointCost);

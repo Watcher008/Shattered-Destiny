@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using SD.Primitives;
 using SD.Inventories;
+using SD.Combat;
 
 namespace SD.Characters
 {
@@ -10,6 +11,8 @@ namespace SD.Characters
     {
         public delegate void OnEquipmentChanged();
         public OnEquipmentChanged onEquipmentChanged;
+
+        public List<WeaponArt> WeaponArts = new List<WeaponArt>();
 
         #region - World Map Location
         private int x, y;

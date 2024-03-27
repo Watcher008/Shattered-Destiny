@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe79520a0741e404682121eb13957e43, type: 3}
   m_Name: Ankle Shot
   m_EditorClassIdentifier: 
-  _actionPointCost: 0
+  _actionPointCost: 2
+  _range: 10
   _description: 

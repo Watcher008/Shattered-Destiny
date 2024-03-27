@@ -1,5 +1,6 @@
 using UnityEngine;
 using SD.Characters;
+using SD.Grids;
 
 namespace SD.Combat
 {
@@ -9,16 +10,19 @@ namespace SD.Combat
         private const int MODIFIER = 3;
         private const int DURATION = 2;
 
-        public override void OnUse(Combatant combatant, Combatant target)
+        public override void OnUse(Combatant combatant, PathNode node)
         {
-            if (CombatManager.Instance.AttackHits(combatant, target))
+            if (CombatManager.Instance.CheckNode(node, out var target))
             {
-                int dmg = combatant.GetAttributeBonus(Attributes.Physicality) * MODIFIER;
-                combatant.DealDamage(dmg, target);
-                target.AddEffect(new Vulnerable(), DURATION);
-            }
+                if (CombatManager.Instance.AttackHits(combatant, target))
+                {
+                    int dmg = combatant.GetAttributeBonus(Attributes.Physicality) * MODIFIER;
+                    combatant.DealDamage(dmg, target);
+                    target.AddEffect(new Vulnerable(), DURATION);
+                }
 
-            combatant.SpendActionPoints(_actionPointCost);
+                combatant.SpendActionPoints(_actionPointCost);
+            }
         }
     }
 }
