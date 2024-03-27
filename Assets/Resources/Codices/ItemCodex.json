@@ -1,8 +1,24 @@
 {
+    "Items":[
+        {
+            "Name": "Ration",
+            "Value": 5,
+            "MaxStack": 10,
+            "Sprite": "misc/food"
+        },
+        {
+            "Name": "Potion",
+            "Value": 5,
+            "MaxStack": 10,
+            "Sprite": "misc/potion"
+        }
+    ],
+
     "Weapons":[
         {
-            "Name": "Basic Sword",
+            "Name": "Sword",
             "Value": 5,
+            "MaxStack": 1,
             "Sprite": "misc/sword",
 
             "Damage": 1,
@@ -10,17 +26,29 @@
             "Attribute": 1
         },
         {
-            "Name": "Basic Warhammer",
-            "Value": 1,
-            "Sprite": "misc/sword",
+            "Name": "Shield",
+            "Value": 5,
+            "MaxStack": 1,
+            "Sprite": "misc/shield",
 
             "Damage": 1,
             "Range": 1,
             "Attribute": 1
         },
         {
-            "Name": "Basic Bow",
+            "Name": "Warhammer",
             "Value": 1,
+            "MaxStack": 1,
+            "Sprite": "misc/warhammer",
+
+            "Damage": 1,
+            "Range": 1,
+            "Attribute": 1
+        },
+        {
+            "Name": "Bow",
+            "Value": 1,
+            "MaxStack": 1,
             "Sprite": "misc/sword",
 
             "Damage": 1,
@@ -28,8 +56,9 @@
             "Attribute": 1
         },
         {
-            "Name": "Basic Staff",
+            "Name": "Staff",
             "Value": 1,
+            "MaxStack": 1,
             "Sprite": "misc/sword",
 
             "Damage": 1,

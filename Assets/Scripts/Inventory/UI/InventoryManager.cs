@@ -1,5 +1,4 @@
 using SD.Characters;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,13 +19,23 @@ namespace SD.Inventories
         [SerializeField] private ItemGrid _gridPrefab;
         [SerializeField] private InventoryElement _elementPrefab;
 
+        private void ForTestingOnly()
+        {
+            Debug.LogWarning("Adding Test Items.");
+
+            var sword = _itemCodex.GetItem("Sword");
+            var ration = _itemCodex.GetItem("Ration");
+            var hammer = _itemCodex.GetItem("Warhammer");
+            _playerData.Inventory.TryFitItem(new InventoryItem(sword, Vector2Int.zero, new Vector2Int(1, 2), false));
+            _playerData.Inventory.TryFitItem(new InventoryItem(ration, Vector2Int.zero, new Vector2Int(1, 1), false));
+            _playerData.Inventory.TryFitItem(new InventoryItem(hammer, Vector2Int.zero, new Vector2Int(1, 3), false));
+        }
 
         private void Awake()
         {
             Instance = this;
 
-            var sword = _itemCodex.GetWeapon("Basic Sword");
-            _playerData.Inventory.TryFitItem(new InventoryItem(sword, Vector2Int.zero, new Vector2Int(2, 1), false));
+            ForTestingOnly();
         }
 
         private void Start()

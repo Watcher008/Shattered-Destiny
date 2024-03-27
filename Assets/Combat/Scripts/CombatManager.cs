@@ -111,7 +111,7 @@ public class CombatManager : MonoBehaviour
 
     private void ForTestingOnly()
     {
-        _playerData.PlayerStats.EquipWeapon(_itemCodex.GetWeapon("Basic Sword"));
+        _playerData.PlayerStats.EquipWeapon(_itemCodex.GetWeapon("Sword"));
         _playerData.PlayerStats.WeaponArts.AddRange(_playerData.WeaponArts);
     }
 
@@ -242,7 +242,7 @@ public class CombatManager : MonoBehaviour
         {
             var newEnemy = Instantiate(_prefab, transform);
             newEnemy.name = $"Enemy {i + 1}";
-            var weapon = _itemCodex.GetWeapon(bandit.DefaultWeapon);
+            var weapon = _itemCodex.GetWeapon(bandit.Weapon);
             newEnemy.SetInitialValues(_enemy, bandit, weapon);
             _combatants.Add(newEnemy);
             EnemyCombatants.Add(newEnemy);

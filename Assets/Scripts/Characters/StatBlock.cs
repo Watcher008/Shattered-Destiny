@@ -19,7 +19,8 @@ namespace SD.Characters
         public int StartingActionPoints;
         public int RefreshActionPoints;
 
-        public string DefaultWeapon;
+        public string Weapon;
+        public string[] WeaponArts;
 
         /// <summary>
         /// Returns the 10th place value of the requested attribute, minimum 1.

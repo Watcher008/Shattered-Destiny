@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using SD.Inventories;
+using UnityEngine.InputSystem;
 
 public class DragManager : MonoBehaviour
 {
@@ -47,38 +48,26 @@ public class DragManager : MonoBehaviour
     // If the drag item is hovering over an equipslot
     private bool equipSlotHover = false;
 
-    // If the drag item is hovering over an attachment slot
-    private bool attachSlotHover = false;
-
     private void Awake()
     {
         Instance = this;
         highlightColor = highlightRect.GetComponent<Image>();
         _equipmentManager = GetComponent<EquipmentManager>();
+
+        var input = GameObject.FindGameObjectWithTag("PlayerInput").GetComponent<PlayerInput>();
+        input.actions["RMB"].performed += OnRotateItem;
     }
 
-    //private void Update() => HandleItemDrag();
-
-    // If I make this a public method, I could have this instead be called by the drag element in its OnDrag method
-    private void HandleItemDrag()
+    private void OnDestroy()
     {
-        if (dragElement == null) return;
-
-        //I can probably swap this out for an inputactionProperty
-        //if (rotateAction.action.WasPerformedThisFrame()) RotateElement(dragElement);
-
-        highlightRect.gameObject.SetActive(hoverGrid != null || equipSlotHover || attachSlotHover);
-        if (hoverGrid == null) return;
-
-        Vector2Int origin = hoverGrid.GetGridPosition(Input.mousePosition) - dragOffset;
-
-        highlightRect.position = gridCorner + origin * InventoryManager.CELL_SIZE;
-        // I don't know why, but the highlight is 1 too low if rotated
-        if (dragElement.Item.IsRotated) highlightRect.position += Vector3.up * InventoryManager.CELL_SIZE;
-
-        SetHighlightColor(hoverGrid.Inventory.CanPlaceItem(dragElement.Item, origin));
+        var obj = GameObject.FindGameObjectWithTag("PlayerInput");
+        if (obj != null && obj.TryGetComponent(out PlayerInput input))
+        {
+            input.actions["RMB"].performed -= OnRotateItem;
+        }
     }
 
+    #region - Drag Handling -
     public void OnBeginDrag(InventoryElement element)
     {
         dragElement = element;
@@ -112,10 +101,7 @@ public class DragManager : MonoBehaviour
     {
         element.Rect.anchoredPosition += delta * _canvas.scaleFactor;
 
-        //I can probably swap this out for an inputactionProperty
-        //if (rotateAction.action.WasPerformedThisFrame()) RotateElement(element);
-
-        highlightRect.gameObject.SetActive(hoverGrid != null || equipSlotHover || attachSlotHover);
+        highlightRect.gameObject.SetActive(hoverGrid != null || equipSlotHover);
         if (hoverGrid == null) return;
 
         Vector2Int origin = hoverGrid.GetGridPosition(Input.mousePosition) - dragOffset;
@@ -172,6 +158,31 @@ public class DragManager : MonoBehaviour
         highlightRect.rotation = element.Rect.rotation;
     }
 
+    private void OnRotateItem(InputAction.CallbackContext obj)
+    {
+        if (dragElement == null) return;
+        RotateElement(dragElement);
+    }
+
+    /// <summary>
+    /// Rotates the current dragElement 90 degrees
+    /// </summary>
+    private void RotateElement(InventoryElement element)
+    {
+        itemRotationToggled = !itemRotationToggled;
+        bool isRotated = element.Item.IsRotated;
+        element.Item.IsRotated = !isRotated;
+
+        // Rotate the element forward or back based on if the item is rotated
+        if (isRotated) element.Rect.RotateAround(Input.mousePosition, Vector3.forward, 90f);
+        else element.Rect.RotateAround(Input.mousePosition, Vector3.forward, -90f);
+
+        SetDragValues(element);
+        SetHighlightSlot(element.Rect);
+    }
+    #endregion
+
+    #region - Drop Handling -
     /// <summary>
     /// Returns the drag element to its previous position
     /// </summary>
@@ -207,6 +218,7 @@ public class DragManager : MonoBehaviour
         fromDragGrid = null;
         fromEquipSlot = null;
     }
+    #endregion
 
     public InventoryElement GetDragElement(InventoryItem item, RectTransform parent)
     {

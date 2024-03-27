@@ -89,7 +89,6 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
         _isPlayer = false;
         _statBlock = stats;
         _weapon = weapon;
-        // Will need to probably store WeaponArts in a string, add some function to add them over
 
         Health = MaxHealth;
         ActionPoints = stats.StartingActionPoints;
