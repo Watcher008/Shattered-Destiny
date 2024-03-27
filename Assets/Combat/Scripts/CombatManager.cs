@@ -556,7 +556,9 @@ namespace SD.Combat
             }
 
             // I think this is clear? low value = good for the attacker
-            return Random.value <= chanceToHit;
+            bool attackHits = Random.value <= chanceToHit;
+            if (!attackHits) Debug.Log("Attack miss!");
+            return attackHits;
         }
 
         public void OnDamageTaken(Combatant combatant)
