@@ -157,6 +157,7 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
     public void SpendActionPoints(int points = 1)
     {
         ActionPoints -= points;
+        CanRest = false;
         onActionPointChange?.Invoke();
     }
 
@@ -319,7 +320,7 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
 
         transform.position = end;
         _currentNode = node;
-
+        //SetNode(node);
         if (_isPlayer) _currentNode.SetOccupant(Occupant.Player);
         else _currentNode.SetOccupant(Occupant.Enemy);
         
@@ -379,7 +380,7 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
         }
         transform.position = start;
 
-        CombatManager.Instance.EndTurn(this);
+        //CombatManager.Instance.EndTurn(this);
         IsActing = false;
     }
     #endregion

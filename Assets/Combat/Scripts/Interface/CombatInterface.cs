@@ -20,13 +20,18 @@ namespace SD.Combat
          * just to show which character is active (I can add more indicators in the future) but I think I should
          * do whaat Fire Emblem does and have the blue movement and red attack highlights already present to 
          * streamline the process
+         * 
+         * 
+         * TO DO:
+         * Auto-end turn after current actor has acted and they have neither AP nor Movement remaining
          */
 
         [SerializeField] private CombatPortrait _portrait;
         [SerializeField] private RectTransform _portraitParent;
 
         [Header("Buttons")]
-        [SerializeField] private Button _skipTurnButton;
+        [SerializeField] private Button _endTurnButton;
+        [SerializeField] private Button _restButton;
         [SerializeField] private Button _moveButton;
         [SerializeField] private Button _sprintButton;
         [SerializeField] private Button _attackButton;
@@ -88,13 +93,14 @@ namespace SD.Combat
             UILayer = LayerMask.NameToLayer("UI");
             _combatEndPanel.SetActive(false);
 
-            _skipTurnButton.onClick.AddListener(OnWaitSelected);
+            _endTurnButton.onClick.AddListener(OnEndTurnSelected);
+            _restButton.onClick.AddListener(OnRestSelected);
             _moveButton.onClick.AddListener(OnMoveSelected);
             _sprintButton.onClick.AddListener(OnSprintSelected);
             _attackButton.onClick.AddListener(OnAttackSelected);
             _weaponArtButton.onClick.AddListener(OnWeaponArtSelected);
 
-            _weaponArtButtons = _weaponArtParent.GetComponentsInChildren<Button>();
+            _weaponArtButtons = _weaponArtParent.GetComponentsInChildren<Button>(true);
             _weaponArtText = new TMP_Text[_weaponArtButtons.Length];
             for (int i = 0; i < _weaponArtButtons.Length; i++)
             {
@@ -109,7 +115,8 @@ namespace SD.Combat
 
         private void OnDestroy()
         {
-            _skipTurnButton.onClick.RemoveAllListeners();
+            _endTurnButton.onClick.RemoveAllListeners();
+            _restButton.onClick.RemoveAllListeners();
             _moveButton.onClick.RemoveAllListeners();
             _sprintButton.onClick.RemoveAllListeners();
             _attackButton.onClick.RemoveAllListeners();
@@ -141,11 +148,13 @@ namespace SD.Combat
                     break;
                 case Action.Attack:
                     OnAttackTarget(hit, node);
+                    ToggleRestButton();
                     break;
                 case Action.WeaponArt:
                     if (_currentArt == null) return;
                     // I feel like I probably need to make a check first?
                     _currentArt.OnUse(CurrentActor, node);
+                    ToggleRestButton();
                     break;
             }
 
@@ -191,6 +200,17 @@ namespace SD.Combat
             }
         }
 
+        /// <summary>
+        /// Called at the start of a new unit's turn.
+        /// </summary>
+        public void OnNewActor()
+        {
+            ToggleRestButton();
+        }
+
+        /// <summary>
+        /// Called at the end of a unit's turn.
+        /// </summary>
         public void ClearInput()
         {
             CurrentAction = Action.None;
@@ -239,15 +259,26 @@ namespace SD.Combat
             return false;
         }
 
-        /// <summary>
-        /// Current actor chooses to rest.
-        /// </summary>
-        private void OnWaitSelected()
+        private void ToggleRestButton()
+        {
+            _restButton.interactable = CurrentActor.CanRest;
+        }
+
+        private void OnEndTurnSelected()
         {
             if (IgnoreSelection()) return;
 
-            // Check if they've acted this turn
+            CurrentAction = Action.None;
+            CombatManager.Instance.EndTurn(CurrentActor);
+        }
 
+        /// <summary>
+        /// Current actor chooses to rest.
+        /// </summary>
+        private void OnRestSelected()
+        {
+            if (IgnoreSelection()) return;
+            if (!CurrentActor.CanRest) return;
             CurrentAction = Action.None;
             CurrentActor.OnRest();
         }
@@ -257,6 +288,7 @@ namespace SD.Combat
             if (IgnoreSelection()) return;
             CurrentAction = Action.None;
             CurrentActor.OnSprint();
+            ToggleRestButton();
         }
 
         #region - Movement -

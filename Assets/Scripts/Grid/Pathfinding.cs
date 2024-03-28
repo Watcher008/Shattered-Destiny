@@ -246,7 +246,7 @@ namespace SD.Grids
             return MOVE_DIAGONAL_COST * Mathf.Min(xDistance, yDistance) + MOVE_STRAIGHT_COST * remaining;
         }
 
-        public static int GetNodeDistance_Path(PathNode fromNode, PathNode toNode)
+        public static int GetNodeDistance(PathNode fromNode, PathNode toNode)
         {
             int x = Mathf.Abs(fromNode.X - toNode.X);
             int y = Mathf.Abs(fromNode.Y - toNode.Y);
@@ -256,7 +256,7 @@ namespace SD.Grids
         /// <summary>
         /// Returns the straight line distance between two nodes. 
         /// </summary>
-        public static float GetNodeDistance_Straight(PathNode fromNode, PathNode toNode)
+        public static float GetStraighDist(PathNode fromNode, PathNode toNode)
         {
             return Mathf.Sqrt(Mathf.Pow(fromNode.X - toNode.X, 2) + Mathf.Pow(fromNode.Y - toNode.Y, 2));
         }
@@ -341,7 +341,7 @@ namespace SD.Grids
                     continue;
                 }
                 path.RemoveAt(0); // where the unit is
-                if (GetTotalMovements(path) > range)
+                if (GetPathCost(path) > range)
                 {
                     area.RemoveAt(i);
                     continue;
@@ -353,12 +353,12 @@ namespace SD.Grids
         /// <summary>
         /// Returns the total movement cost for the given path.
         /// </summary>
-        public static int GetTotalMovements(List<PathNode> nodes)
+        public static int GetPathCost(List<PathNode> nodes)
         {
             int cost = nodes.Count;
             nodes.ForEach(node => cost += node.MovementCost);
-            Debug.Log($"Path from {nodes[0].X},{nodes[0].Y} to {nodes[nodes.Count - 1].X}," +
-                $"{nodes[nodes.Count - 1].Y} is {cost}.");
+            //Debug.Log($"Path from {nodes[0].X},{nodes[0].Y} to {nodes[nodes.Count - 1].X}," +
+                //$"{nodes[nodes.Count - 1].Y} is {cost}.");
             return cost;
         }
 

@@ -19,6 +19,9 @@ public class CameraController : MonoBehaviour
     private Vector3 dragOrigin;
     private bool isPanning;
 
+    private bool _canInteract = true;
+
+
     private void Awake()
     {
         mapMinX = mapRenderer.transform.position.x - mapRenderer.bounds.size.x / 2f;
@@ -43,10 +46,19 @@ public class CameraController : MonoBehaviour
         input.actions["Mouse Scroll"].performed += Zoom;
     }
 
+    private void Start()
+    {
+        WorldMapManager.Instance.onPauseInput += OnPauseInput;
+        WorldMapManager.Instance.onResumeInput += OnResumeInput;
+    }
+
     private void OnDisable()
     {
         isPanning = false;
         if (panCoroutine != null) StopCoroutine(panCoroutine);
+
+        WorldMapManager.Instance.onPauseInput -= OnPauseInput;
+        WorldMapManager.Instance.onResumeInput -= OnResumeInput;
 
         var obj = GameObject.FindGameObjectWithTag("PlayerInput");
         if (obj != null && obj.TryGetComponent(out PlayerInput input))
@@ -57,8 +69,21 @@ public class CameraController : MonoBehaviour
         }
     }
 
+    private void OnPauseInput()
+    {
+        _canInteract = false;
+        isPanning = false;
+    }
+
+    private void OnResumeInput()
+    {
+        _canInteract = true;
+    }
+
     private void BeginPanCamera(InputAction.CallbackContext obj)
     {
+        if (!_canInteract) return;
+
         dragOrigin = cam.ScreenToWorldPoint(mousePosition.ReadValue<Vector2>());
         if (panCoroutine != null) StopCoroutine(panCoroutine);
         panCoroutine = StartCoroutine(PanCamera());
@@ -71,6 +96,8 @@ public class CameraController : MonoBehaviour
 
     private void Zoom(InputAction.CallbackContext obj)
     {
+        if (!_canInteract) return;
+
         float zoom = obj.ReadValue<Vector2>().y;
 
         cam.orthographicSize -= zoom * Time.deltaTime;

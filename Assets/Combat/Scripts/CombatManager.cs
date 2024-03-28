@@ -179,6 +179,7 @@ namespace SD.Combat
             //Debug.Log("Turn start for " + combatant.gameObject.name);
             CurrentActor = combatant;
             CurrentActor.OnTurnStart();
+            _interface.OnNewActor();
         }
 
         private void OnNextTurn()
@@ -267,8 +268,9 @@ namespace SD.Combat
                 }
             }
 
-            // I think this is clear? low value = good for the attacker
-            bool attackHits = Random.value <= chanceToHit;
+            var roll = Random.value;
+            bool attackHits = roll <= chanceToHit; // Roll under
+            Debug.Log($"Chance to hit: {chanceToHit}, Roll: {roll}");
             if (!attackHits) Debug.Log("Attack miss!");
             return attackHits;
         }
