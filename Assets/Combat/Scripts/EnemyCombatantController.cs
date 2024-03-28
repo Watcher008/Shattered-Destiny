@@ -44,7 +44,7 @@ namespace SD.Combat
 
             foreach (var player in CombatManager.Instance.PlayerCombatants)
             {
-                var dist = Pathfinding.instance.GetNodeDistance_Path(_combatant.Node, player.Node);
+                var dist = Pathfinding.GetNodeDistance_Path(_combatant.Node, player.Node);
                 if (dist < minDist)
                 {
                     minDist = dist;
@@ -56,7 +56,7 @@ namespace SD.Combat
 
         private bool TryAttack(Combatant target)
         {
-            if (Pathfinding.instance.GetNodeDistance_Path(_combatant.Node, target.Node) <= _combatant.AttackRange)
+            if (Pathfinding.GetNodeDistance_Path(_combatant.Node, target.Node) <= _combatant.AttackRange)
             {
                 _combatant.Attack(target);
                 return true;
@@ -66,7 +66,7 @@ namespace SD.Combat
 
         private bool TryMove(Combatant target)
         {
-            var path = Pathfinding.instance.FindNodePath(_combatant.Node, target.Node, true, Occupant.Enemy);
+            var path = Pathfinding.FindNodePath(_combatant.Node, target.Node, true, Occupant.Enemy);
             if (path == null) return false;
 
             if (path[0] == _combatant.Node) path.RemoveAt(0);

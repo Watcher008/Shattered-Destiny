@@ -40,6 +40,8 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
 
     // Prevents further input until current action has resolved
     public bool IsActing { get; private set; }
+    // Prevents the use of the Rest action if they've taken any other action during their turn
+    public bool CanRest { get; private set; }
     #endregion
 
     #region - Stats -
@@ -137,7 +139,7 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
 
         // Regain all movement
         MovementRemaining = _movement;
-
+        CanRest = true;
         Block = 0;
 
         for (int i = _activeEffects.Count - 1; i >= 0; i--)
@@ -169,11 +171,21 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
 
     public void AddEffect(StatusEffects effect, int duration = 1)
     {
-        // Need to check if the effect already exists
-
-        // Do they stack?
-
-        // If higher, just set duration to new value
+        if (effect is Daze)
+        {
+            ActionPoints = 0;
+            return;
+        }
+        
+        foreach(var item in _activeEffects)
+        {
+            if(item.Effect == effect)
+            {
+                // If higher, just set duration to new value
+                if (item.Duration < duration) item.Duration = duration;
+                return;
+            }
+        }       
 
         _activeEffects.Add(new ActiveEffect(effect, duration));
     }
@@ -238,24 +250,17 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
         _movementCoroutine = StartCoroutine(FollowPath(path));
     }
 
-    public void ForceMove(PathNode to)
-    {
-        if (_movementCoroutine != null) StopCoroutine(_movementCoroutine);
-        _movementCoroutine = StartCoroutine(MoveToNode(to));
-    }
-
     private IEnumerator FollowPath(List<PathNode> path)
     {
         IsActing = true;
         while (path.Count > 0)
         {
-            // Abandon current node
-            _currentNode.SetOccupant(Occupant.None);
-
             var next = path[0];
             path.RemoveAt(0);
+            // This shouldn't happen, but let's just make sure
+            if (MovementRemaining < next.MovementCost + 1) break;
 
-            var temp = Pathfinding.instance.GetNodeWorldPosition(next.X, next.Y);
+            var temp = CombatManager.Instance.GetNodePosition(next.X, next.Y);
             var end = new Vector3(temp.x, 0, temp.y);
 
             float t = 0f;
@@ -269,24 +274,37 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
             }
 
             transform.position = end;
+
+            // Abandon current node
+            _currentNode.SetOccupant(Occupant.None);
             _currentNode = next;
 
             if (_isPlayer) _currentNode.SetOccupant(Occupant.Player);
             else _currentNode.SetOccupant(Occupant.Enemy);
 
-            MovementRemaining--;
+            MovementRemaining -= 1 + _currentNode.MovementCost;
             yield return null;
         }
         IsActing = false;
     }
 
-    private IEnumerator MoveToNode(PathNode node)
+    /// <summary>
+    /// Forces the unit to the given node. Does not cost Movement.
+    /// </summary>
+    /// <param name="to"></param>
+    public void ForceMove(PathNode to)
+    {
+        if (_movementCoroutine != null) StopCoroutine(_movementCoroutine);
+        _movementCoroutine = StartCoroutine(MoveDirect(to));
+    }
+
+    private IEnumerator MoveDirect(PathNode node)
     {
         IsActing = true;
         // Abandon current node
         _currentNode.SetOccupant(Occupant.None);
 
-        var temp = Pathfinding.instance.GetNodeWorldPosition(node.X, node.Y);
+        var temp = CombatManager.Instance.GetNodePosition(node.X, node.Y);
         var end = new Vector3(temp.x, 0, temp.y);
 
         float t = 0f;

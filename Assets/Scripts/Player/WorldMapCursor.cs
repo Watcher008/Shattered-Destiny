@@ -108,7 +108,7 @@ namespace SD.Grids
         {
             if (!_canInteract) return;
 
-            var node = Pathfinding.instance.GetNode(transform.position);
+            var node = WorldMap.GetNode(transform.position);
             if (node == null) return;
             _playerController.SetDestination(node);
         }
@@ -131,7 +131,7 @@ namespace SD.Grids
         {
             ClearLine();
 
-            var node = Pathfinding.instance.GetNode(transform.position);
+            var node = WorldMap.GetNode(transform.position);
             if (node == null) return;
             //Debug.Log($"{node.Terrain}: {node.MovementModifier}");
 
@@ -148,7 +148,7 @@ namespace SD.Grids
 
         private void RenderLine()
         {
-            var path = Pathfinding.instance.FindVectorPath(transform.position, _player.position);
+            var path = Pathfinding.FindVectorPath(WorldMap.Grid, transform.position, _player.position);
             if (path == null) return;
 
             for (int i = 0; i < path.Count; i++)

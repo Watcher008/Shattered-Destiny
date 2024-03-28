@@ -20,6 +20,14 @@ namespace SD.Grids
         private Vector3 originPosition;
         private TGridObject[,] gridArray;
 
+        public int MaxSize
+        {
+            get
+            {
+                return width * height;
+            }
+        }
+
         public Grid(int width, int height, float cellSize, Vector3 originPosition, Func<Grid<TGridObject>, int, int, TGridObject> createdGribObject)
         {
             this.width = width;

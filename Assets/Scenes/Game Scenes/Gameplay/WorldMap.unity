@@ -4460,7 +4460,7 @@ MonoBehaviour:
   _eventPanel: {fileID: 1722844377}
   _eventText: {fileID: 691687029}
   _eventButton: {fileID: 1171745270}
-  encounterChance: 100
+  encounterChance: 2
 --- !u!114 &752168677
 MonoBehaviour:
   m_ObjectHideFlags: 0

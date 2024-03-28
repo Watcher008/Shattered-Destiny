@@ -17,7 +17,7 @@ namespace SD.Combat.WeaponArts
             combatant.ForceMove(node);
 
             // Tells the CombatManager to wait until unit has stopped moving to call OnComplete
-            CombatManager.Instance.WaitToStopActing(this, combatant);
+            CombatManager.Instance.DelayWeaponArt(this, combatant);
             
             combatant.SpendActionPoints(_actionPointCost);
         }
@@ -26,7 +26,7 @@ namespace SD.Combat.WeaponArts
         {
             int dmg = DAMAGE_MOD * combatant.GetAttributeBonus(Attributes.Physicality);
 
-            var nodes = Pathfinding.instance.GetArea(combatant.Node, RANGE);
+            var nodes = Pathfinding.GetArea(combatant.Node, RANGE);
             foreach (var areaNode in nodes)
             {
                 if (CombatManager.Instance.CheckNode(areaNode, out var nextTarget))

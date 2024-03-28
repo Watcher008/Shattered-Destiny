@@ -27,7 +27,7 @@ public class LocationManager : MonoBehaviour
                 var tile = _locationMap.GetTile(pos);
                 if (tile == null) continue;
 
-                var node = Pathfinding.instance.GetNode(pos);
+                var node = WorldMap.GetNode(pos);
                 _locations.Add(node);
             }
         }

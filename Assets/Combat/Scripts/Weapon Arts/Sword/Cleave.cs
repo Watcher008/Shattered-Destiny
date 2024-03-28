@@ -16,7 +16,7 @@ namespace SD.Combat.WeaponArts
             {
                 int dmg = DAMAGE_MOD * combatant.GetAttributeBonus(Attributes.Physicality);
 
-                var nodes = Pathfinding.instance.GetArea(combatant.Node, RANGE);
+                var nodes = Pathfinding.GetArea(combatant.Node, RANGE);
                 foreach (var areaNode in nodes)
                 {
                     if (CombatManager.Instance.CheckNode(areaNode, out var nextTarget))
