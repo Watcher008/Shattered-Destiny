@@ -19,6 +19,8 @@ namespace SD.Combat
     {
         private const int CELL_SIZE = 1;
         public const int GRID_SIZE = 10;
+        private Grid<PathNode> _grid;
+        public Grid<PathNode> Grid => _grid;
 
         public static CombatManager Instance;
         private bool _combatActive = true;
@@ -64,8 +66,7 @@ namespace SD.Combat
         {
             Instance = this;
 
-            Pathfinding.instance?.Destroy();
-            new Pathfinding(GRID_SIZE, GRID_SIZE, CELL_SIZE, Vector2.zero);
+            CreateGrid();
 
             _endCombatButton.onClick.AddListener(OnVictory);
         }
@@ -88,9 +89,31 @@ namespace SD.Combat
 
         private void OnDestroy()
         {
-            Pathfinding.instance?.Destroy();
             _endCombatButton.onClick.RemoveAllListeners();
         }
+
+        #region - Grid -
+        private void CreateGrid()
+        {
+            _grid = new Grid<PathNode>(GRID_SIZE, GRID_SIZE, CELL_SIZE, Vector2.zero, 
+                (Grid<PathNode> g, int x, int y) => new PathNode(g, x, y));
+        }
+
+        public PathNode GetNode(int x, int y)
+        {
+            return _grid.GetGridObject(x, y);
+        }
+
+        public PathNode GetNode(Vector3 worldPosition)
+        {
+            return _grid.GetGridObject(worldPosition);
+        }
+
+        public Vector3 GetNodePosition(int x, int y)
+        {
+            return _grid.GetNodePosition(x, y);
+        }
+        #endregion
 
         /// <summary>
         /// Place combatants in their starting positions on either side of the map.
@@ -140,7 +163,7 @@ namespace SD.Combat
                     if (Combatants[i].IsPlayer) y = Random.Range(0, 2);
                     else y = Random.Range(GRID_SIZE - 3, GRID_SIZE - 1);
 
-                    var node = Pathfinding.instance.GetNode(x, y);
+                    var node = GetNode(x, y);
                     if (node.IsWalkable && node.Occupant == Occupant.None)
                     {
                         Combatants[i].SetNode(node);
@@ -231,7 +254,7 @@ namespace SD.Combat
 
             // Lastly check for terrain between the two
             var points = Bresenham.PlotLine(attacker.Node.X, attacker.Node.Y, target.Node.X, target.Node.Y);
-            var nodes = Pathfinding.instance.ConvertToNodes(points);
+            var nodes = Pathfinding.ConvertToNodes(_grid, points);
             nodes.Remove(attacker.Node);
             nodes.Remove(target.Node);
 

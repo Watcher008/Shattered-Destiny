@@ -14,7 +14,7 @@ namespace SD.Combat.WeaponArts
             {
                 if (target.IsPlayer != combatant.IsPlayer) return;
 
-                var nodes = Pathfinding.instance.GetArea(target.Node, RANGE);
+                var nodes = Pathfinding.GetArea(target.Node, RANGE);
                 foreach (var newNode in nodes)
                 {
                     if (CombatManager.Instance.CheckNode(newNode, out var nextTarget))

@@ -14,7 +14,7 @@ namespace SD.Combat.WeaponArts
                 var direction = new Vector2Int(target.Node.X - combatant.Node.X, target.Node.Y - combatant.Node.Y);
 
                 // Make sure to not try to push them out of bounds
-                var newNode = Pathfinding.instance.GetNode(target.Node.X + direction.x, target.Node.Y + direction.y);
+                var newNode = CombatManager.Instance.GetNode(target.Node.X + direction.x, target.Node.Y + direction.y);
 
                 if (newNode != null)
                 {

@@ -123,7 +123,7 @@ namespace SD.Combat
             Ray ray = cam.ScreenPointToRay(mousePosition.ReadValue<Vector2>());
             if (!Physics.Raycast(ray, out var hit)) return;
 
-            var node = Pathfinding.instance.GetNode(new Vector3(hit.point.x, hit.point.z, 0));
+            var node = CombatManager.Instance.GetNode(new Vector3(hit.point.x, hit.point.z, 0));
 
             switch (CurrentAction)
             {
@@ -209,7 +209,7 @@ namespace SD.Combat
 
         private void HighlightArea(PathNode from, int range, RuleTile tile)
         {
-            var nodes = Pathfinding.instance.GetArea(from, range);
+            var nodes = Pathfinding.GetArea(from, range);
             if (nodes == null) return;
 
             // I'm going to have to add some more logic here, don't show movement for occupied nodes
@@ -258,8 +258,16 @@ namespace SD.Combat
             CurrentAction = Action.Move;
             if (CurrentAction == Action.None) return;
 
+            // Get the max area that the unit can move into
+            var area = Pathfinding.GetArea(CurrentActor.Node, CurrentActor.MovementRemaining);
+
+            // Now check each node to see if they're still reachable with movement penalties
+            foreach(var node in area)
+            {
+                // Calculate path and then get total movement cost
+            }
             // Actually this won't even work because terrain is going to fuck with things a lot
-            var range = Pathfinding.instance.GetNodesInRange(CurrentActor.Node, CurrentActor.MovementRemaining);
+            var range = Pathfinding.GetNodesInRange(CurrentActor.Node, CurrentActor.MovementRemaining);
             if (range == null) return;
 
             foreach (var node in range)
@@ -277,7 +285,7 @@ namespace SD.Combat
             if (node == null) return;
 
             // Find path
-            var path = Pathfinding.instance.FindNodePath(CurrentActor.Node, node, false, Occupant.Player);
+            var path = Pathfinding.FindNodePath(CurrentActor.Node, node, false, Occupant.Player);
             if (path == null) return;
 
             if (path[0] == CurrentActor.Node) path.RemoveAt(0);

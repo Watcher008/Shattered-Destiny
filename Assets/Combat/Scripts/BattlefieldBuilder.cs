@@ -9,6 +9,10 @@ namespace SD.Combat
     /// </summary>
     public class BattlefieldBuilder : MonoBehaviour
     {
+        private const int FOREST_MOVE_MOD = 1;
+        private const int MOUNTAIN_MOVE_MOD = 1;
+        private const int WATER_MOVE_MOD = 2;
+
         [SerializeField] private Tilemap _tilemap;
         [SerializeField] private Tilemap _overlay;
 
@@ -32,14 +36,6 @@ namespace SD.Combat
 
         public void BuildGrid()
         {
-            // Pseudo-randomly place down appropriate floor types
-
-            // If on a road, there should be a road going through the middle of the map
-
-            // The type/density of terrain placement should be based on the world terrain the player is in
-            // Forest = more forests, etc.
-
-            // Randomly place down obstacles - trees, rocks, etc.
             var points = Poisson.GeneratePoints(0, _treeSpacing, 
                 new Vector2(CombatManager.GRID_SIZE - 1, CombatManager.GRID_SIZE - 1));
 
@@ -48,30 +44,50 @@ namespace SD.Combat
                 int x = Mathf.RoundToInt(point.x);
                 int y = Mathf.RoundToInt(point.y);
 
-                var node = Pathfinding.instance.GetNode(x, y);
+                var node = CombatManager.Instance.GetNode(x, y);
                 if (node == null) continue;
 
-                var pos = new Vector3Int(x, 0, y);
-                var tilePos = new Vector3Int(x, y);
                 var value = Random.value;
-
-                if (value <= 0.25f)
-                {
-                    _tilemap.SetTile(tilePos, _waterTile);
-                    node.SetTerrain(TerrainType.Water);
-                }
-                else if (value <= 0.625f)
-                {
-                    Instantiate(_forest, pos, Quaternion.identity, transform);
-                    node.SetTerrain(TerrainType.Forest);
-                }
-                else
-                {
-                    Instantiate(_mountain, pos, Quaternion.identity, transform);
-                    node.SetTerrain(TerrainType.Mountain);
-                    _tilemap.SetTile(tilePos, _rockTile);
-                }
+                if (value <= 0.25f) SetWaterTile(node);
+                else if (value <= 0.625f) SetForestTile(node);
+                else SetMountainTile(node);
             }
+        }
+
+        private void SetForestTile(PathNode node)
+        {
+            if (node == null) return;
+
+            node.SetTerrain(TerrainType.Forest);
+            node.SetMovementCost(FOREST_MOVE_MOD);
+
+            var pos = new Vector3Int(node.X, 0, node.Y);
+            Instantiate(_forest, pos, Quaternion.identity, transform);
+        }
+
+        private void SetMountainTile(PathNode node)
+        {
+            if (node == null) return;
+
+            node.SetTerrain(TerrainType.Mountain);
+            node.SetMovementCost(MOUNTAIN_MOVE_MOD);
+
+            var tilePos = new Vector3Int(node.X, node.Y);
+            _tilemap.SetTile(tilePos, _rockTile);
+
+            var pos = new Vector3Int(node.X, 0, node.Y);
+            Instantiate(_mountain, pos, Quaternion.identity, transform);
+        }
+
+        private void SetWaterTile(PathNode node)
+        {
+            if (node == null) return;
+
+            node.SetTerrain(TerrainType.Water);
+            node.SetMovementCost(WATER_MOVE_MOD);
+
+            var tilePos = new Vector3Int(node.X, node.Y);
+            _tilemap.SetTile(tilePos, _waterTile);
         }
     }
 }

@@ -14,7 +14,7 @@ namespace SD.Combat.WeaponArts
             int dmg = DAMAGE_MOD * combatant.GetAttributeBonus(Attributes.Physicality);
 
             var points = Bresenham.PlotLine(combatant.Node.X, combatant.Node.Y, node.X, node.Y);
-            var nodes = Pathfinding.instance.ConvertToNodes(points);
+            var nodes = Pathfinding.ConvertToNodes(node.grid, points);
             nodes.Remove(combatant.Node);
 
             foreach (var newNode in nodes)

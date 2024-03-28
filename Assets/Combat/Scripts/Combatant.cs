@@ -250,24 +250,17 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
         _movementCoroutine = StartCoroutine(FollowPath(path));
     }
 
-    public void ForceMove(PathNode to)
-    {
-        if (_movementCoroutine != null) StopCoroutine(_movementCoroutine);
-        _movementCoroutine = StartCoroutine(MoveDirect(to));
-    }
-
     private IEnumerator FollowPath(List<PathNode> path)
     {
         IsActing = true;
         while (path.Count > 0)
         {
-            // Abandon current node
-            _currentNode.SetOccupant(Occupant.None);
-
             var next = path[0];
             path.RemoveAt(0);
+            // This shouldn't happen, but let's just make sure
+            if (MovementRemaining < next.MovementCost + 1) break;
 
-            var temp = Pathfinding.instance.GetNodeWorldPosition(next.X, next.Y);
+            var temp = CombatManager.Instance.GetNodePosition(next.X, next.Y);
             var end = new Vector3(temp.x, 0, temp.y);
 
             float t = 0f;
@@ -281,15 +274,28 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
             }
 
             transform.position = end;
+
+            // Abandon current node
+            _currentNode.SetOccupant(Occupant.None);
             _currentNode = next;
 
             if (_isPlayer) _currentNode.SetOccupant(Occupant.Player);
             else _currentNode.SetOccupant(Occupant.Enemy);
 
-            MovementRemaining--;
+            MovementRemaining -= 1 + _currentNode.MovementCost;
             yield return null;
         }
         IsActing = false;
+    }
+
+    /// <summary>
+    /// Forces the unit to the given node. Does not cost Movement.
+    /// </summary>
+    /// <param name="to"></param>
+    public void ForceMove(PathNode to)
+    {
+        if (_movementCoroutine != null) StopCoroutine(_movementCoroutine);
+        _movementCoroutine = StartCoroutine(MoveDirect(to));
     }
 
     private IEnumerator MoveDirect(PathNode node)
@@ -298,7 +304,7 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
         // Abandon current node
         _currentNode.SetOccupant(Occupant.None);
 
-        var temp = Pathfinding.instance.GetNodeWorldPosition(node.X, node.Y);
+        var temp = CombatManager.Instance.GetNodePosition(node.X, node.Y);
         var end = new Vector3(temp.x, 0, temp.y);
 
         float t = 0f;
