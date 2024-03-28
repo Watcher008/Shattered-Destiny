@@ -3,6 +3,7 @@ using UnityEngine;
 using SD.Primitives;
 using SD.Inventories;
 using SD.Combat.WeaponArts;
+using UnityEngine.Rendering.Universal;
 
 namespace SD.Characters
 {
@@ -32,10 +33,11 @@ namespace SD.Characters
         private static int[] defaultXP = {0, 0, 0, 0};
 
         private CharacterSheet _playerStats = new CharacterSheet(defaultStats, defaultXP, 5, 5, 3, 1);
+        private PlayerEquipment _equipment = new PlayerEquipment();
+
         private List<CharacterSheet> _companions = new();
 
         private Inventory _inventory = new(new Vector2Int(10, 10));
-        private InventoryItem[] _equipment = new InventoryItem[System.Enum.GetNames(typeof(EquipmentType)).Length];
 
         private int _travelSpeed;
         private int _exhaustion;
@@ -58,7 +60,7 @@ namespace SD.Characters
         }
 
         public Inventory Inventory => _inventory;
-        public InventoryItem[] Equipment => _equipment;
+        public PlayerEquipment PlayerEquip => _equipment;
 
         #region - Reputation & Influence - 
         [SerializeField] private IntReference[] _factionReputation;
@@ -93,11 +95,18 @@ namespace SD.Characters
         #region - Equipment -
         public bool TryEquipItem(EquipmentType slot, Item item)
         {
+            // Is it valid
+            if (item == null) return false;
+            if (item is not Equipment) return false;
+
+            // Is it the proper slot?
+            var equip = (Equipment)item;
+            if (equip.Slot != slot) return false;
+            
             Debug.LogWarning("This functionality has not been added yet.");
 
-            // Is it the same item that was already there?
 
-            // is it the correct slot?
+            // Is it the same item that was already there?
 
             // is there an item already there? Need to unequip it and add to inventory
 

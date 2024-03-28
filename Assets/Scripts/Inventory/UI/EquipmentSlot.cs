@@ -34,6 +34,8 @@ public class EquipmentSlot : MonoBehaviour, IDropHandler, IPointerEnterHandler, 
         if (eventData.pointerDrag != null)
         {
             if (!eventData.pointerDrag.TryGetComponent<InventoryElement>(out var element)) return;
+            if (element.Item.Item is not Equipment) return;
+
             onItemDropped?.Invoke(slot, element);
         }
     }
@@ -47,12 +49,4 @@ public class EquipmentSlot : MonoBehaviour, IDropHandler, IPointerEnterHandler, 
     {
         DragManager.Instance.OnEquipSlotHover(null);
     }
-}
-
-public enum EquipmentType
-{
-    RightHand,
-    LeftHand,
-    Body,
-    Boots
 }

@@ -17,6 +17,9 @@ public class RandomEncounterManager : MonoBehaviour
     private int encounterChance = 100; // Much higher for non-testing
     private int currentChance;
 
+    [Header("TESTING")]
+    [SerializeField] private Button _testButton;
+
     private string[] _combatText =
     {
         "You sense danger as shadows gather. Weapons at the ready!",
@@ -46,6 +49,28 @@ public class RandomEncounterManager : MonoBehaviour
         "Reality twists as arcane energies manifest in a bewildering display.",
         "You witness a phenomenon beyond comprehension, a glimpse into the unknown.",
     };
+
+    private void Start()
+    {
+        _testButton.onClick.AddListener(StartCombat);
+    }
+
+    private void OnDestroy()
+    {
+        _testButton.onClick.RemoveAllListeners();
+    }
+
+    private void StartCombat()
+    {
+        _eventPanel.SetActive(true);
+        _eventButton.onClick.RemoveAllListeners();
+
+        _eventText.text = _combatText[Random.Range(0, _combatText.Length)];
+        _eventButton.onClick.AddListener(delegate
+        {
+            _combatEvent.Invoke();
+        });
+    }
 
     /// <summary>
     /// Randomly determines if a random encounter occurs based on player location and time.

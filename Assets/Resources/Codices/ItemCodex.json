@@ -11,9 +11,32 @@
             "Value": 5,
             "MaxStack": 10,
             "Sprite": "misc/potion"
+        },
+        {
+            "Name": "Jewel",
+            "Value": 5,
+            "MaxStack": 10,
+            "Sprite": "misc/jewel"
         }
     ],
+    "Equipment":[
+        {
+            "Name": "Armor",
+            "Value": 5,
+            "MaxStack": 1,
+            "Sprite": "misc/armor",
 
+            "Slot": 0
+        },
+        {
+            "Name": "Boots",
+            "Value": 5,
+            "MaxStack": 1,
+            "Sprite": "misc/boots",
+
+            "Slot": 1
+        }
+    ],
     "Weapons":[
         {
             "Name": "Sword",
@@ -23,7 +46,7 @@
 
             "Damage": 1,
             "Range": 1,
-            "Attribute": 1
+            "Attribute": 0
         },
         {
             "Name": "Shield",
@@ -33,7 +56,7 @@
 
             "Damage": 1,
             "Range": 1,
-            "Attribute": 1
+            "Attribute": 0
         },
         {
             "Name": "Warhammer",
@@ -43,7 +66,7 @@
 
             "Damage": 1,
             "Range": 1,
-            "Attribute": 1
+            "Attribute": 0
         },
         {
             "Name": "Bow",
@@ -53,7 +76,7 @@
 
             "Damage": 1,
             "Range": 2,
-            "Attribute": 1
+            "Attribute": 0
         },
         {
             "Name": "Staff",
@@ -63,7 +86,17 @@
 
             "Damage": 1,
             "Range": 2,
-            "Attribute": 2
+            "Attribute": 1
+        },
+        {
+            "Name": "Book",
+            "Value": 1,
+            "MaxStack": 1,
+            "Sprite": "misc/sword",
+
+            "Damage": 1,
+            "Range": 2,
+            "Attribute": 1
         }
     ]
 }

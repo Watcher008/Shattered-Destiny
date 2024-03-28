@@ -8,7 +8,7 @@ public class InventoryItem
     public Vector2Int Size;
     public bool IsRotated;
 
-    public InventoryItem(Item weapon, Vector2Int origin, Vector2Int size, bool isRotated)
+    public InventoryItem(Item weapon, Vector2Int origin, Vector2Int size, bool isRotated = false)
     {
         Item = weapon;
         Origin = origin;

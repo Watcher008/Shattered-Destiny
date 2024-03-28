@@ -271,7 +271,9 @@ public class DragManager : MonoBehaviour
             equipSlotHover = true;
             SetHighlightSlot(slot.Rect);
 
-            //SetHighlightColor(_equipmentManager.CharacterEquipment.CanEquipItem(dragElement.Item.Item, (int)slot.Slot));
+            // Must be an equipment of the corresponding slot type
+            bool isValid = dragElement.Item.Item is Equipment equipment && equipment.Slot == slot.Slot;
+            SetHighlightColor(isValid);
         }
         else
         {

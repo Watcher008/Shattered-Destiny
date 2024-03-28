@@ -370,8 +370,8 @@ TextureImporter:
       name: food
       rect:
         serializedVersion: 2
-        x: 16
-        y: 16
+        x: 32
+        y: 32
         width: 16
         height: 16
       alignment: 0
@@ -391,8 +391,8 @@ TextureImporter:
       name: boots
       rect:
         serializedVersion: 2
-        x: 32
-        y: 16
+        x: 16
+        y: 0
         width: 32
         height: 32
       alignment: 0
@@ -412,7 +412,7 @@ TextureImporter:
       name: shield
       rect:
         serializedVersion: 2
-        x: 64
+        x: 48
         y: 16
         width: 32
         height: 32
@@ -538,8 +538,8 @@ TextureImporter:
       name: rock
       rect:
         serializedVersion: 2
-        x: 96
-        y: 16
+        x: 80
+        y: 32
         width: 16
         height: 16
       alignment: 0
@@ -555,6 +555,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: armor
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 897c71131c840da4caa0081ddd63c59d
+      internalID: 1620556328
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -566,6 +587,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
+      armor: 1620556328
       boots: 1204141666
       castle: -879106632
       cave: -553467683
