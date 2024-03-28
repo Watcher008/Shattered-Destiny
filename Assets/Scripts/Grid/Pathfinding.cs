@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 namespace SD.Grids
@@ -9,21 +9,12 @@ namespace SD.Grids
         private const int MOVE_STRAIGHT_COST = 10;
         private const int MOVE_DIAGONAL_COST = 14;
 
-        //public static Pathfinding instance { get; private set; }
-
-        //private Grid<PathNode> grid;
-        private Heap<PathNode> openList; //nodes to search
-        private HashSet<PathNode> closedList; //already searched
-
         public static List<Vector3> FindVectorPath(Grid<PathNode> grid, Vector3 startWorldPosition, Vector3 endWorldPosition, bool ignoreEndNode = false, Occupant ignoreOccupants = Occupant.None)
         {
-            grid.GetXY(startWorldPosition, out int startX, out int startY);
-            grid.GetXY(endWorldPosition, out int endX, out int endY);
-            var start = grid.GetGridObject(startX, startY);
-            var end = grid.GetGridObject(endX, endY);
+            var start = grid.GetGridObject(startWorldPosition);
+            var end = grid.GetGridObject(endWorldPosition);
 
             List<PathNode> path = FindNodePath(start, end, ignoreEndNode, ignoreOccupants);
-            //List<PathNode> path = FindNodePath(startX, startY, endX, endY, ignoreEndNode, ignoreOccupants);
             if (path == null) return null;
             else
             {
@@ -107,7 +98,6 @@ namespace SD.Grids
                 }
             }
 
-            //Out of nodes on the openList
             //Debug.Log("Path could not be found");
             return null;
         }
@@ -256,19 +246,6 @@ namespace SD.Grids
             return MOVE_DIAGONAL_COST * Mathf.Min(xDistance, yDistance) + MOVE_STRAIGHT_COST * remaining;
         }
 
-        private static PathNode GetLowestFCostNode(List<PathNode> pathNodeList)
-        {
-            PathNode lowestFCostNode = pathNodeList[0];
-
-            for (int i = 0; i < pathNodeList.Count; i++)
-            {
-                if (pathNodeList[i].fCost < lowestFCostNode.fCost)
-                    lowestFCostNode = pathNodeList[i];
-            }
-
-            return lowestFCostNode;
-        }
-
         public static int GetNodeDistance_Path(PathNode fromNode, PathNode toNode)
         {
             int x = Mathf.Abs(fromNode.X - toNode.X);
@@ -346,6 +323,57 @@ namespace SD.Grids
                 if (node != null) nodes.Add(node);
             }
             return nodes;
+        }
+
+        /// <summary>
+        /// Returns an area around the given node that can be moved to with the available range.
+        /// </summary>
+        public static List<PathNode> GetMovementRange(PathNode from, int range, Occupant ignoreOccupant = Occupant.None)
+        {
+            var area = GetArea(from, range);
+
+            for (int i = area.Count - 1; i >= 0; i--)
+            {
+                var path = FindNodePath(from, area[i], false, ignoreOccupant);
+                if (path == null)
+                {
+                    area.RemoveAt(i);
+                    continue;
+                }
+                path.RemoveAt(0); // where the unit is
+                if (GetTotalMovements(path) > range)
+                {
+                    area.RemoveAt(i);
+                    continue;
+                }
+            }
+            return area;
+        }
+
+        /// <summary>
+        /// Returns the total movement cost for the given path.
+        /// </summary>
+        public static int GetTotalMovements(List<PathNode> nodes)
+        {
+            int cost = nodes.Count;
+            nodes.ForEach(node => cost += node.MovementCost);
+            Debug.Log($"Path from {nodes[0].X},{nodes[0].Y} to {nodes[nodes.Count - 1].X}," +
+                $"{nodes[nodes.Count - 1].Y} is {cost}.");
+            return cost;
+        }
+
+        [System.Obsolete]
+        private PathNode GetLowestFCostNode(List<PathNode> pathNodeList)
+        {
+            PathNode lowestFCostNode = pathNodeList[0];
+
+            for (int i = 0; i < pathNodeList.Count; i++)
+            {
+                if (pathNodeList[i].fCost < lowestFCostNode.fCost)
+                    lowestFCostNode = pathNodeList[i];
+            }
+
+            return lowestFCostNode;
         }
     }
 }

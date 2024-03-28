@@ -11,8 +11,17 @@ using UnityEngine.UI;
 
 namespace SD.Combat
 {
+    /// <summary>
+    /// A class that connects the GUI and combatant actions.
+    /// </summary>
     public class CombatInterface : MonoBehaviour
     {
+        /* So my current idea is that since each time a player turn starts, I have to click move/attack
+         * just to show which character is active (I can add more indicators in the future) but I think I should
+         * do whaat Fire Emblem does and have the blue movement and red attack highlights already present to 
+         * streamline the process
+         */
+
         [SerializeField] private CombatPortrait _portrait;
         [SerializeField] private RectTransform _portraitParent;
 
@@ -258,19 +267,10 @@ namespace SD.Combat
             CurrentAction = Action.Move;
             if (CurrentAction == Action.None) return;
 
-            // Get the max area that the unit can move into
-            var area = Pathfinding.GetArea(CurrentActor.Node, CurrentActor.MovementRemaining);
+            // Get the movable area of the unit
+            var area = Pathfinding.GetMovementRange(CurrentActor.Node, CurrentActor.MovementRemaining, Occupant.Player);
 
-            // Now check each node to see if they're still reachable with movement penalties
-            foreach(var node in area)
-            {
-                // Calculate path and then get total movement cost
-            }
-            // Actually this won't even work because terrain is going to fuck with things a lot
-            var range = Pathfinding.GetNodesInRange(CurrentActor.Node, CurrentActor.MovementRemaining);
-            if (range == null) return;
-
-            foreach (var node in range)
+            foreach (var node in area)
             {
                 if (node.Occupant != Occupant.None || !node.IsWalkable) continue;
 
@@ -371,7 +371,5 @@ namespace SD.Combat
             }
         }
         #endregion
-
-
     }
 }
