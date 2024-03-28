@@ -17,7 +17,7 @@ namespace SD.Combat.WeaponArts
             combatant.ForceMove(node);
 
             // Tells the CombatManager to wait until unit has stopped moving to call OnComplete
-            CombatManager.Instance.WaitToStopActing(this, combatant);
+            CombatManager.Instance.DelayWeaponArt(this, combatant);
             
             combatant.SpendActionPoints(_actionPointCost);
         }

@@ -26,95 +26,33 @@ namespace SD.Combat
         [SerializeField] private PlayerData _playerData;
         [SerializeField] private CreatureCodex _creatureCodex;
         [SerializeField] private ItemCodex _itemCodex;
+        
+        [Space]
+        
+        [SerializeField] private BattlefieldBuilder _battlefield;
+        [SerializeField] private CombatInterface _interface;
 
         [Space]
 
         [SerializeField] private Combatant _prefab;
-        [SerializeField] private CombatPortrait _portrait;
-
-        [Space]
-
-        [SerializeField] private Tilemap _tilemap;
-        [SerializeField] private Tilemap _overlay;
-        [SerializeField] private RectTransform _portraitParent;
-
-        [Tooltip("The minimum distance between trees.")]
-        [SerializeField, Range(1, 5)] private int _treeSpacing = 2;
 
         #region - Combatants -
-        private Combatant _currentActor;
-
-        private List<Combatant> _combatants = new();
+        public Combatant CurrentActor { get; private set; }
+        public List<Combatant> Combatants { get; private set; } = new();
         public List<Combatant> PlayerCombatants { get; private set; } = new();
         public List<Combatant> EnemyCombatants { get; private set; } = new();
         #endregion
-
-        [Header("Buttons")]
-        [SerializeField] private Button _skipTurnButton;
-        [SerializeField] private Button _moveButton;
-        [SerializeField] private Button _sprintButton;
-        [SerializeField] private Button _attackButton;
-        [SerializeField] private Button _weaponArtButton;
-        [SerializeField] private Button[] _weaponArtButtons;
-        private TMP_Text[] _weaponArtText;
-
-        [Header("Overlay")]
-        [SerializeField] private RuleTile _moveHighlight;
-        [SerializeField] private RuleTile _attackHighlight;
-
-        [Header("Combat End")]
-        [SerializeField] private GameObject _panel;
-        [SerializeField] private TMP_Text _header;
-        [SerializeField] private TMP_Text _flavorText;
 
         #region - Testing -
         [Header("Testing")]
         [SerializeField] private Button _endCombatButton;
         [SerializeField] private Sprite _player;
         [SerializeField] private Sprite _enemy;
-        [SerializeField] private GameObject _tree;
-        [SerializeField] private GameObject _rock;
         [SerializeField] private GameObject _blood;
         #endregion
 
-        #region - Input -
-        private InputAction mousePosition;
-        private Camera cam;
 
-        private enum Action
-        {
-            None,
-            Move,
-            Attack,
-            WeaponArt
-        }
-
-        private Action _action;
-        private Action CurrentAction
-        {
-            get => _action;
-            set
-            {
-                _currentArt = null;
-                _overlay.ClearAllTiles();
-                HideAllWeaponArts();
-
-                if (_action == value || value == Action.None)
-                {
-                    // sets to none when clicking same button
-                    _action = Action.None;
-
-                }
-                else
-                {
-                    _action = value;
-                }
-            }
-        }
-
-        private WeaponArt _currentArt;
         private Coroutine _delayCoroutine;
-        #endregion
 
         private void ForTestingOnly()
         {
@@ -125,126 +63,33 @@ namespace SD.Combat
         private void Awake()
         {
             Instance = this;
-            _panel.SetActive(false);
 
             Pathfinding.instance?.Destroy();
             new Pathfinding(GRID_SIZE, GRID_SIZE, CELL_SIZE, Vector2.zero);
 
-            _skipTurnButton.onClick.AddListener(OnWaitSelected);
-            _moveButton.onClick.AddListener(OnMoveSelected);
-            _sprintButton.onClick.AddListener(OnSprintSelected);
-            _attackButton.onClick.AddListener(OnAttackSelected);
-            _weaponArtButton.onClick.AddListener(OnWeaponArtSelected);
-
-            _weaponArtText = new TMP_Text[_weaponArtButtons.Length];
-            for (int i = 0; i < _weaponArtButtons.Length; i++)
-            {
-                _weaponArtText[i] = _weaponArtButtons[i].GetComponentInChildren<TMP_Text>();
-            }
-
             _endCombatButton.onClick.AddListener(OnVictory);
-
-            cam = Camera.main;
-            var input = GameObject.FindGameObjectWithTag("PlayerInput").GetComponent<PlayerInput>();
-            mousePosition = input.actions["Mouse Position"];
-            input.actions["LMB"].performed += OnMouseClick; ;
         }
 
         private IEnumerator Start()
         {
             while (gameObject.scene != SceneManager.GetActiveScene()) yield return null;
 
-            BuildGrid();
+            _battlefield.BuildGrid();
             PlaceCombatants();
 
-            _combatants.Sort(); // Sort by initiative
+            Combatants.Sort(); // Sort by initiative
 
-            AddPortraits();
+            _interface.AddPortraits();
 
             yield return new WaitForSeconds(1.5f);
 
-            OnStartTurn(_combatants[0]);
+            OnStartTurn(Combatants[0]);
         }
 
         private void OnDestroy()
         {
             Pathfinding.instance?.Destroy();
-            _skipTurnButton.onClick.RemoveAllListeners();
-            _moveButton.onClick.RemoveAllListeners();
-            _sprintButton.onClick.RemoveAllListeners();
-            _attackButton.onClick.RemoveAllListeners();
-            _weaponArtButton.onClick.RemoveAllListeners();
-
             _endCombatButton.onClick.RemoveAllListeners();
-
-            var obj = GameObject.FindGameObjectWithTag("PlayerInput");
-            if (obj != null && obj.TryGetComponent(out PlayerInput input))
-            {
-                input.actions["LMB"].performed -= OnMouseClick;
-            }
-        }
-
-        private void OnMouseClick(InputAction.CallbackContext obj)
-        {
-            // Raycast to mouse position
-            Ray ray = cam.ScreenPointToRay(mousePosition.ReadValue<Vector2>());
-            if (!Physics.Raycast(ray, out var hit)) return;
-
-            var node = Pathfinding.instance.GetNode(new Vector3(hit.point.x, hit.point.z, 0));
-
-            switch (CurrentAction)
-            {
-                case Action.Move:
-                    OnMoveToNode(node);
-                    break;
-                case Action.Attack:
-                    OnAttackTarget(hit, node);
-                    break;
-                case Action.WeaponArt:
-                    // I feel like I probably need to make a check first?
-                    _currentArt.OnUse(_currentActor, node);
-                    break;
-            }
-
-            CurrentAction = Action.None;
-        }
-
-        #region - Init -
-        /// <summary>
-        /// Randomly place down the combat map. Should be dependent upon world tile.
-        /// </summary>
-        private void BuildGrid()
-        {
-            // Pseudo-randomly place down appropriate floor types
-
-            // If on a road, there should be a road going through the middle of the map
-
-            // The type/density of terrain placement should be based on the world terrain the player is in
-            // Forest = more forests, etc.
-
-            // Randomly place down obstacles - trees, rocks, etc.
-            var points = Poisson.GeneratePoints(0, _treeSpacing, new Vector2(GRID_SIZE - 1, GRID_SIZE - 1));
-
-            foreach (var point in points)
-            {
-                int x = Mathf.RoundToInt(point.x);
-                int y = Mathf.RoundToInt(point.y);
-
-                var node = Pathfinding.instance.GetNode(x, y);
-                if (node != null)
-                {
-                    if (Random.value <= 0.5f)
-                    {
-                        Instantiate(_tree, new Vector3(x, 0, y), Quaternion.identity, transform);
-                        node.SetTerrain(TerrainType.Forest);
-                    }
-                    else
-                    {
-                        Instantiate(_rock, new Vector3(x, 0, y), Quaternion.identity, transform);
-                        node.SetTerrain(TerrainType.Mountain);
-                    }                    
-                }
-            }
         }
 
         /// <summary>
@@ -262,7 +107,7 @@ namespace SD.Combat
                 newEnemy.name = $"Enemy {i + 1}";
                 var weapon = _itemCodex.GetWeapon(bandit.Weapon);
                 newEnemy.SetInitialValues(_enemy, bandit, weapon);
-                _combatants.Add(newEnemy);
+                Combatants.Add(newEnemy);
                 EnemyCombatants.Add(newEnemy);
             }
 
@@ -272,7 +117,7 @@ namespace SD.Combat
             var player = Instantiate(_prefab, transform);
             player.name = "Player";
             player.SetInitialValues(_player, _playerData.PlayerStats);
-            _combatants.Add(player);
+            Combatants.Add(player);
             PlayerCombatants.Add(player);
 
             // Spawn player companions
@@ -281,219 +126,63 @@ namespace SD.Combat
                 var newPlayer = Instantiate(_prefab, transform);
                 newPlayer.name = $"Player {i + 1}";
                 newPlayer.SetInitialValues(_player, _playerData.PlayerStats);
-                _combatants.Add(newPlayer);
+                Combatants.Add(newPlayer);
                 PlayerCombatants.Add(newPlayer);
             }
 
-            for (int i = 0; i < _combatants.Count; i++)
+            for (int i = 0; i < Combatants.Count; i++)
             {
                 while (true)
                 {
                     int y;
                     int x = Random.Range(0, GRID_SIZE - 1);
 
-                    if (_combatants[i].IsPlayer) y = Random.Range(0, 2);
+                    if (Combatants[i].IsPlayer) y = Random.Range(0, 2);
                     else y = Random.Range(GRID_SIZE - 3, GRID_SIZE - 1);
 
                     var node = Pathfinding.instance.GetNode(x, y);
                     if (node.IsWalkable && node.Occupant == Occupant.None)
                     {
-                        _combatants[i].SetNode(node);
+                        Combatants[i].SetNode(node);
                         break;
                     }
                 }
             }
         }
 
-        private void AddPortraits()
-        {
-            // Do this after the combatants are sorted
-            foreach (var combatant in _combatants)
-            {
-                var portrait = Instantiate(_portrait, _portraitParent);
-                portrait.SetCombatant(combatant);
-            }
-        }
-        #endregion
-
         #region - Turn Handling -
         private void OnStartTurn(Combatant combatant)
         {
             //Debug.Log("Turn start for " + combatant.gameObject.name);
-            _currentActor = combatant;
-            _currentActor.OnTurnStart();
+            CurrentActor = combatant;
+            CurrentActor.OnTurnStart();
         }
 
         private void OnNextTurn()
         {
             if (!_combatActive) return;
 
-            int index = _combatants.IndexOf(_currentActor) + 1;
+            int index = Combatants.IndexOf(CurrentActor) + 1;
 
-            if (index >= _combatants.Count) index = 0;
+            if (index >= Combatants.Count) index = 0;
 
-            OnStartTurn(_combatants[index]);
+            OnStartTurn(Combatants[index]);
         }
 
         public void EndTurn(Combatant combatant)
         {
-            if (combatant != _currentActor) return;
-            _currentActor.onTurnEnd?.Invoke();
-            CurrentAction = Action.None;
+            if (combatant != CurrentActor) return;
+            CurrentActor.onTurnEnd?.Invoke();
+            _interface.ClearInput();
             OnNextTurn();
         }
         #endregion
 
-        private void HighlightArea(PathNode from, int range, RuleTile tile)
-        {
-            var nodes = Pathfinding.instance.GetArea(from, range);
-            if (nodes == null) return;
-
-            // I'm going to have to add some more logic here, don't show movement for occupied nodes
-            // Don't highlight nodes for attacking if occupied by allies, etc.
-            foreach (var node in nodes)
-            {
-                if (node.Occupant == Occupant.Player) continue;
-
-                var pos = new Vector3Int(node.X, node.Y, 0);
-                _overlay.SetTile(pos, tile);
-            }
-        }
-
-        #region - Actions -
+        #region - Weapon Art Delay -
         /// <summary>
-        /// Current actor chooses to rest.
+        /// Used to add delay between two segments of a Weapon Art.
         /// </summary>
-        private void OnWaitSelected()
-        {
-            if (!_currentActor.IsPlayer) return; // make sure player doesn't skip enemy turn
-            else if (_currentActor.IsActing) return;
-            CurrentAction = Action.None;
-            _currentActor.OnRest();
-        }
-
-        private void OnSprintSelected()
-        {
-            if (!_currentActor.IsPlayer) return;
-            else if (_currentActor.IsActing) return;
-            _overlay.ClearAllTiles();
-            _currentActor.OnSprint();
-        }
-
-        // Movement
-        private void OnMoveSelected()
-        {
-            if (!_currentActor.IsPlayer) return;
-            else if (_currentActor.IsActing) return;
-
-            CurrentAction = Action.Move;
-            if (CurrentAction == Action.None) return;
-
-            // Actually this won't even work because terrain is going to fuck with things a lot
-            var range = Pathfinding.instance.GetNodesInRange(_currentActor.Node, _currentActor.MovementRemaining);
-            if (range == null) return;
-
-            foreach (var node in range)
-            {
-                if (node.Occupant != Occupant.None || !node.IsWalkable) continue;
-
-                var pos = new Vector3Int(node.X, node.Y, 0);
-                _overlay.SetTile(pos, _moveHighlight);
-            }
-        }
-
-        private void OnMoveToNode(PathNode node)
-        {
-            // Check for valid node
-            if (node == null) return;
-
-            // Find path
-            var path = Pathfinding.instance.FindNodePath(_currentActor.Node, node, false, Occupant.Player);
-            if (path == null) return;
-
-            if (path[0] == _currentActor.Node) path.RemoveAt(0);
-            if (path.Count > _currentActor.MovementRemaining) return; // valid path but not within immediate move range
-
-            while (path.Count > _currentActor.MovementRemaining) path.RemoveAt(path.Count - 1); // cut down to max Move
-            _currentActor.Move(path);
-        }
-
-        // Basic Attack
-        private void OnAttackSelected()
-        {
-            if (!_currentActor.IsPlayer) return;
-            else if (_currentActor.IsActing) return;
-
-            CurrentAction = Action.Attack;
-            if (CurrentAction == Action.None) return;
-
-
-            HighlightArea(_currentActor.Node, _currentActor.AttackRange, _attackHighlight);
-        }
-
-        private void OnAttackTarget(RaycastHit hit, PathNode node)
-        {
-            // Check if they clicked onto a character sprite
-            if (hit.collider.TryGetComponent(out Combatant target)) _currentActor.Attack(target);
-            else if (node != null) // else check if they clicked on a node
-            {
-                for (int i = EnemyCombatants.Count - 1; i >= 0; i--)
-                {
-                    if (EnemyCombatants[i].Node == node)
-                    {
-                        _currentActor.Attack(EnemyCombatants[i]);
-                        break;
-                    }
-                }
-            }
-        }
-
-        private void OnWeaponArtSelected()
-        {
-            if (!_currentActor.IsPlayer) return;
-            else if (_currentActor.IsActing) return;
-
-            CurrentAction = Action.WeaponArt;
-            if (CurrentAction == Action.None) return;
-
-            // Display a new panel with buttons for each weapon art
-            for (int i = 0; i < _currentActor.WeaponArts.Count; i++)
-            {
-                int index = i;
-                _weaponArtButtons[index].gameObject.SetActive(true);
-                _weaponArtText[index].text = _currentActor.WeaponArts[index].name;
-                _weaponArtButtons[index].interactable = _currentActor.ActionPoints >= _currentActor.WeaponArts[index].Cost;
-
-                _weaponArtButtons[index].onClick.AddListener(delegate
-                {
-                    BeginWeaponArtTargeting(_currentActor.WeaponArts[index]);
-                });
-            }
-        }
-
-        private void BeginWeaponArtTargeting(WeaponArt art)
-        {
-            //HideAllWeaponArts();
-            _currentArt = art;
-            _overlay.ClearAllTiles();
-            HighlightArea(_currentActor.Node, art.Range, _attackHighlight);
-
-            // Pressing a button for a weapon art should then switch to targeting mode
-            // Do I just highlight all nodes within range? That would be easiest...
-            // Use red for attacks, green for buffs
-
-        }
-
-        private void HideAllWeaponArts()
-        {
-            for (int i = 0; i < _weaponArtButtons.Length; i++)
-            {
-                _weaponArtButtons[i].onClick.RemoveAllListeners();
-                _weaponArtButtons[i].gameObject.SetActive(false);
-            }
-        }
-
-        public void WaitToStopActing(WeaponArt art, Combatant combatant)
+        public void DelayWeaponArt(WeaponArt art, Combatant combatant)
         {
             if (_delayCoroutine != null) StopCoroutine(_delayCoroutine);
             _delayCoroutine = StartCoroutine(DelayCoroutine(art, combatant));
@@ -509,7 +198,7 @@ namespace SD.Combat
         public bool CheckNode(PathNode node, out Combatant combatant)
         {
             combatant = null;
-            foreach (var c in _combatants)
+            foreach (var c in Combatants)
             {
                 if (c.Node == node)
                 {
@@ -568,7 +257,7 @@ namespace SD.Combat
 
         public void OnCombatantDefeated(Combatant combatant)
         {
-            _combatants.Remove(combatant);
+            Combatants.Remove(combatant);
             if (PlayerCombatants.Contains(combatant))
             {
                 PlayerCombatants.Remove(combatant);
@@ -592,32 +281,14 @@ namespace SD.Combat
         private void OnVictory()
         {
             _combatActive = false;
-            Invoke(nameof(OnCombatEnd), 2.5f);
+            _interface.Invoke(nameof(_interface.OnCombatEnd), 2.5f);
+
         }
 
         private void OnDefeat()
         {
             _combatActive = false;
-            Invoke(nameof(OnCombatEnd), 2.5f);
-        }
-
-        private void OnCombatEnd()
-        {
-            _panel.SetActive(true);
-            bool victory = EnemyCombatants.Count == 0;
-
-            if (victory)
-            {
-                _header.text = "VICTORY!";
-                _flavorText.text = "Congratulations, noble warrior! Your valor and skill have vanquished the foe, " +
-                    "bringing glory to your name and peace to the realm!";
-            }
-            else
-            {
-                _header.text = "DEFEAT";
-                _flavorText.text = "Alas, brave adventurer! Though valiant in battle, the forces of darkness " +
-                    "proved too formidable. Take heart, for even in defeat, legends are born anew.";
-            }
+            _interface.Invoke(nameof(_interface.OnCombatEnd), 2.5f);
         }
     }
 }

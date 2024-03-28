@@ -40,6 +40,8 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
 
     // Prevents further input until current action has resolved
     public bool IsActing { get; private set; }
+    // Prevents the use of the Rest action if they've taken any other action during their turn
+    public bool CanRest { get; private set; }
     #endregion
 
     #region - Stats -
@@ -137,7 +139,7 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
 
         // Regain all movement
         MovementRemaining = _movement;
-
+        CanRest = true;
         Block = 0;
 
         for (int i = _activeEffects.Count - 1; i >= 0; i--)
@@ -169,11 +171,21 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
 
     public void AddEffect(StatusEffects effect, int duration = 1)
     {
-        // Need to check if the effect already exists
-
-        // Do they stack?
-
-        // If higher, just set duration to new value
+        if (effect is Daze)
+        {
+            ActionPoints = 0;
+            return;
+        }
+        
+        foreach(var item in _activeEffects)
+        {
+            if(item.Effect == effect)
+            {
+                // If higher, just set duration to new value
+                if (item.Duration < duration) item.Duration = duration;
+                return;
+            }
+        }       
 
         _activeEffects.Add(new ActiveEffect(effect, duration));
     }
@@ -241,7 +253,7 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
     public void ForceMove(PathNode to)
     {
         if (_movementCoroutine != null) StopCoroutine(_movementCoroutine);
-        _movementCoroutine = StartCoroutine(MoveToNode(to));
+        _movementCoroutine = StartCoroutine(MoveDirect(to));
     }
 
     private IEnumerator FollowPath(List<PathNode> path)
@@ -280,7 +292,7 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
         IsActing = false;
     }
 
-    private IEnumerator MoveToNode(PathNode node)
+    private IEnumerator MoveDirect(PathNode node)
     {
         IsActing = true;
         // Abandon current node
