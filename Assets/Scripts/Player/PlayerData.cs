@@ -1,18 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
-using SD.Primitives;
 using SD.Inventories;
 using SD.Combat.WeaponArts;
-using UnityEngine.Rendering.Universal;
 
 namespace SD.Characters
 {
     [CreateAssetMenu(menuName = "Scriptable Objects/Player Data", fileName = "Player Data")]
     public class PlayerData : ScriptableObject
     {
-        public delegate void OnEquipmentChanged();
-        public OnEquipmentChanged onEquipmentChanged;
-
         public List<WeaponArt> WeaponArts = new List<WeaponArt>();
 
         #region - World Map Location
@@ -29,29 +24,20 @@ namespace SD.Characters
         }
         #endregion
 
-        private static int[] defaultStats = { 15, 15, 15, 15 };
-        private static int[] defaultXP = {0, 0, 0, 0};
-
-        private CharacterSheet _playerStats = new CharacterSheet(defaultStats, defaultXP, 5, 5, 3, 1);
-        private PlayerEquipment _equipment = new PlayerEquipment();
-
+        private CharacterSheet _playerStats;
+        private PlayerEquipment _equipment;
         private List<CharacterSheet> _companions = new();
-
         private Inventory _inventory = new(new Vector2Int(10, 10));
 
-        private int _travelSpeed;
+        private int _marchSpeed;
         private int _exhaustion;
 
-        public CharacterSheet PlayerStats
-        {
-            get => _playerStats;
-            set => _playerStats = value;
-        }
+
         public List<CharacterSheet> Companions => _companions;
-        public int TravelSpeed
+        public int MarchSpeed
         {
-            get => _travelSpeed;
-            set => _travelSpeed = value;
+            get => _marchSpeed;
+            set => _marchSpeed = value;
         }
         public int Exhaustion
         {
@@ -59,13 +45,21 @@ namespace SD.Characters
             set => _exhaustion = Mathf.Clamp(value, 0, 10);
         }
 
-        public Inventory Inventory => _inventory;
-        public PlayerEquipment PlayerEquip => _equipment;
-
-        #region - Reputation & Influence - 
-        [SerializeField] private IntReference[] _factionReputation;
-        [SerializeField] private IntReference[] _factionInfluence;
-        #endregion
+        public CharacterSheet PlayerStats
+        {
+            get => _playerStats;
+            set => _playerStats = value;
+        }
+        public Inventory Inventory
+        {
+            get => _inventory;
+            set => _inventory = value;
+        }
+        public PlayerEquipment PlayerEquip
+        {
+            get => _equipment;
+            set => _equipment = value;
+        }
 
 
         /// <summary>
@@ -79,48 +73,5 @@ namespace SD.Characters
                 _companions[i].RegainHealth(value);
             }
         }
-
-        public void SetReputation(Factions faction, int value)
-        {
-            _factionReputation[(int)faction].Value += value;
-        }
-
-        public int GetReputation(Factions faction)
-        {
-            return _factionReputation[(int)faction].Value;
-        }
-
-
-
-        #region - Equipment -
-        public bool TryEquipItem(EquipmentType slot, Item item)
-        {
-            // Is it valid
-            if (item == null) return false;
-            if (item is not Equipment) return false;
-
-            // Is it the proper slot?
-            var equip = (Equipment)item;
-            if (equip.Slot != slot) return false;
-            
-            Debug.LogWarning("This functionality has not been added yet.");
-
-
-            // Is it the same item that was already there?
-
-            // is there an item already there? Need to unequip it and add to inventory
-
-            return false;
-        }
-        #endregion
     }
-}
-
-
-public enum Factions
-{
-    KingdomOfZodia,
-    ImperiumVitalis,
-    Ath_rakTribes,
-    EderanMerchantConglomerate,
 }

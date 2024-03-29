@@ -23,18 +23,19 @@ namespace SD.Inventories
         {
             Debug.LogWarning("Adding Test Items.");
 
-            var sword = _itemCodex.GetItem("Sword");
-            var ration = _itemCodex.GetItem("Ration");
-            var hammer = _itemCodex.GetItem("Warhammer");
-
             var boots = _itemCodex.GetItem("Boots");
             var armor = _itemCodex.GetItem("Armor");
+            var armor2 = _itemCodex.GetItem("Steel Armor");
 
-            _playerData.Inventory.TryFitItem(new InventoryItem(sword, Vector2Int.zero, new Vector2Int(1, 2)));
-            _playerData.Inventory.TryFitItem(new InventoryItem(ration, Vector2Int.zero, new Vector2Int(1, 1)));
-            _playerData.Inventory.TryFitItem(new InventoryItem(hammer, Vector2Int.zero, new Vector2Int(1, 3)));
             _playerData.Inventory.TryFitItem(new InventoryItem(boots, Vector2Int.zero, new Vector2Int(2, 2)));
             _playerData.Inventory.TryFitItem(new InventoryItem(armor, Vector2Int.zero, new Vector2Int(2, 2)));
+            _playerData.Inventory.TryFitItem(new InventoryItem(armor2, Vector2Int.zero, new Vector2Int(2, 2)));
+
+            for (int i = 0; i < 13; i++)
+            {
+                var ration = _itemCodex.GetItem("Ration");
+                _playerData.Inventory.TryFitItem(new InventoryItem(ration, Vector2Int.zero, new Vector2Int(1, 1)));
+            }
         }
 
         private void Awake()

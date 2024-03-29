@@ -1,4 +1,5 @@
 using SD.Characters;
+using SD.Inventories;
 using UnityEngine;
 
 namespace SD.CommandSystem
@@ -10,6 +11,9 @@ namespace SD.CommandSystem
     public class NewGameCommand : CommandBase
     {
         [SerializeField] private PlayerData _playerData;
+
+        private int[] defaultStats = { 15, 15, 15, 15 };
+        private int[] defaultXP = { 0, 0, 0, 0 };
 
         protected override bool ExecuteCommand()
         {
@@ -25,11 +29,14 @@ namespace SD.CommandSystem
             // Placeholder - todo - more to come
             DateTime.ResetTime();
 
+            Debug.Log("Setting default values for player character.");
             // Set player starting position
             _playerData.X = 75;// 78;
             _playerData.Y = 26;// 29;
 
-
+            _playerData.PlayerStats = new CharacterSheet(defaultStats, defaultXP, 5, 5, 3, 1);
+            _playerData.Inventory = new Inventory(new Vector2Int(10, 10));
+            _playerData.PlayerEquip = new PlayerEquipment(_playerData);
 
             return true;
         }

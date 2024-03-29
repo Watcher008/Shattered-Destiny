@@ -6,6 +6,7 @@ public class EquipmentManager : MonoBehaviour
 {
     [SerializeField] private PlayerData _playerData;
     [SerializeField] private EquipmentSlot[] equipmentSlots;
+    public PlayerData PlayerData => _playerData;
 
     private void Awake()
     {
@@ -14,7 +15,7 @@ public class EquipmentManager : MonoBehaviour
             equipmentSlots[i].onItemDropped += TryEquipDroppedItem;
         }
 
-        _playerData.onEquipmentChanged += RefreshDisplay;
+        _playerData.PlayerEquip.onEquipmentChanged += RefreshDisplay;
     }
 
     private void OnEnable()
@@ -24,7 +25,7 @@ public class EquipmentManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        _playerData.onEquipmentChanged -= RefreshDisplay;
+        _playerData.PlayerEquip.onEquipmentChanged -= RefreshDisplay;
     }
 
     public void RefreshDisplay()
@@ -45,10 +46,8 @@ public class EquipmentManager : MonoBehaviour
     {
         for (int i = 0; i < equipmentSlots.Length; i++)
         {
-            // Each equipment slot has an image and TMP_Text GameObject children
-            if (equipmentSlots[i].Rect.childCount > 2)
+            if (equipmentSlots[i].Rect.childCount > 0)
             {
-                // UI_Elements set as children are placed as first siblings
                 Destroy(equipmentSlots[i].Rect.GetChild(0).gameObject);
             }
         }
@@ -56,12 +55,10 @@ public class EquipmentManager : MonoBehaviour
 
     private void TryEquipDroppedItem(EquipmentType slot, InventoryElement element)
     {
-        if (_playerData.PlayerEquip.TryEquipItem(slot, element.Item, out var oldEquipment))
+        if (_playerData.PlayerEquip.TryEquipItem(slot, element.Item, out _))
         {
             element.Item.IsRotated = false;
             DragManager.Instance.OnDraggedItemEquipped();
-
-            Debug.LogWarning("Need to add old equipment to inventory");
         }
     }
 }

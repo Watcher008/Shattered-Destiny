@@ -35,8 +35,6 @@ namespace SD.Grids
             input.actions["Mouse Position"].performed += OnMousePosition;
             input.actions["LMB"].performed += OnMouseClick;
 
-            //roundedValue = Pathfinding.instance.GetCellSize();
-
             WorldMapManager.Instance.onPauseInput += OnPauseInput;
             WorldMapManager.Instance.onResumeInput += OnResumeInput;
         }
@@ -57,7 +55,11 @@ namespace SD.Grids
         private void LateUpdate()
         {
             if (!_canInteract) return;
-            if (IsPointerOverUIElement()) return;
+            if (IsPointerOverUIElement())
+            {
+                ClearLine();
+                return;
+            }
 
             SetCursorPosition();
             CheckNode();

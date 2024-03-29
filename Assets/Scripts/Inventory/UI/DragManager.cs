@@ -81,12 +81,8 @@ public class DragManager : MonoBehaviour
         // Dragging an item from an equipment slot
         if (dragElement.EquippedSlot != null)
         {
-            //dragElement.UpdateSprite(true);
             fromEquipSlot = dragElement.EquippedSlot;
-            //dragElement.Rect.sizeDelta = dragElement.Item.Item.Data.Size * UIManager.CellSize;
-
-            Debug.LogWarning("Unequip Item");
-            //_equipmentManager.CharacterEquipment.UnequipItem((int)fromEquipSlot.Slot);
+            _equipmentManager.PlayerData.PlayerEquip.UnequipItem((int)dragElement.EquippedSlot.Slot);
         }
         else
         {
@@ -191,11 +187,10 @@ public class DragManager : MonoBehaviour
         // Return item to the equipped slot it was in
         if (element.EquippedSlot != null)
         {
-            Debug.LogWarning("TryEquipItem");
-            //_equipmentManager.CharacterEquipment.TryEquipItem(element.Item.Item, (int)element.EquippedSlot.Slot);
+            _equipmentManager.PlayerData.PlayerEquip.TryEquipItem(element.EquippedSlot.Slot, element.Item, out _);
         }
         // Return it to its previous position in the inventory
-        //else
+        else
         {
             // Item was rotated, return to original rotation
             if (itemRotationToggled) element.Item.IsRotated = !element.Item.IsRotated;
@@ -240,7 +235,6 @@ public class DragManager : MonoBehaviour
         newElement.transform.SetAsFirstSibling();
 
         newElement.SetItem(item);
-        newElement.UpdateSprite(false);
 
         return newElement;
     }
