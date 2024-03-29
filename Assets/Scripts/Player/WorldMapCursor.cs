@@ -109,6 +109,7 @@ namespace SD.Grids
         private void OnMouseClick(InputAction.CallbackContext obj)
         {
             if (!_canInteract) return;
+            if (IsPointerOverUIElement()) return;
 
             var node = WorldMap.GetNode(transform.position);
             if (node == null) return;

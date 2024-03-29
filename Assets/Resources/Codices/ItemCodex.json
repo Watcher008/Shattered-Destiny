@@ -76,6 +76,16 @@
     ],
     "Weapons":[
         {
+            "Name": "Natural",
+            "Value": 5,
+            "MaxStack": 1,
+            "Sprite": "misc/unarmed",
+
+            "Damage": 1,
+            "Range": 1,
+            "Attribute": 0
+        },
+        {
             "Name": "Sword",
             "Value": 5,
             "MaxStack": 1,

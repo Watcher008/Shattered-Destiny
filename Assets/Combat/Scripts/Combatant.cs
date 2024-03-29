@@ -68,14 +68,14 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
     {
         get
         {
-            return _characterSheet != null ? _characterSheet.MaxActionPoints : _statBlock.MaxActionPoints;
+            return _characterSheet != null ? _characterSheet.MaxActionPoints : _statBlock.MAP;
         }
     }
     private int _refreshedActionPoints
     {
         get
         {
-            return _characterSheet != null ? _characterSheet.RefreshActionPoints : _statBlock.RefreshActionPoints;
+            return _characterSheet != null ? _characterSheet.RefreshActionPoints : _statBlock.RAP;
         }
     }
     #endregion
@@ -87,16 +87,18 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
     public void OnMouseEnter() => onMouseEnter?.Invoke();
     public void OnMouseExit() => onMouseExit?.Invoke();
 
-    public void SetInitialValues(Sprite sprite, StatBlock stats, Weapon weapon)
+    public void SetInitialValues(StatBlock stats, Weapon weapon)
     {
+        gameObject.name = stats.Name;
+
         _isPlayer = false;
         _statBlock = stats;
         _weapon = weapon;
 
         Health = MaxHealth;
-        ActionPoints = stats.StartingActionPoints;
+        ActionPoints = stats.SAP;
 
-        GetComponentInChildren<SpriteRenderer>().sprite = sprite;
+        GetComponentInChildren<SpriteRenderer>().sprite = SpriteHelper.GetSprite(stats.Sprite);
         gameObject.AddComponent<EnemyCombatantController>();
 
         _initiative = UnityEngine.Random.Range(1, 7) + _initiativeBonus;
@@ -193,8 +195,10 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
 
     public void TakeDamage(int damage)
     {
-        if (HasEffect<Vulnerable>()) damage = Mathf.RoundToInt(damage * 1.25f);
-        if (HasEffect<Reinforced>()) damage = Mathf.RoundToInt(damage * 0.75f);
+        float damageMultiplier = 1.0f;
+        if (HasEffect<Vulnerable>()) damageMultiplier += 0.25f;
+        if (HasEffect<Reinforced>()) damageMultiplier -= 0.25f;
+        damage = Mathf.RoundToInt(damage * damageMultiplier);
 
         damage -= Block;
         if (damage <= 0) return;
@@ -342,8 +346,10 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
 
     public void DealDamage(int dmg, Combatant target)
     {
-        if (HasEffect<Weaken>()) dmg = Mathf.RoundToInt(dmg * 0.75f);
-        if (HasEffect<Empowered>()) dmg = Mathf.RoundToInt(dmg * 1.25f);
+        float damageMultiplier = 1.0f;
+        if (HasEffect<Weaken>()) damageMultiplier -= 0.25f;
+        if (HasEffect<Empowered>()) damageMultiplier += 0.25f;
+        dmg = Mathf.RoundToInt(dmg * damageMultiplier);
 
         target.TakeDamage(dmg);
     }

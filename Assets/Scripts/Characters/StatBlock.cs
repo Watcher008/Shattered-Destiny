@@ -10,14 +10,15 @@ namespace SD.Characters
     public class StatBlock
     {
         public string Name;
+        public string Sprite;
         public int[] Attributes;
         public int MaxHealth;
         public int Movement;
         public int Initiative;
 
-        public int MaxActionPoints;
-        public int StartingActionPoints;
-        public int RefreshActionPoints;
+        public int MAP;
+        public int SAP;
+        public int RAP;
 
         public string Weapon;
         public string[] WeaponArts;

@@ -77,18 +77,6 @@ namespace SD.Inventories
             }
         }*/
 
-        public Sprite GetSprite(string name)
-        {
-            var path = name.Split("/");
-            var sprites = Resources.LoadAll<Sprite>($"Sprites/{path[0]}");
-            foreach ( var sprite in sprites )
-            {
-                if (!sprite.name.Equals(path[1])) continue;
-                return sprite;
-            }
-            return null;
-        }
-
         public void RefreshDisplay(ItemGrid grid)
         {
             // Remove all existing UI_InventoryElements

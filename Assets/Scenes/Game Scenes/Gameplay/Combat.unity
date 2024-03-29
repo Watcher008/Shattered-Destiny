@@ -7248,7 +7248,6 @@ MonoBehaviour:
   _prefab: {fileID: 5675029148953810745, guid: 02a3ce4e377655b4493b04e8542b266b, type: 3}
   _endCombatButton: {fileID: 36967274}
   _player: {fileID: 603775805, guid: 3f015a5c1e6633f48a0669377a1e992c, type: 3}
-  _enemy: {fileID: 1990582262, guid: 3f015a5c1e6633f48a0669377a1e992c, type: 3}
   _blood: {fileID: 6451979034182795890, guid: 7e168b48434fe5444bfa77f621c62a54, type: 3}
 --- !u!1 &1591717052
 GameObject:

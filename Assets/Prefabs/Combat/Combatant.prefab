@@ -59,13 +59,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23bc3fc2eb01888489e4ee5ff642b82c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Speed: 5
-  Initiative: 0
-  MoveSpeed: 2
-  AttackPower: 2
-  AttackRange: 1
-  MaxHealth: 5
-  Health: 5
+  Block: 0
 --- !u!61 &879836076149382351
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -137,7 +131,7 @@ Transform:
   m_GameObject: {fileID: 5713565851544430545}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.375, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -184,7 +178,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 603775805, guid: 3f015a5c1e6633f48a0669377a1e992c, type: 3}
+  m_Sprite: {fileID: 603775805, guid: 04e46f929967fe44c9b83422525f163f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

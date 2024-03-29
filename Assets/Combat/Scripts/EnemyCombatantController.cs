@@ -42,6 +42,7 @@ namespace SD.Combat
 
             // Find nearest target
             var target = FindNearest();
+            if (target == null) CombatManager.Instance.EndTurn(_combatant); // all players defeated
 
             // Only available actions is to Move
             if (_combatant.ActionPoints == 0)
@@ -94,6 +95,8 @@ namespace SD.Combat
         private Combatant FindNearest()
         {
             int minDist = int.MaxValue;
+            if (CombatManager.Instance.PlayerCombatants.Count == 0) return null;
+
             Combatant nearest = CombatManager.Instance.PlayerCombatants[0];
 
             foreach (var player in CombatManager.Instance.PlayerCombatants)
@@ -163,8 +166,11 @@ namespace SD.Combat
             if (path.Count == 0) return false;
 
             // Remove from end of path until the last tile is not occupied
-            while (path[path.Count - 1].Occupant != Occupant.None) path.RemoveAt(path.Count - 1);
-            if (path.Count == 0) return false;
+            while (path[path.Count - 1].Occupant != Occupant.None)
+            {
+                path.RemoveAt(path.Count - 1);
+                if (path.Count == 0) return false;
+            }
 
             _combatant.Move(path);
 
