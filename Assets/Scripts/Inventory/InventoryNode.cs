@@ -8,8 +8,8 @@ namespace SD.Inventories
         public Grid<InventoryNode> grid { get; private set; }
         public int x { get; private set; }
         public int y { get; private set; }
-        public InventoryItem item;
-        public bool IsBlocked;
+        private InventoryItem _item;
+        public InventoryItem Item => _item;
 
         public InventoryNode(Grid<InventoryNode> grid, int x, int y)
         {
@@ -18,19 +18,25 @@ namespace SD.Inventories
             this.y = y;
         }
 
-        public bool CanPlaceItem()
+        public bool CanPlaceItem(InventoryItem item)
         {
-            return item == null;
+            if (_item == null) return true;
+            return _item.CanStack(item, out _);
         }
 
         public bool HasItem()
         {
-            return item != null;
+            return _item != null;
         }
 
         public InventoryItem GetItem()
         {
-            return item;
+            return _item;
+        }
+
+        public void SetItem(InventoryItem item)
+        {
+            _item = item;
         }
     }
 }

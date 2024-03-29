@@ -48,8 +48,6 @@ namespace SD.Combat
         #region - Testing -
         [Header("Testing")]
         [SerializeField] private Button _endCombatButton;
-        [SerializeField] private Sprite _player;
-        [SerializeField] private Sprite _enemy;
         [SerializeField] private GameObject _blood;
         #endregion
 
@@ -120,18 +118,28 @@ namespace SD.Combat
         /// </summary>
         private void PlaceCombatants()
         {
-            var bandit = _creatureCodex.GetCreatureByName("Bandit");
-            // For now just spawn 3 of each, later this should come from the player party and an encounter table
+            //Select group randomly based on current terrain
+            var terrain = WorldMap.GetNode(_playerData.X, _playerData.Y).Terrain.ToString();
+            Debug.Log($"Terrain: {terrain}");
+
+            var units = _creatureCodex.GetSquad(terrain);
+            string s = "";
+            foreach (var item in units)
+            {
+                s += $"{item},";
+            }
+            Debug.Log($"Units: {s}");
 
             // Spawn enemies based on chosen encounter
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < units.Length; i++)
             {
-                var newEnemy = Instantiate(_prefab, transform);
-                newEnemy.name = $"Enemy {i + 1}";
-                var weapon = _itemCodex.GetWeapon(bandit.Weapon);
-                newEnemy.SetInitialValues(_enemy, bandit, weapon);
-                Combatants.Add(newEnemy);
-                EnemyCombatants.Add(newEnemy);
+                var statBlock = _creatureCodex.GetCreatureByName(units[i]);
+                var enemy = Instantiate(_prefab, transform);
+                var weapon = _itemCodex.GetWeapon(statBlock.Weapon);
+                enemy.SetInitialValues(statBlock, weapon);
+
+                Combatants.Add(enemy);
+                EnemyCombatants.Add(enemy);
             }
 
             ForTestingOnly();
@@ -139,7 +147,7 @@ namespace SD.Combat
             // Spawn player
             var player = Instantiate(_prefab, transform);
             player.name = "Player";
-            player.SetInitialValues(_player, _playerData.PlayerStats);
+            player.SetInitialValues(SpriteHelper.GetSprite("creatures/knight"), _playerData.PlayerStats);
             Combatants.Add(player);
             PlayerCombatants.Add(player);
 
@@ -148,7 +156,7 @@ namespace SD.Combat
             {
                 var newPlayer = Instantiate(_prefab, transform);
                 newPlayer.name = $"Player {i + 1}";
-                newPlayer.SetInitialValues(_player, _playerData.PlayerStats);
+                newPlayer.SetInitialValues(SpriteHelper.GetSprite("creatures/knight"), _playerData.PlayerStats);
                 Combatants.Add(newPlayer);
                 PlayerCombatants.Add(newPlayer);
             }
@@ -179,6 +187,7 @@ namespace SD.Combat
             //Debug.Log("Turn start for " + combatant.gameObject.name);
             CurrentActor = combatant;
             CurrentActor.OnTurnStart();
+            _interface.OnNewActor();
         }
 
         private void OnNextTurn()
@@ -267,8 +276,9 @@ namespace SD.Combat
                 }
             }
 
-            // I think this is clear? low value = good for the attacker
-            bool attackHits = Random.value <= chanceToHit;
+            var roll = Random.value;
+            bool attackHits = roll <= chanceToHit; // Roll under
+            Debug.Log($"Chance to hit: {chanceToHit}, Roll: {roll}");
             if (!attackHits) Debug.Log("Attack miss!");
             return attackHits;
         }

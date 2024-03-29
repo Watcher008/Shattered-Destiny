@@ -37,44 +37,16 @@ namespace SD.Inventories
         public void SetItem(InventoryItem item)
         {
             _item = item;
-            _image.sprite = InventoryManager.Instance.GetSprite(item.Item.Sprite);
-            _itemCountText.text = GetCountText();
-        }
-
-        public void UpdateSprite(bool useFull)
-        {
-            //if (useFull) _image.sprite = _item.Item.Data.Sprite;
-            //else _image.sprite = _item.Item.Data.CompactSprite;
-        }
-        
-        private string GetCountText()
-        {
-            return string.Empty;
-            /*if (_item.Item.Data.Category == ItemCategory.RangedWeapon)
-            {
-                if (TryGetComponent<Firearm>(out var firearm))
-                {
-                    return firearm.Magazine.Rounds + "/" + firearm.Magazine.Capacity;
-                }
-            }
-            else if (_item.Item.Data.Category == ItemCategory.Attachment)
-            {
-                if (TryGetComponent<FirearmMagazine>(out var mag))
-                {
-                    return mag.Rounds + "/" + mag.Capacity;
-                }
-            }
-
-            return (_item.Item.StackCount == 0) ? string.Empty : _item.Item.StackCount.ToString();*/
-        }
-
+            _image.sprite = SpriteHelper.GetSprite(item.Item.Sprite);
+            _itemCountText.text = _item.Count == 1 ? string.Empty : _item.Count.ToString();
+        }        
 
         #region - Pointer Events -
-
         public void OnPointerDown(PointerEventData eventData)
         {
             if (eventData.button == PointerEventData.InputButton.Right)
             {
+                // Context menu for splitting half/one from stack
                 //UI_ContextMenuManager.Instance.OnItemSelected(this);
             }
         }

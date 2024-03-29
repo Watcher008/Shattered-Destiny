@@ -22,7 +22,55 @@ namespace SD.Inventories
                 (Grid<InventoryNode> g, int x, int y) => new InventoryNode(g, x, y));
         }
 
-        public bool IsValidPosition(Vector2Int position)
+        public bool CanPlaceItem(InventoryItem item, Vector2Int gridPos)
+        {
+            // First check for stacking
+            var node = _grid.GetGridObject(gridPos.x, gridPos.y);
+            if (node == null) return false;
+
+            if (node.Item != null && node.Item.CanStack(item, out _)) return true;
+
+            // then check the rest
+            List<Vector2Int> gridPositions = item.GetGridPositionList(gridPos);
+            foreach(var pos in gridPositions)
+            {
+                // Outside bounds of grid
+                if (!IsValidPosition(pos)) return false;
+                // Something else is placed here
+                if (!_grid.GetGridObject(pos.x, pos.y).CanPlaceItem(item)) return false;
+            }
+
+            return true;
+        }
+
+        public bool TryPlaceItem(InventoryItem item, Vector2Int gridPos)
+        {
+            if (!CanPlaceItem(item, gridPos)) return false;
+
+
+            var node = _grid.GetGridObject(gridPos.x, gridPos.y);
+            if (node.Item != null && node.Item.CanStack(item, out var remainder))
+            {
+                node.Item.TryStack(item);
+                return item.Count == 0;
+            }
+
+            item.Origin = gridPos;
+
+            List<Vector2Int> gridPositions = item.GetGridPositionList(gridPos);
+            foreach (var pos in gridPositions)
+            {
+                _grid.GetGridObject(pos.x, pos.y).SetItem(item);
+            }
+
+            onContentsChanged?.Invoke();
+            return true;
+        }
+
+        /// <summary>
+        /// Returns true if the given positio is within the grid bounds.
+        /// </summary>
+        private bool IsValidPosition(Vector2Int position)
         {
             if (position.x < 0) return false;
             if (position.x >= _dimensions.x) return false;
@@ -31,55 +79,15 @@ namespace SD.Inventories
             return true;
         }
 
-        public bool CanPlaceItem(InventoryItem item, Vector2Int origin)
-        {
-            List<Vector2Int> gridPositions = item.GetGridPositionList(origin);
-
-            foreach(var pos in gridPositions)
-            {
-                // Outside bounds of grid
-                if (!IsValidPosition(pos))
-                {
-                    //Debug.Log("Position is not valid!");
-                    return false;
-                }
-                // Something else is placed here
-                if (!_grid.GetGridObject(pos.x, pos.y).CanPlaceItem())
-                {
-                    //Debug.Log("Position is occupied!");
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        public bool TryPlaceItem(InventoryItem item, Vector2Int origin)
-        {
-            //Debug.Log("Trying to place item at " + origin);
-            if (!CanPlaceItem(item, origin)) return false;
-            //Debug.Log("Placing item at " + origin);
-            item.Origin = origin;
-
-            List<Vector2Int> gridPositions = item.GetGridPositionList(origin);
-            foreach (var pos in gridPositions)
-            {
-                _grid.GetGridObject(pos.x, pos.y).item = item;
-            }
-
-            onContentsChanged?.Invoke();
-            return true;
-        }
-
         public void RemoveItemAt(Vector2Int origin, bool IsRotated, bool detachObject = true)
         {
-            var item = _grid.GetGridObject(origin.x, origin.y).item;
+            var item = _grid.GetGridObject(origin.x, origin.y).Item;
             if (item == null) return;
 
             List<Vector2Int> gridPositions = item.GetGridPositionList(origin);
             foreach(var pos in gridPositions)
             {
-                _grid.GetGridObject(pos.x, pos.y).item = null;
+                _grid.GetGridObject(pos.x, pos.y).SetItem(null);
             }
 
             onContentsChanged?.Invoke();
@@ -97,6 +105,8 @@ namespace SD.Inventories
                     if (TryPlaceItem(item, origin)) return true;
                 }
             }
+
+            // should I not be trying to rotate the item here?
 
             for (int y = _grid.GetHeight() - 1; y >= 0; y--)
             {

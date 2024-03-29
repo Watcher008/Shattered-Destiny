@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using SD.Primitives;
 using SD.Inventories;
 using SD.Combat.WeaponArts;
 
@@ -9,9 +8,6 @@ namespace SD.Characters
     [CreateAssetMenu(menuName = "Scriptable Objects/Player Data", fileName = "Player Data")]
     public class PlayerData : ScriptableObject
     {
-        public delegate void OnEquipmentChanged();
-        public OnEquipmentChanged onEquipmentChanged;
-
         public List<WeaponArt> WeaponArts = new List<WeaponArt>();
 
         #region - World Map Location
@@ -28,28 +24,22 @@ namespace SD.Characters
         }
         #endregion
 
-        private static int[] defaultStats = { 15, 15, 15, 15 };
-        private static int[] defaultXP = {0, 0, 0, 0};
-
-        private CharacterSheet _playerStats = new CharacterSheet(defaultStats, defaultXP, 5, 5, 3, 1);
+        private CharacterSheet _playerStats;
+        private PlayerEquipment _equipment;
         private List<CharacterSheet> _companions = new();
-
         private Inventory _inventory = new(new Vector2Int(10, 10));
-        private InventoryItem[] _equipment = new InventoryItem[System.Enum.GetNames(typeof(EquipmentType)).Length];
 
-        private int _travelSpeed;
+        private int _marchSpeed;
         private int _exhaustion;
 
-        public CharacterSheet PlayerStats
-        {
-            get => _playerStats;
-            set => _playerStats = value;
-        }
+        private WeaponTypes _rightHand = WeaponTypes.Sword;
+        private WeaponTypes _leftHand = WeaponTypes.Shield;
+
         public List<CharacterSheet> Companions => _companions;
-        public int TravelSpeed
+        public int MarchSpeed
         {
-            get => _travelSpeed;
-            set => _travelSpeed = value;
+            get => _marchSpeed;
+            set => _marchSpeed = value;
         }
         public int Exhaustion
         {
@@ -57,13 +47,60 @@ namespace SD.Characters
             set => _exhaustion = Mathf.Clamp(value, 0, 10);
         }
 
-        public Inventory Inventory => _inventory;
-        public InventoryItem[] Equipment => _equipment;
+        public CharacterSheet PlayerStats
+        {
+            get => _playerStats;
+            set => _playerStats = value;
+        }
+        public Inventory Inventory
+        {
+            get => _inventory;
+            set => _inventory = value;
+        }
+        public PlayerEquipment PlayerEquip
+        {
+            get => _equipment;
+            set => _equipment = value;
+        }
 
-        #region - Reputation & Influence - 
-        [SerializeField] private IntReference[] _factionReputation;
-        [SerializeField] private IntReference[] _factionInfluence;
-        #endregion
+        public WeaponTypes RightHand
+        {
+            get => _rightHand;
+            set
+            {
+                // Can't have nothing in right hand
+                if (value == WeaponTypes.None) return;
+                // Also can't have shield
+                if (value == WeaponTypes.Shield) return;
+
+                _rightHand = value;
+
+                // two-handed weapons
+                if (_rightHand == WeaponTypes.Warhammer) _leftHand = _rightHand;
+                else if (_rightHand == WeaponTypes.Bow) _leftHand = _rightHand;
+                else if (_rightHand == WeaponTypes.Staff) _leftHand = _rightHand;
+                else if (_leftHand == _rightHand) _leftHand = WeaponTypes.None;
+                else // Equipped a one-handed weapon
+                {
+                    if (_leftHand == WeaponTypes.Warhammer || _leftHand == WeaponTypes.Bow || _leftHand == WeaponTypes.Staff)
+                    {
+                        _leftHand = WeaponTypes.None;
+                    }
+                }
+            }
+        }
+
+        public WeaponTypes LeftHand
+        {
+            get => _leftHand;
+            set
+            {
+                // Have to equip two-handed weapons through right hand
+                if (value == WeaponTypes.Warhammer || value == WeaponTypes.Bow || value == WeaponTypes.Staff) return;
+                 
+                _leftHand = value;
+            }
+        }
 
 
         /// <summary>
@@ -77,41 +114,16 @@ namespace SD.Characters
                 _companions[i].RegainHealth(value);
             }
         }
-
-        public void SetReputation(Factions faction, int value)
-        {
-            _factionReputation[(int)faction].Value += value;
-        }
-
-        public int GetReputation(Factions faction)
-        {
-            return _factionReputation[(int)faction].Value;
-        }
-
-
-
-        #region - Equipment -
-        public bool TryEquipItem(EquipmentType slot, Item item)
-        {
-            Debug.LogWarning("This functionality has not been added yet.");
-
-            // Is it the same item that was already there?
-
-            // is it the correct slot?
-
-            // is there an item already there? Need to unequip it and add to inventory
-
-            return false;
-        }
-        #endregion
     }
 }
 
-
-public enum Factions
+public enum WeaponTypes
 {
-    KingdomOfZodia,
-    ImperiumVitalis,
-    Ath_rakTribes,
-    EderanMerchantConglomerate,
+    None,
+    Sword,
+    Shield,
+    Warhammer,
+    Bow,
+    Staff,
+    Book
 }

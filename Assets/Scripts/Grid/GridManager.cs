@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using SD.Grids;
-using System.Runtime.CompilerServices;
 
 public class GridManager : MonoBehaviour
 {
@@ -24,7 +23,7 @@ public class GridManager : MonoBehaviour
     private void InitializeGrid()
     {
         if (WorldMap.Grid != null) return;
-        Debug.LogWarning("Creating world map grid");
+        //Debug.LogWarning("Creating world map grid");
 
         var tilemap = GetComponentInChildren<Tilemap>();
         tilemap.CompressBounds();

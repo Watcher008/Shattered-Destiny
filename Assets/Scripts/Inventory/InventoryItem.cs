@@ -4,16 +4,47 @@ using UnityEngine;
 public class InventoryItem
 {
     public Item Item;
+    public int Count;
     public Vector2Int Origin;
     public Vector2Int Size;
     public bool IsRotated;
 
-    public InventoryItem(Item weapon, Vector2Int origin, Vector2Int size, bool isRotated)
+    public InventoryItem(Item item, Vector2Int origin, Vector2Int size, int count = 1, bool isRotated = false)
     {
-        Item = weapon;
+        Item = item;
+        Count = count;
         Origin = origin;
         Size = size;
         IsRotated = isRotated;
+    }
+
+    /// <summary>
+    /// If the two items can stack.
+    /// </summary>
+    /// <param name="remainder">The leftover count after stacking the two up to the max stack count.</param>
+    /// <returns></returns>
+    public bool CanStack(InventoryItem other, out int remainder)
+    {
+        remainder = 0;
+        // Not the same item
+        if (other.Item.Name != Item.Name) return false;
+        if (Count >= Item.MaxStack) return false;
+
+        remainder = Count + other.Count - Item.MaxStack;
+        if (remainder < 0) remainder = 0;
+        return true;
+    }
+
+    public void TryStack(InventoryItem other)
+    {
+        if (!CanStack(other, out int remainder)) return;
+
+        int diff = Item.MaxStack - Count;
+
+        int numToAdd = Mathf.Min(other.Count, diff);
+
+        Count += numToAdd;
+        other.Count -= numToAdd;
     }
 
     public List<Vector2Int> GetGridPositionList(Vector2Int origin)

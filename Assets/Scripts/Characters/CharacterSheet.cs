@@ -96,6 +96,16 @@ namespace SD.Characters
             _weapon = newWeapon;
             return oldWeapon;
         }
+
+        public void AddModifier(Attributes attribute, int value)
+        {
+            _attributes[(int)attribute].AddModifier(value);
+        }
+
+        public void RemoveModifier(Attributes attribute, int value)
+        {
+            _attributes[(int)attribute].RemoveModifier(value);
+        }
     }
 
     public enum Attributes
@@ -104,5 +114,12 @@ namespace SD.Characters
         Intelligence,
         Survival,
         Social
+    }
+
+    public enum AP
+    {
+        MAP,
+        SAP,
+        RAP
     }
 }
