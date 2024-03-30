@@ -27,6 +27,8 @@ public class PlayerController : MonoBehaviour
         _currentNode = WorldMap.GetNode(_transform.position);
         _transform.position = WorldMap.GetNodePosition(_currentNode.X, _currentNode.Y);
 
+        GetComponentInChildren<SpriteRenderer>().sprite = _playerData.Sprite;
+
         WorldMapManager.Instance.onPauseInput += PauseInput;
         WorldMapManager.Instance.onResumeInput += ResumeInput;
     }
@@ -86,8 +88,7 @@ public class PlayerController : MonoBehaviour
             _transform.position = end;
 
             _currentNode = next;
-            _playerData.X = next.X;
-            _playerData.Y = next.Y;
+            _playerData.WorldPos = new Vector2Int(next.X, next.Y);
 
             WorldMapManager.Instance.OnPlayerActed(_currentNode);
 

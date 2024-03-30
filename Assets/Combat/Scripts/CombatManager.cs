@@ -119,16 +119,8 @@ namespace SD.Combat
         private void PlaceCombatants()
         {
             //Select group randomly based on current terrain
-            var terrain = WorldMap.GetNode(_playerData.X, _playerData.Y).Terrain.ToString();
-            Debug.Log($"Terrain: {terrain}");
-
+            var terrain = WorldMap.GetNode(_playerData.WorldPos.x, _playerData.WorldPos.y).Terrain.ToString();
             var units = _creatureCodex.GetSquad(terrain);
-            string s = "";
-            foreach (var item in units)
-            {
-                s += $"{item},";
-            }
-            Debug.Log($"Units: {s}");
 
             // Spawn enemies based on chosen encounter
             for (int i = 0; i < units.Length; i++)
@@ -147,7 +139,7 @@ namespace SD.Combat
             // Spawn player
             var player = Instantiate(_prefab, transform);
             player.name = "Player";
-            player.SetInitialValues(SpriteHelper.GetSprite("creatures/knight"), _playerData.PlayerStats);
+            player.SetInitialValues(_playerData.Sprite, _playerData.PlayerStats);
             Combatants.Add(player);
             PlayerCombatants.Add(player);
 

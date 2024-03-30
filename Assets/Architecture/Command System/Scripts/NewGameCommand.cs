@@ -31,8 +31,8 @@ namespace SD.CommandSystem
 
             Debug.Log("Setting default values for player character.");
             // Set player starting position
-            _playerData.X = 75;// 78;
-            _playerData.Y = 26;// 29;
+            //_playerData.WorldPos = new Vector2Int(75, 26);
+            //_playerData.WorldPos = new Vector2Int(78, 29);
 
             _playerData.PlayerStats = new CharacterSheet(defaultStats, defaultXP, 5, 5, 3, 1);
             _playerData.Inventory = new Inventory(new Vector2Int(10, 10));

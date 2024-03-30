@@ -57,7 +57,7 @@ namespace SD.Characters
                     if (location == terrain)
                     {
                         list.Add(squad.Value);
-                        Debug.Log("Adding " + squad.Value.Name);
+                        //Debug.Log("Adding " + squad.Value.Name);
                         break;
                     }
                 }

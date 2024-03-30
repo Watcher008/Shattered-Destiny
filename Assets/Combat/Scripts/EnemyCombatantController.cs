@@ -175,17 +175,17 @@ namespace SD.Combat
             _combatant.Move(path);
 
             if (_waitCoroutine != null) StopCoroutine(_waitCoroutine);
-            _waitCoroutine = StartCoroutine(WaitToAct());
+            _waitCoroutine = StartCoroutine(WaitToAct(false));
             return true;
         }
 
         /// <summary>
         /// Wait for the combatant to finish acting and then re-evaluate options.
         /// </summary>
-        private IEnumerator WaitToAct()
+        private IEnumerator WaitToAct(bool addDelay = true)
         {
             while (_combatant.IsActing) yield return null;
-            yield return new WaitForSeconds(0.5f); // Slight delay between actions
+            if (addDelay) yield return new WaitForSeconds(0.5f); // Slight delay between actions
             EvaluateActions();
         }
     }

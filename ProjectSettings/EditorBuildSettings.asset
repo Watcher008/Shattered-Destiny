@@ -21,6 +21,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Game Scenes/UI/MainMenu.unity
     guid: 59b684b279bfdcf49ab1e596e916f6cd
   - enabled: 1
+    path: Assets/Scenes/Game Scenes/Gameplay/CharacterCreation.unity
+    guid: 3099a234198dabc4b93055c4503bdb3f
+  - enabled: 1
     path: Assets/Scenes/Game Scenes/Gameplay/WorldMap.unity
     guid: a14dac8ff2e131d47a8e7e216b226f44
   - enabled: 1
