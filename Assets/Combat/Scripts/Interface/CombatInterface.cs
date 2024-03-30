@@ -24,6 +24,7 @@ namespace SD.Combat
          * 
          * TO DO:
          * Auto-end turn after current actor has acted and they have neither AP nor Movement remaining
+         * Set Move, Sprint, Attack, and Weapon Art Buttons to interactable based on player AP/Move remaining
          */
 
         [SerializeField] private CombatPortrait _portrait;
@@ -254,6 +255,7 @@ namespace SD.Combat
 
         private bool IgnoreSelection()
         {
+            if (!CurrentActor.PlayerControlled) return false;
             if (!CurrentActor.IsPlayer) return true;
             if (CurrentActor.IsActing) return true;
             return false;

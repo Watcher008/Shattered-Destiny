@@ -140,6 +140,7 @@ namespace SD.Combat
             var player = Instantiate(_prefab, transform);
             player.name = "Player";
             player.SetInitialValues(_playerData.Sprite, _playerData.PlayerStats);
+            player.PlayerControlled = true;
             Combatants.Add(player);
             PlayerCombatants.Add(player);
 
@@ -149,6 +150,7 @@ namespace SD.Combat
                 var newPlayer = Instantiate(_prefab, transform);
                 newPlayer.name = $"Player {i + 1}";
                 newPlayer.SetInitialValues(SpriteHelper.GetSprite("creatures/knight"), _playerData.PlayerStats);
+                newPlayer.gameObject.AddComponent<CombatantController>();
                 Combatants.Add(newPlayer);
                 PlayerCombatants.Add(newPlayer);
             }

@@ -23,6 +23,8 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
     public OnStatChange onActionPointChange;
     #endregion
 
+    public bool PlayerControlled = false;
+
     #region - General -
     private bool _isPlayer;
     private PathNode _currentNode;
@@ -99,7 +101,7 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
         ActionPoints = stats.SAP;
 
         GetComponentInChildren<SpriteRenderer>().sprite = SpriteHelper.GetSprite(stats.Sprite);
-        gameObject.AddComponent<EnemyCombatantController>();
+        gameObject.AddComponent<CombatantController>();
 
         _initiative = UnityEngine.Random.Range(1, 7) + _initiativeBonus;
     }
