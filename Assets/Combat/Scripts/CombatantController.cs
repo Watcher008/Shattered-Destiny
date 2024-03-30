@@ -59,7 +59,11 @@ namespace SD.Combat
 
             // Find nearest target
             var target = FindNearest();
-            if (target == null) CombatManager.Instance.EndTurn(_combatant); // all players defeated
+            if (target == null)
+            {
+                CombatManager.Instance.EndTurn(_combatant); // all opponents defeated
+                return;
+            }
 
             // Only available actions is to Move
             if (_combatant.ActionPoints == 0)
@@ -133,6 +137,11 @@ namespace SD.Combat
         /// </summary>
         private bool WithinAttackRange(Combatant target)
         {
+            if (target == null)
+            {
+                Debug.LogWarning("Target is null");
+                return false;
+            }
             foreach(var art in _combatant.WeaponArts)
             {
                 // Will need to add a variable to arts for if they are offensive or defensive
