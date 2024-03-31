@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: New Game Command
   m_EditorClassIdentifier: 
   callbackEvents:
-  - {fileID: 11400000, guid: 44fb074031309a84dad33c561b5f8e69, type: 2}
+  - {fileID: 11400000, guid: 95857505370d8f94191140b764ef5b97, type: 2}
   developerNotes: 
   _playerData: {fileID: 11400000, guid: 964da513a2d1311478cf1791204336b2, type: 2}

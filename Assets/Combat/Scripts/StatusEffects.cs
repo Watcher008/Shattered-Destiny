@@ -36,7 +36,7 @@ namespace SD.Combat
     /// Unit uses all movement randomly.
     /// Unit uses 1/3 of their action points on random weapon arts towards random targets.
     /// </summary>
-    public class Confuse : StatusEffects { }
+    public class Confuse_Effect : StatusEffects { }
 
     /// <summary>
     /// Unit does 25% less damage.

@@ -10,19 +10,25 @@ namespace SD.Characters
     {
         public List<WeaponArt> WeaponArts = new List<WeaponArt>();
 
-        #region - World Map Location
-        private int x, y;
-        public int X
+        private string _name;
+        public string Name
         {
-            get => x;
-            set => x = value;
+            get => _name;
+            set => _name = value;
         }
-        public int Y
+
+        private Sprite _sprite;
+        public Sprite Sprite
         {
-            get => y;
-            set => y = value;
+            get => _sprite;
+            set => _sprite = value;
         }
-        #endregion
+        private Vector2Int _worldPosition; 
+        public Vector2Int WorldPos
+        {
+            get => _worldPosition;
+            set => _worldPosition = value;
+        }
 
         private CharacterSheet _playerStats;
         private PlayerEquipment _equipment;

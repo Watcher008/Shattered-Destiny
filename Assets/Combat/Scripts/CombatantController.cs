@@ -1,6 +1,7 @@
 using UnityEngine;
 using SD.Grids;
 using System.Collections;
+using System.Collections.Generic;
 
 /* I will likely need to implement a Blackboard system to handle group strategy logic
  * Most units will just favor straight damage-dealing so that's no major issue
@@ -13,11 +14,27 @@ namespace SD.Combat
     /// <summary>
     /// A class that handles enemy AI logic during combat.
     /// </summary>
-    public class EnemyCombatantController : MonoBehaviour
+    public class CombatantController : MonoBehaviour
     {
         private Combatant _combatant;
-
         private Coroutine _waitCoroutine;
+
+        private Occupant _allies
+        {
+            get
+            {
+                if (_combatant.IsPlayer) return Occupant.Player;
+                return Occupant.Enemy;
+            }
+        }
+        private List<Combatant> Adversaries
+        {
+            get
+            {
+                if (_combatant.IsPlayer) return CombatManager.Instance.EnemyCombatants;
+                return CombatManager.Instance.PlayerCombatants;
+            }
+        }
 
         private void Awake()
         {
@@ -42,7 +59,11 @@ namespace SD.Combat
 
             // Find nearest target
             var target = FindNearest();
-            if (target == null) CombatManager.Instance.EndTurn(_combatant); // all players defeated
+            if (target == null)
+            {
+                CombatManager.Instance.EndTurn(_combatant); // all opponents defeated
+                return;
+            }
 
             // Only available actions is to Move
             if (_combatant.ActionPoints == 0)
@@ -95,17 +116,17 @@ namespace SD.Combat
         private Combatant FindNearest()
         {
             int minDist = int.MaxValue;
-            if (CombatManager.Instance.PlayerCombatants.Count == 0) return null;
+            if (Adversaries.Count == 0) return null;            
 
-            Combatant nearest = CombatManager.Instance.PlayerCombatants[0];
+            Combatant nearest = Adversaries[0];
 
-            foreach (var player in CombatManager.Instance.PlayerCombatants)
+            foreach (var adversary in Adversaries)
             {
-                var dist = Pathfinding.GetNodeDistance(_combatant.Node, player.Node);
+                var dist = Pathfinding.GetNodeDistance(_combatant.Node, adversary.Node);
                 if (dist < minDist)
                 {
                     minDist = dist;
-                    nearest = player;
+                    nearest = adversary;
                 }
             }
             return nearest;
@@ -116,6 +137,11 @@ namespace SD.Combat
         /// </summary>
         private bool WithinAttackRange(Combatant target)
         {
+            if (target == null)
+            {
+                Debug.LogWarning("Target is null");
+                return false;
+            }
             foreach(var art in _combatant.WeaponArts)
             {
                 // Will need to add a variable to arts for if they are offensive or defensive
@@ -156,7 +182,7 @@ namespace SD.Combat
         private bool TryMove(Combatant target)
         {
             // Find the initial path
-            var path = Pathfinding.FindNodePath(_combatant.Node, target.Node, true, Occupant.Enemy);
+            var path = Pathfinding.FindNodePath(_combatant.Node, target.Node, true, _allies);
             if (path == null) return false;
             if (path[0] == _combatant.Node) path.RemoveAt(0);
 
@@ -175,17 +201,17 @@ namespace SD.Combat
             _combatant.Move(path);
 
             if (_waitCoroutine != null) StopCoroutine(_waitCoroutine);
-            _waitCoroutine = StartCoroutine(WaitToAct());
+            _waitCoroutine = StartCoroutine(WaitToAct(false));
             return true;
         }
 
         /// <summary>
         /// Wait for the combatant to finish acting and then re-evaluate options.
         /// </summary>
-        private IEnumerator WaitToAct()
+        private IEnumerator WaitToAct(bool addDelay = true)
         {
             while (_combatant.IsActing) yield return null;
-            yield return new WaitForSeconds(0.5f); // Slight delay between actions
+            if (addDelay) yield return new WaitForSeconds(0.5f); // Slight delay between actions
             EvaluateActions();
         }
     }
