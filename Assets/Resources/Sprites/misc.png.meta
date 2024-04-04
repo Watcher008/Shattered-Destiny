@@ -690,7 +690,7 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -698,6 +698,48 @@ TextureImporter:
       bones: []
       spriteID: 1907505399bb7c846a08bce428049e2e
       internalID: -1593459416
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: backpack
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 112
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 15a35e9ee7a1cf14b801318c553f9778
+      internalID: 809489737
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: equipment
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 112
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b5daf555379c7f54c92d5dd212f29209
+      internalID: -1904047039
       vertices: []
       indices: 
       edges: []
@@ -715,6 +757,7 @@ TextureImporter:
     nameFileIdTable:
       armor: 1620556328
       armor2: -442988068
+      backpack: 809489737
       book: 1309480606
       boots: 1204141666
       boots2: 1336918598
@@ -724,6 +767,7 @@ TextureImporter:
       diamond: -970150729
       dot: 231858709
       enemy: 1990582262
+      equipment: -1904047039
       food: -929394505
       gold: 354503779
       grass: 1447622715

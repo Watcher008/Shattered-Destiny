@@ -143,6 +143,8 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
 
         // Regain all movement
         MovementRemaining = _movement;
+        if (HasEffect<Hurry>()) MovementRemaining += _movement; // 2x if Hurried
+
         CanRest = true;
         Block = 0;
 

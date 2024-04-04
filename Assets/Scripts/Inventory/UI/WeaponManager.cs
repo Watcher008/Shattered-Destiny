@@ -1,5 +1,6 @@
 using SD.Characters;
 using System;
+using System.Net.NetworkInformation;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,6 +16,14 @@ public class WeaponManager : MonoBehaviour
 
     [SerializeField] private Button _selectionPanel;
     [SerializeField] private Button[] _weaponButtons;
+
+    [Header("To be moved")]
+    [SerializeField] private Button _showInventoryButton;
+    [SerializeField] private Button _showWeaponsButton;
+    [SerializeField] private GameObject _inventoryPanel;
+    [SerializeField] private GameObject _miscPanel;
+    [SerializeField] private GameObject _weaponsPanel;
+    [SerializeField] private GameObject _tooltipPanel;
 
     private readonly Color _occupied = new Color(1.0f, 1.0f, 1.0f, 200.0f / 255.0f);
 
@@ -43,6 +52,9 @@ public class WeaponManager : MonoBehaviour
         _leftHandButton.onClick.AddListener(OnSelectLeftHand);
         _selectionPanel.onClick.AddListener(ClosePanel);
 
+        _showInventoryButton.onClick.AddListener(ShowInventoryPanel);
+        _showWeaponsButton.onClick.AddListener(ShowWeaponsPanel);
+
         for (int i = 0; i < _weaponButtons.Length; i++)
         {
             int index = i;
@@ -51,6 +63,8 @@ public class WeaponManager : MonoBehaviour
                 SetWeapon(index);
             });
         }
+
+        ShowInventoryPanel();
     }
 
     private void OnDestroy()
@@ -58,11 +72,37 @@ public class WeaponManager : MonoBehaviour
         _rightHandButton.onClick.RemoveAllListeners();
         _leftHandButton.onClick.RemoveAllListeners();
         _selectionPanel.onClick.RemoveAllListeners();
+        _showInventoryButton.onClick.RemoveAllListeners();
+        _showWeaponsButton.onClick.RemoveAllListeners();
 
         for (int i = 0; i < _weaponButtons.Length; i++)
         {
             _weaponButtons[i].onClick.RemoveAllListeners();
         }
+    }
+
+    private void ShowInventoryPanel()
+    {
+        _inventoryPanel.SetActive(true);
+        _miscPanel.SetActive(true);
+
+        _weaponsPanel.SetActive(false);
+        _tooltipPanel.SetActive(false);
+
+        _showInventoryButton.interactable = false;
+        _showWeaponsButton.interactable = true;
+    }
+
+    private void ShowWeaponsPanel()
+    {
+        _inventoryPanel.SetActive(false);
+        _miscPanel.SetActive(false);
+
+        _weaponsPanel.SetActive(true);
+        _tooltipPanel.SetActive(true);
+
+        _showInventoryButton.interactable = true;
+        _showWeaponsButton.interactable = false;
     }
 
     /// <summary>
