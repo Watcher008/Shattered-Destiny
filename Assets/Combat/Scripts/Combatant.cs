@@ -132,9 +132,10 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
         transform.position = new Vector3(node.X, 0, node.Y);
     }
 
-    public void OnTurnStart()
+    public void OnTurnStart(bool regainAP)
     {
-        if (!HasEffect<Stun>())
+        // Do not regain AP on first round
+        if (!HasEffect<Stun>() && regainAP)
         {
             // Regain action points, up to max
             ActionPoints = Mathf.Clamp(ActionPoints + _refreshedActionPoints, 0, MaxActionPoints);

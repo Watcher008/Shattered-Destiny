@@ -45,6 +45,8 @@ namespace SD.Combat
         public List<Combatant> EnemyCombatants { get; private set; } = new();
         #endregion
 
+        private int _currentRound;
+
         #region - Testing -
         [Header("Testing")]
         [SerializeField] private Button _endCombatButton;
@@ -81,6 +83,8 @@ namespace SD.Combat
             _interface.AddPortraits();
 
             yield return new WaitForSeconds(1.5f);
+
+            _currentRound = 1;
 
             OnStartTurn(Combatants[0]);
         }
@@ -180,7 +184,7 @@ namespace SD.Combat
         {
             //Debug.Log("Turn start for " + combatant.gameObject.name);
             CurrentActor = combatant;
-            CurrentActor.OnTurnStart();
+            CurrentActor.OnTurnStart(_currentRound > 1);
             _interface.OnNewActor();
         }
 
@@ -190,7 +194,11 @@ namespace SD.Combat
 
             int index = Combatants.IndexOf(CurrentActor) + 1;
 
-            if (index >= Combatants.Count) index = 0;
+            if (index >= Combatants.Count)
+            {
+                _currentRound++;
+                index = 0;
+            }
 
             OnStartTurn(Combatants[index]);
         }

@@ -69,43 +69,45 @@ namespace SD.Characters
             set => _equipment = value;
         }
 
-        public WeaponTypes RightHand
+        public WeaponTypes RightHand => _rightHand;
+        public WeaponTypes LeftHand => _leftHand;
+
+        public void SetWeapon(WeaponTypes weapon, Hand hand)
         {
-            get => _rightHand;
-            set
+            if (weapon == WeaponTypes.None) return;
+
+            // Set weapon
+            if (hand == Hand.Right) _rightHand = weapon;
+            else _leftHand = weapon;
+
+            // If two handed, empty other hand
+            if (IsTwoHanded(weapon))
             {
-                // Can't have nothing in right hand
-                if (value == WeaponTypes.None) return;
-                // Also can't have shield
-                if (value == WeaponTypes.Shield) return;
+                if (hand == Hand.Right) _leftHand = WeaponTypes.None;
+                else _rightHand = WeaponTypes.None;
+            }
 
-                _rightHand = value;
+            if (_rightHand != _leftHand) return;
 
-                // two-handed weapons
-                if (_rightHand == WeaponTypes.Warhammer) _leftHand = _rightHand;
-                else if (_rightHand == WeaponTypes.Bow) _leftHand = _rightHand;
-                else if (_rightHand == WeaponTypes.Staff) _leftHand = _rightHand;
-                else if (_leftHand == _rightHand) _leftHand = WeaponTypes.None;
-                else // Equipped a one-handed weapon
-                {
-                    if (_leftHand == WeaponTypes.Warhammer || _leftHand == WeaponTypes.Bow || _leftHand == WeaponTypes.Staff)
-                    {
-                        _leftHand = WeaponTypes.None;
-                    }
-                }
+            // Handle wielding same weapon twice, default to sword or shield
+            if (hand == Hand.Right)
+            {
+                if (weapon == WeaponTypes.Sword) _leftHand = WeaponTypes.Shield;
+                else _leftHand = WeaponTypes.Sword;
+            }
+            else
+            {
+                if (weapon == WeaponTypes.Sword) _rightHand = WeaponTypes.Shield;
+                else _rightHand = WeaponTypes.Sword;
             }
         }
 
-        public WeaponTypes LeftHand
+        private bool IsTwoHanded(WeaponTypes weapon)
         {
-            get => _leftHand;
-            set
-            {
-                // Have to equip two-handed weapons through right hand
-                if (value == WeaponTypes.Warhammer || value == WeaponTypes.Bow || value == WeaponTypes.Staff) return;
-                 
-                _leftHand = value;
-            }
+            if (weapon == WeaponTypes.Warhammer) return true;
+            if (weapon == WeaponTypes.Staff) return true;
+            if (weapon == WeaponTypes.Bow) return true;
+            return false;
         }
 
 
@@ -122,6 +124,8 @@ namespace SD.Characters
         }
     }
 }
+
+public enum Hand { Right, Left };
 
 public enum WeaponTypes
 {

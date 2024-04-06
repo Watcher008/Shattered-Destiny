@@ -16,3 +16,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 95857505370d8f94191140b764ef5b97, type: 2}
   developerNotes: 
   _playerData: {fileID: 11400000, guid: 964da513a2d1311478cf1791204336b2, type: 2}
+  _weaponData: {fileID: 11400000, guid: cf5af98684926e548aa2f748aad22401, type: 2}

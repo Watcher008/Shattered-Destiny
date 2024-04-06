@@ -10,7 +10,10 @@ namespace SD.CommandSystem
     [CreateAssetMenu(menuName = "Command System/New Game Command")]
     public class NewGameCommand : CommandBase
     {
+        [Space]
+
         [SerializeField] private PlayerData _playerData;
+        [SerializeField] private PlayerWeaponData _weaponData;
 
         private int[] defaultStats = { 15, 15, 15, 15 };
         private int[] defaultXP = { 0, 0, 0, 0 };
@@ -30,6 +33,10 @@ namespace SD.CommandSystem
             _playerData.PlayerStats = new CharacterSheet(defaultStats, defaultXP, 5, 5, 3, 1);
             _playerData.Inventory = new Inventory(new Vector2Int(8, 10));
             _playerData.PlayerEquip = new PlayerEquipment(_playerData);
+
+            _weaponData.Init();
+            _weaponData.SetWeapon(WeaponTypes.Sword, Hand.Right);
+            _weaponData.SetWeapon(WeaponTypes.Shield, Hand.Left);
 
             return true;
         }
