@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71ee0020c245a204199dd78791fdae57, type: 3}
   m_Name: Pierce
   m_EditorClassIdentifier: 
+  _type: 1
   _actionPointCost: 2
   _range: 2
   _description: 
+  _sprite: {fileID: 0}

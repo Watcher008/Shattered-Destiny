@@ -5,11 +5,16 @@ namespace SD.Combat.WeaponArts
 {
     public abstract class WeaponArt : ScriptableObject
     {
+        [SerializeField] private WeaponTypes _type;
+
+        [Space]
+
         [SerializeField] protected int _actionPointCost;
         [SerializeField] protected int _range;
         [SerializeField] private string _description;
         [SerializeField] private Sprite _sprite;
 
+        public WeaponTypes Type => _type;
         public int Cost => _actionPointCost;
         public int Range => _range;
         public Sprite Sprite => _sprite;

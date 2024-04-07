@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5350ce7dbb47cde40a830775868853e6, type: 3}
   m_Name: Coup De Grace
   m_EditorClassIdentifier: 
+  _type: 3
   _actionPointCost: 3
   _range: 1
   _description: 
+  _sprite: {fileID: 0}

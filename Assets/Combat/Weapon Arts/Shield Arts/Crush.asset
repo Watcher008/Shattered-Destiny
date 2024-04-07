@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78e6da7db064bd74e886069c9df2625b, type: 3}
   m_Name: Crush
   m_EditorClassIdentifier: 
+  _type: 2
   _actionPointCost: 1
   _range: 1
   _description: 
+  _sprite: {fileID: 0}

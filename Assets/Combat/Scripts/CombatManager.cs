@@ -9,6 +9,7 @@ using TMPro;
 using SD.Grids;
 using SD.Characters;
 using SD.Combat.WeaponArts;
+using SD.Combat.Effects;
 
 namespace SD.Combat
 {
@@ -46,6 +47,8 @@ namespace SD.Combat
         #endregion
 
         private int _currentRound;
+
+        private List<ActiveAreaEffect> _areaEffects = new();
 
         #region - Testing -
         [Header("Testing")]
@@ -180,6 +183,22 @@ namespace SD.Combat
         }
 
         #region - Turn Handling -
+        private void OnNewRound()
+        {
+            _currentRound++;
+
+            // Decrement effects
+            for (int i = _areaEffects.Count - 1; i >= 0; i--)
+            {
+                _areaEffects[i].Duration--;
+                if (_areaEffects[i].Duration <= 0)
+                {
+                    _areaEffects.RemoveAt(i);
+                    // Destroy any visual effects
+                }
+            }
+        }
+
         private void OnStartTurn(Combatant combatant)
         {
             //Debug.Log("Turn start for " + combatant.gameObject.name);
@@ -196,7 +215,7 @@ namespace SD.Combat
 
             if (index >= Combatants.Count)
             {
-                _currentRound++;
+                OnNewRound();
                 index = 0;
             }
 
@@ -229,6 +248,30 @@ namespace SD.Combat
         }
         #endregion
 
+        #region - Area Effects -
+        public void AddNewAreaEffect(AreaEffects effect, int duration, List<PathNode> area)
+        {
+            _areaEffects.Add(new ActiveAreaEffect(effect, duration, area));
+            // Add any visual effects
+        }
+
+        public bool NodeHasEffect<T>(PathNode node, out ActiveAreaEffect areaEffect) where T : AreaEffects
+        {
+            areaEffect = null;
+            foreach(var effect in _areaEffects)
+            {
+                if (effect.Effect is T && effect.Area.Contains(node))
+                {
+                    areaEffect = effect;
+                    return true;
+
+                }
+            }
+            return false;
+        }
+
+        #endregion
+
         public bool CheckNode(PathNode node, out Combatant combatant)
         {
             combatant = null;
@@ -250,9 +293,24 @@ namespace SD.Combat
         public bool AttackHits(Combatant attacker, Combatant target)
         {
             // OP Auto-hit
-            if (attacker.HasEffect<Focused>()) return true;
+            if (attacker.HasEffect<Effect_Focused>()) return true;
 
             float chanceToHit = 0.8f; // - 0.05f * attacker.Weapon.Tier
+
+            // Rolling to hit the terrain
+            if (target == null)
+            {
+                bool hits = Random.value <= chanceToHit;
+                if (!hits) Debug.Log("Attack miss!");
+                return hits;
+            }
+
+            // Check for Barrier effect and apply if present
+            if (NodeHasEffect<Effect_Barrier>(target.Node, out var areaEffect))
+            {
+                if (!areaEffect.Area.Contains(attacker.Node)) return false;
+            }
+
 
             // Bonus to hit if attacker is in a Mountain tile
             if (attacker.Node.Terrain == TerrainType.Mountain) chanceToHit += 0.2f;

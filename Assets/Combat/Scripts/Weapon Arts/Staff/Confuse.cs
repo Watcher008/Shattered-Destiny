@@ -12,7 +12,7 @@ namespace SD.Combat.WeaponArts
             {
                 if (CombatManager.Instance.AttackHits(combatant, target))
                 {
-                    target.AddEffect(new Confuse_Effect());
+                    target.AddEffect(new Effect_Confused());
                 }
 
                 combatant.SpendActionPoints(_actionPointCost);

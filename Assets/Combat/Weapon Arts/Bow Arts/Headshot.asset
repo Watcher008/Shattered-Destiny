@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1fa0075c38e9944ebf1079b4d4ed671, type: 3}
   m_Name: Headshot
   m_EditorClassIdentifier: 
+  _type: 4
   _actionPointCost: 2
   _range: 10
   _description: 
+  _sprite: {fileID: 0}

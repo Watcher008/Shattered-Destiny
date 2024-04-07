@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eacb60f9dfc613a4f8973986090e4ca6, type: 3}
   m_Name: Chain Lightning
   m_EditorClassIdentifier: 
+  _type: 5
   _actionPointCost: 3
   _range: 10
   _description: 
+  _sprite: {fileID: 0}

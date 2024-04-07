@@ -118,5 +118,19 @@ namespace SD.Characters
             int weaponTier = _weaponTiers[(int)weapon];
             return _slotsPerTier[weaponTier];
         }
+
+        public bool LearnArt(WeaponArt art)
+        {
+            if (art == null) return false;
+
+            if (_knownWeaponArts[art.Type].Contains(art))
+            {
+                Debug.Log("This art is already known");
+                return false;
+            }
+
+            _knownWeaponArts[art.Type].Add(art);
+            return true;
+        }
     }
 }

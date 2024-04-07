@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aeed2cc1b156edd4090b0947b7f3380d, type: 3}
   m_Name: Confuse
   m_EditorClassIdentifier: 
+  _type: 5
   _actionPointCost: 3
   _range: 10
   _description: 
+  _sprite: {fileID: 0}

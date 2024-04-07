@@ -1,4 +1,5 @@
 using SD.Characters;
+using SD.Combat.WeaponArts;
 using SD.Inventories;
 using UnityEngine;
 
@@ -14,6 +15,11 @@ namespace SD.CommandSystem
 
         [SerializeField] private PlayerData _playerData;
         [SerializeField] private PlayerWeaponData _weaponData;
+
+        [Space]
+
+        [SerializeField] private WeaponArt[] _startingArts;
+
 
         private int[] defaultStats = { 15, 15, 15, 15 };
         private int[] defaultXP = { 0, 0, 0, 0 };
@@ -37,6 +43,11 @@ namespace SD.CommandSystem
             _weaponData.Init();
             _weaponData.SetWeapon(WeaponTypes.Sword, Hand.Right);
             _weaponData.SetWeapon(WeaponTypes.Shield, Hand.Left);
+
+            for (int i = 0; i < _startingArts.Length; i++)
+            {
+                _weaponData.LearnArt(_startingArts[i]);
+            }
 
             return true;
         }

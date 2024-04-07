@@ -21,7 +21,7 @@ namespace SD.Combat.WeaponArts
                     {
                         if (unit.IsPlayer == combatant.IsPlayer)
                         {
-                            unit.AddEffect(new Reinforced());
+                            unit.AddEffect(new Effect_Reinforced());
                             return;
                         }
                         else

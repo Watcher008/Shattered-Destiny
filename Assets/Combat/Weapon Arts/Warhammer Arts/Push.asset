@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bbbcc45fe13d9947a185580521206bb, type: 3}
   m_Name: Push
   m_EditorClassIdentifier: 
+  _type: 3
   _actionPointCost: 2
   _range: 1
   _description: 
+  _sprite: {fileID: 0}

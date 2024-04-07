@@ -38,9 +38,6 @@ namespace SD.Characters
         private int _marchSpeed;
         private int _exhaustion;
 
-        private WeaponTypes _rightHand = WeaponTypes.Sword;
-        private WeaponTypes _leftHand = WeaponTypes.Shield;
-
         public List<CharacterSheet> Companions => _companions;
         public int MarchSpeed
         {
@@ -68,48 +65,6 @@ namespace SD.Characters
             get => _equipment;
             set => _equipment = value;
         }
-
-        public WeaponTypes RightHand => _rightHand;
-        public WeaponTypes LeftHand => _leftHand;
-
-        public void SetWeapon(WeaponTypes weapon, Hand hand)
-        {
-            if (weapon == WeaponTypes.None) return;
-
-            // Set weapon
-            if (hand == Hand.Right) _rightHand = weapon;
-            else _leftHand = weapon;
-
-            // If two handed, empty other hand
-            if (IsTwoHanded(weapon))
-            {
-                if (hand == Hand.Right) _leftHand = WeaponTypes.None;
-                else _rightHand = WeaponTypes.None;
-            }
-
-            if (_rightHand != _leftHand) return;
-
-            // Handle wielding same weapon twice, default to sword or shield
-            if (hand == Hand.Right)
-            {
-                if (weapon == WeaponTypes.Sword) _leftHand = WeaponTypes.Shield;
-                else _leftHand = WeaponTypes.Sword;
-            }
-            else
-            {
-                if (weapon == WeaponTypes.Sword) _rightHand = WeaponTypes.Shield;
-                else _rightHand = WeaponTypes.Sword;
-            }
-        }
-
-        private bool IsTwoHanded(WeaponTypes weapon)
-        {
-            if (weapon == WeaponTypes.Warhammer) return true;
-            if (weapon == WeaponTypes.Staff) return true;
-            if (weapon == WeaponTypes.Bow) return true;
-            return false;
-        }
-
 
         /// <summary>
         /// Regain health for all party members during rest.

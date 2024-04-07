@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1920
     height: 1037
   m_ShowMode: 4
-  m_Title: Hierarchy
+  m_Title: Inspector
   m_RootView: {fileID: 2}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -120,7 +120,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 100}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 90
+  controlID: 157
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -222,7 +222,7 @@ MonoBehaviour:
   m_MinSize: {x: 100, y: 100}
   m_MaxSize: {x: 8096, y: 16192}
   vertical: 1
-  controlID: 91
+  controlID: 98
 --- !u!114 &10
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -233,7 +233,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 1
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: GameView
+  m_Name: SceneView
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
@@ -242,16 +242,16 @@ MonoBehaviour:
     y: 0
     width: 1203
     height: 726
-  m_MinSize: {x: 102, y: 121}
+  m_MinSize: {x: 202, y: 221}
   m_MaxSize: {x: 4002, y: 4021}
-  m_ActualView: {fileID: 16}
+  m_ActualView: {fileID: 19}
   m_Panes:
   - {fileID: 19}
   - {fileID: 16}
   - {fileID: 15}
   - {fileID: 13}
-  m_Selected: 1
-  m_LastSelected: 0
+  m_Selected: 0
+  m_LastSelected: 1
 --- !u!114 &11
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -445,7 +445,7 @@ MonoBehaviour:
   watches: []
   autoUpdateWatches: 0
   watchUpdateFrequency: 1
-  nextWatchUpdateTime: 2136.6114814000002
+  nextWatchUpdateTime: 30586.0629446
   watchableVariableNames:
   - Actor
   - ActorIndex
@@ -818,7 +818,7 @@ MonoBehaviour:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: 5aa2ffff9cccffff58dfffff12fbffff0e7c0000747d0000fa7d0000
+      m_ExpandedIDs: b404fffff452ffff9857ffffb658fffffc5affff405fffff32bbffff4cc9ffff68cdffff06d1ffff1eddffff54ddffffeee4ffff42e6ffffdee9ffffb2efffff02f0fffff0f8ffff48f9ffff12fbffff429a0000d49a0000949b00003c9e0000ce9e00008e9f000046b3000070b30000c4b30000d8b30000ecb300008eb4000098b40000c2b4000032b5000004b60000f8ce000028cf000072cf000036d8000060d80000b4d80000dcd8000086d900000cf400003cf4000086f4000078490100a2490100de4a0100f84a0100224b0100324b0100564b0100a84b0100ca4b0100144c0100804c0100
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -887,7 +887,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Resources/Sprites
+    - Assets/Scenes/Game Scenes/UI
     m_Globs: []
     m_OriginalText: 
     m_ImportLogFlags: 0
@@ -903,7 +903,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: ae640000
     m_LastClickedID: 25774
-    m_ExpandedIDs: 000000006e82000070820000728200007482000076820000788200007a8200007c8200007e82000080820000828200008482000086820000888200008a8200008c8200008e820000
+    m_ExpandedIDs: 000000000e83000010830000128300001483000016830000188300001a8300001c8300001e8300002083000022830000248300002683000028830000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -928,10 +928,10 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_AssetTreeState:
-    scrollPos: {x: 0, y: 0}
+    scrollPos: {x: 0, y: 666}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: ffffffff000000006e82000070820000728200007482000076820000788200007a8200007c8200007e820000848200008c8200008e820000dc82000058b50000
+    m_ExpandedIDs: ffffffff000000000e830000108300001283000014830000168300001a8300002083000026830000288300002c830000b2850000bc850000c4850000c6850000c8850000ce850000da850000788d0000848d0000c8b600009aee000096120100
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1343,9 +1343,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 855.3378, y: 525.3161, z: -1.8489572}
+    m_Target: {x: 895.8372, y: 530.3202, z: -0.24797499}
     speed: 2
-    m_Value: {x: 855.3378, y: 525.3161, z: -1.8489572}
+    m_Value: {x: 931.6295, y: 522.27, z: -0.5282841}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -1395,9 +1395,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 754.98083
+    m_Target: 594.88275
     speed: 2
-    m_Value: 754.98083
+    m_Value: 622.9139
   m_Ortho:
     m_Target: 1
     speed: 2

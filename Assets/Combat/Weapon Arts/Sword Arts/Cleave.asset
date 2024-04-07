@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c4718e6dc1c8d74ca094efccf2f9b32, type: 3}
   m_Name: Cleave
   m_EditorClassIdentifier: 
+  _type: 1
   _actionPointCost: 2
   _range: 1
   _description: 
+  _sprite: {fileID: 0}

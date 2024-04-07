@@ -20,7 +20,7 @@ namespace SD.Combat.WeaponArts
                     if (CombatManager.Instance.CheckNode(newNode, out var nextTarget))
                     {
                         if (nextTarget.IsPlayer != combatant.IsPlayer) continue;
-                        nextTarget.AddEffect(new Empowered());
+                        nextTarget.AddEffect(new Effect_Empowered());
                         nextTarget.AddEffect(new Hardened());
                     }
                 }
