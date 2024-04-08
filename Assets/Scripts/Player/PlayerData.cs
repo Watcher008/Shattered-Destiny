@@ -1,15 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using SD.Inventories;
-using SD.Combat.WeaponArts;
 
 namespace SD.Characters
 {
     [CreateAssetMenu(menuName = "Scriptable Objects/Player Data", fileName = "Player Data")]
     public class PlayerData : ScriptableObject
     {
-        public List<WeaponArt> WeaponArts = new List<WeaponArt>();
-
         private string _name;
         public string Name
         {
@@ -37,9 +34,6 @@ namespace SD.Characters
 
         private int _marchSpeed;
         private int _exhaustion;
-
-        private WeaponTypes _rightHand = WeaponTypes.Sword;
-        private WeaponTypes _leftHand = WeaponTypes.Shield;
 
         public List<CharacterSheet> Companions => _companions;
         public int MarchSpeed
@@ -69,46 +63,6 @@ namespace SD.Characters
             set => _equipment = value;
         }
 
-        public WeaponTypes RightHand
-        {
-            get => _rightHand;
-            set
-            {
-                // Can't have nothing in right hand
-                if (value == WeaponTypes.None) return;
-                // Also can't have shield
-                if (value == WeaponTypes.Shield) return;
-
-                _rightHand = value;
-
-                // two-handed weapons
-                if (_rightHand == WeaponTypes.Warhammer) _leftHand = _rightHand;
-                else if (_rightHand == WeaponTypes.Bow) _leftHand = _rightHand;
-                else if (_rightHand == WeaponTypes.Staff) _leftHand = _rightHand;
-                else if (_leftHand == _rightHand) _leftHand = WeaponTypes.None;
-                else // Equipped a one-handed weapon
-                {
-                    if (_leftHand == WeaponTypes.Warhammer || _leftHand == WeaponTypes.Bow || _leftHand == WeaponTypes.Staff)
-                    {
-                        _leftHand = WeaponTypes.None;
-                    }
-                }
-            }
-        }
-
-        public WeaponTypes LeftHand
-        {
-            get => _leftHand;
-            set
-            {
-                // Have to equip two-handed weapons through right hand
-                if (value == WeaponTypes.Warhammer || value == WeaponTypes.Bow || value == WeaponTypes.Staff) return;
-                 
-                _leftHand = value;
-            }
-        }
-
-
         /// <summary>
         /// Regain health for all party members during rest.
         /// </summary>
@@ -121,15 +75,4 @@ namespace SD.Characters
             }
         }
     }
-}
-
-public enum WeaponTypes
-{
-    None,
-    Sword,
-    Shield,
-    Warhammer,
-    Bow,
-    Staff,
-    Book
 }

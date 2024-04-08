@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c151b7d8e11f844781885e83f28c767, type: 3}
   m_Name: Magic Bolt
   m_EditorClassIdentifier: 
+  _type: 5
   _actionPointCost: 2
   _range: 10
   _description: 
+  _sprite: {fileID: 0}

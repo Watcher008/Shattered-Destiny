@@ -1,21 +1,35 @@
 using SD.Characters;
 using System;
+using System.Net.NetworkInformation;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class WeaponManager : MonoBehaviour
 {
-    [SerializeField] private PlayerData _playerData;
+    [SerializeField] private PlayerWeaponData _playerWeapons;
     
     [SerializeField] private Button _rightHandButton;
     [SerializeField] private Button _leftHandButton;
 
     private Image _rightHandImage;
     private Image _leftHandImage;
+    [SerializeField] private Image _rightHandImage02;
+    [SerializeField] private Image _leftHandImage02;
 
-    [SerializeField] private Button _selectionPanel;
+    [SerializeField] private Button _cancelSelectButton;
     [SerializeField] private Button[] _weaponButtons;
 
+    [Space]
+
+    [SerializeField] private Image[] _rightHandWeaponArts;
+    [SerializeField] private Image[] _leftHandWeaponArts;
+
+    [Space]
+
+    [SerializeField] private RectTransform _rightHandPoolParent;
+    [SerializeField] private RectTransform _leftHandPoolParent;
+
+    [SerializeField] private Sprite _lock;
     private readonly Color _occupied = new Color(1.0f, 1.0f, 1.0f, 200.0f / 255.0f);
 
     private readonly string[] _spritePaths =
@@ -29,35 +43,37 @@ public class WeaponManager : MonoBehaviour
         "misc/book",
     };
 
-    private enum Hand { Right, Left };
     private Hand _hand;
 
     private void Awake()
     {
-        _rightHandImage = _rightHandButton.transform.GetChild(0).GetComponent<Image>();
-        _leftHandImage = _leftHandButton.transform.GetChild(0).GetComponent<Image>();
-
-        UpdateWeaponSprites();
+        _rightHandImage = _rightHandButton.GetComponent<Image>();
+        _leftHandImage = _leftHandButton.GetComponent<Image>();
 
         _rightHandButton.onClick.AddListener(OnSelectRightHand);
         _leftHandButton.onClick.AddListener(OnSelectLeftHand);
-        _selectionPanel.onClick.AddListener(ClosePanel);
+
+        _cancelSelectButton.image.raycastTarget = false;
 
         for (int i = 0; i < _weaponButtons.Length; i++)
         {
             int index = i;
+            _weaponButtons[index].interactable = false;
             _weaponButtons[index].onClick.AddListener(delegate
             {
-                SetWeapon(index);
+                // The first item in enum is None - reserved for two-handed weapons
+                SetWeapon(index + 1);
             });
         }
+
+        UpdateWeapons();
     }
 
     private void OnDestroy()
     {
+        _cancelSelectButton.onClick.RemoveAllListeners();
         _rightHandButton.onClick.RemoveAllListeners();
         _leftHandButton.onClick.RemoveAllListeners();
-        _selectionPanel.onClick.RemoveAllListeners();
 
         for (int i = 0; i < _weaponButtons.Length; i++)
         {
@@ -65,68 +81,126 @@ public class WeaponManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Updates the weapon sprites to reflect player's currenlty equipped loadout.
-    /// </summary>
-    private void UpdateWeaponSprites()
-    {
-        _rightHandImage.sprite = SpriteHelper.GetSprite(_spritePaths[(int)_playerData.RightHand]);
-        _leftHandImage.sprite = SpriteHelper.GetSprite(_spritePaths[(int)_playerData.LeftHand]);
-
-        bool twoHanded = _playerData.RightHand == _playerData.LeftHand;
-
-        // Set lower opacity on left hand to show that it's occupied by the right hand weapon
-        _leftHandImage.color = twoHanded ? _occupied : Color.white;
-        // If right hand has two-handed weapon, have to change that first
-        _leftHandButton.interactable = !twoHanded;
-    }
-
     private void OnSelectRightHand()
     {
         _hand = Hand.Right;
-        _selectionPanel.gameObject.SetActive(true);
-
-        // This one should be fairly straightforward
-        // The only thing that the player can't equip in their right hand is Nothing and the Shield
 
         for (int i = 0; i < _weaponButtons.Length; i++)
         {
-            _weaponButtons[i].gameObject.SetActive(true);
+            _weaponButtons[i].interactable = true;
         }
-        _weaponButtons[(int)WeaponTypes.None].gameObject.SetActive(false);
-        _weaponButtons[(int)WeaponTypes.Shield].gameObject.SetActive(false);
     }
 
     private void OnSelectLeftHand()
     {
         _hand = Hand.Left;
-        _selectionPanel.gameObject.SetActive(true);
 
         for (int i = 0; i < _weaponButtons.Length; i++)
         {
-            _weaponButtons[i].gameObject.SetActive(true);
+            _weaponButtons[i].interactable = true;
         }
-
-        // Have to equip two-handed weapons through right hand selection
-        _weaponButtons[(int)WeaponTypes.Warhammer].gameObject.SetActive(false);
-        _weaponButtons[(int)WeaponTypes.Bow].gameObject.SetActive(false);
-        _weaponButtons[(int)WeaponTypes.Staff].gameObject.SetActive(false);
-
-        // Can't equip the same as whatever is in the right hand (sword, book)
-        _weaponButtons[(int)_playerData.RightHand].gameObject.SetActive(false);
     }
 
     private void SetWeapon(int index)
     {
-        if (_hand == Hand.Right) _playerData.RightHand = (WeaponTypes)index;
-        else _playerData.LeftHand = (WeaponTypes)index;
+        _playerWeapons.SetWeapon((WeaponTypes)index, _hand);
+        UpdateWeapons();
 
-        UpdateWeaponSprites();
-        _selectionPanel.gameObject.SetActive(false);
+        for (int i = 0; i < _weaponButtons.Length; i++)
+        {
+            _weaponButtons[i].interactable = false;
+        }
     }
 
-    private void ClosePanel()
+    private void UpdateWeapons()
     {
-        _selectionPanel.gameObject.SetActive(false);
+        UpdateWeaponSprites();
+        UpdateWeaponArts();
+    }
+
+    /// <summary>
+    /// Updates the weapon sprites to reflect player's currenlty equipped loadout.
+    /// </summary>
+    private void UpdateWeaponSprites()
+    {
+        _rightHandImage.color = Color.white;
+        _rightHandImage02.color = Color.white;
+        _leftHandImage.color = Color.white;
+        _leftHandImage02.color = Color.white;
+
+        var right = _playerWeapons.RightHand == WeaponTypes.None ? _playerWeapons.LeftHand : _playerWeapons.RightHand;
+        var left = _playerWeapons.LeftHand == WeaponTypes.None ? _playerWeapons.RightHand : _playerWeapons.LeftHand;
+
+        var rightSprite = SpriteHelper.GetSprite(_spritePaths[(int)right]);
+        var leftSprite = SpriteHelper.GetSprite(_spritePaths[(int)left]);
+
+        _rightHandImage.sprite = rightSprite;
+        _rightHandImage02.sprite = rightSprite;
+
+        _leftHandImage.sprite = leftSprite;
+        _leftHandImage02.sprite = leftSprite;
+
+        // Set lower opacity on empty hand to show that it's occupied by the other hand weapon
+        if (right == WeaponTypes.None)
+        {
+            _rightHandImage.color = _occupied;
+            _rightHandImage02.color = _occupied;
+        }
+        else if (left == WeaponTypes.None)
+        {
+            _leftHandImage.color = _occupied;
+            _leftHandImage02.color = _occupied;
+        }
+    }
+
+    private void UpdateWeaponArts()
+    {
+        // Right Hand
+        for (int i = 0; i < _rightHandWeaponArts.Length; i++)
+        {
+            if (i >= _playerWeapons.RightHandArts.Length)
+            {
+                _rightHandWeaponArts[i].sprite = _lock;
+                continue;
+            }
+
+            // This will need to become a specific UI element to handle tooltips, drag and drop, etc.
+            if (_playerWeapons.RightHandArts[i] != null)
+            {
+                _rightHandWeaponArts[i].sprite = _playerWeapons.RightHandArts[i].Sprite;
+            }
+            else
+            {
+                _rightHandWeaponArts[i].sprite = null;
+            }
+        }
+
+        // Left Hand
+        for (int i = 0; i < _leftHandWeaponArts.Length; i++)
+        {
+            if (i >= _playerWeapons.LeftHandArts.Length)
+            {
+                _leftHandWeaponArts[i].sprite = _lock;
+                continue;
+            }
+
+            if (_playerWeapons.LeftHandArts[i] != null)
+            {
+                _leftHandWeaponArts[i].sprite = _playerWeapons.LeftHandArts[i].Sprite;
+            }
+            else
+            {
+                _leftHandWeaponArts[i].sprite = null;
+            }
+        }
+
+        // Spawn in 
+    }
+
+
+
+    private void OnCancelSelection()
+    {
+
     }
 }

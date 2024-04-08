@@ -4,12 +4,12 @@ namespace SD.Combat
 {
     public abstract class StatusEffects { }
 
-    public class ActiveEffect
+    public class ActiveStatusEffect
     {
         public StatusEffects Effect;
         public int Duration;
 
-        public ActiveEffect(StatusEffects effect, int duration)
+        public ActiveStatusEffect(StatusEffects effect, int duration)
         {
             Effect = effect;
             Duration = duration;
@@ -30,13 +30,13 @@ namespace SD.Combat
     /// <summary>
     /// Movement costs 2x per 1 tile moved.
     /// </summary>
-    public class Slow : StatusEffects { }
+    public class Effect_Slowed : StatusEffects { }
 
     /// <summary>
     /// Unit uses all movement randomly.
     /// Unit uses 1/3 of their action points on random weapon arts towards random targets.
     /// </summary>
-    public class Confuse_Effect : StatusEffects { }
+    public class Effect_Confused : StatusEffects { }
 
     /// <summary>
     /// Unit does 25% less damage.
@@ -56,24 +56,24 @@ namespace SD.Combat
     /// <summary>
     /// Applies a random debuff every turn.
     /// </summary>
-    public class Cursed : StatusEffects { }
+    public class Effect_Cursed : StatusEffects { }
     #endregion
 
     #region - Buffs -
     /// <summary>
     /// Unit does not have miss chance.
     /// </summary>
-    public class Focused : StatusEffects { }
+    public class Effect_Focused : StatusEffects { }
 
     /// <summary>
     /// Unit does 25% more damage.
     /// </summary>
-    public class Empowered : StatusEffects { }
+    public class Effect_Empowered : StatusEffects { }
 
     /// <summary>
     /// Unit takes 25% less damage. 
     /// </summary>
-    public class Reinforced : StatusEffects { }
+    public class Effect_Reinforced : StatusEffects { }
 
     /// <summary>
     /// Unit has 25% less chance to be affected by any ranged ability.
@@ -82,7 +82,7 @@ namespace SD.Combat
     /// <summary>
     /// Doubles the movement of the unit.
     /// </summary>
-    public class Hurry : StatusEffects { }
+    public class Effect_Hurried : StatusEffects { }
     #endregion
 }
 

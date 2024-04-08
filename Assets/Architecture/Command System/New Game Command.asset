@@ -16,3 +16,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 95857505370d8f94191140b764ef5b97, type: 2}
   developerNotes: 
   _playerData: {fileID: 11400000, guid: 964da513a2d1311478cf1791204336b2, type: 2}
+  _weaponData: {fileID: 11400000, guid: cf5af98684926e548aa2f748aad22401, type: 2}
+  _startingArts:
+  - {fileID: 11400000, guid: 0e963d9d48a53e048a757917427917ce, type: 2}
+  - {fileID: 11400000, guid: eb99e4f297490d64597a8b6d5463409c, type: 2}
+  - {fileID: 11400000, guid: ac28576c9b8721c488139d850c92f7a1, type: 2}
+  - {fileID: 11400000, guid: 83f606c3cd414e544ae53cc6db608e78, type: 2}
+  - {fileID: 11400000, guid: 1c6ebe2ca72a4014aa57b40e12480a75, type: 2}
+  - {fileID: 11400000, guid: 8a8c8531887fc9842ab13b367274fd9c, type: 2}

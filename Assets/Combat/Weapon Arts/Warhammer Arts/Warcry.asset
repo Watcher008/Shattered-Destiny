@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cae094173e420a441a6ea891e9af9dc9, type: 3}
   m_Name: Warcry
   m_EditorClassIdentifier: 
+  _type: 3
   _actionPointCost: 1
   _range: 10
   _description: 
+  _sprite: {fileID: 0}

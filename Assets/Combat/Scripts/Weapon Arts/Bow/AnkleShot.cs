@@ -18,7 +18,7 @@ namespace SD.Combat.WeaponArts
                 {
                     int dmg = combatant.GetAttributeBonus(Attributes.Physicality) * MODIFIER;
                     combatant.DealDamage(dmg, target);
-                    target.AddEffect(new Slow(), DURATION);
+                    target.AddEffect(new Effect_Slowed(), DURATION);
                 }
 
                 combatant.SpendActionPoints(_actionPointCost);

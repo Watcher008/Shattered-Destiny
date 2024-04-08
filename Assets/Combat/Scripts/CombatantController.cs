@@ -2,6 +2,7 @@ using UnityEngine;
 using SD.Grids;
 using System.Collections;
 using System.Collections.Generic;
+using static UnityEngine.GraphicsBuffer;
 
 /* I will likely need to implement a Blackboard system to handle group strategy logic
  * Most units will just favor straight damage-dealing so that's no major issue
@@ -42,11 +43,48 @@ namespace SD.Combat
             _combatant.onTurnStart += OnTurnStart;
         }
 
-        private void OnTurnStart()
+        private void OnDestroy()
         {
-            EvaluateActions();
+            _combatant.onTurnStart -= OnTurnStart;
         }
 
+        private void OnTurnStart() => EvaluateActions();
+
+
+        // Just trying to clean up the EvaluateAction function
+        private void Foo()
+        {
+            if (_combatant.ActionPoints == 0 && _combatant.CanRest) _combatant.OnRest();
+            else if (FindNearest(out var nearest))
+            {
+                if (_combatant.ActionPoints == 0)
+                {
+                    // Cannot move
+                    if (_combatant.MovementRemaining == 0) CombatManager.Instance.EndTurn(_combatant);
+                    // Am I in range to attack? Then there's no need to move
+                    else if (WithinAttackRange(nearest)) CombatManager.Instance.EndTurn(_combatant);
+                    // Else, can I move towards the target with remaining movement?
+                    // If unit can move, will do so and then re-evaluate
+                    else if (!TryMove(nearest)) CombatManager.Instance.EndTurn(_combatant);
+                }
+                else // Unit DOES have AP to spend
+                {
+                    // Am I within range to attack? Attack
+                    if (TryAttack(nearest)) return;
+                    // I'm not in range, do I have Movement to get there? Then get there
+                    else if (TryMove(nearest)) return;
+                    // Only Sprint if actually able to do something once reaching destination
+                    else if (_combatant.ActionPoints > 1)
+                    {
+                        _combatant.OnSprint();
+                        EvaluateActions();
+                    }
+                    // The unit is not within range to attack, and cannot Move without using last AP to sprint
+                    else CombatManager.Instance.EndTurn(_combatant);
+                }
+            }
+            else CombatManager.Instance.EndTurn(_combatant); // all opponents defeated
+        }
 
         private void EvaluateActions()
         {
@@ -132,23 +170,39 @@ namespace SD.Combat
             return nearest;
         }
 
+        private bool FindNearest(out Combatant nearest)
+        {
+            nearest = null;
+            int minDist = int.MaxValue;
+            if (Adversaries.Count == 0) return false;
+
+            foreach (var adversary in Adversaries)
+            {
+                var dist = Pathfinding.GetNodeDistance(_combatant.Node, adversary.Node);
+                if (dist < minDist)
+                {
+                    minDist = dist;
+                    nearest = adversary;
+                }
+            }
+            return nearest;
+        }
+
         /// <summary>
         /// Returns true if the target is within range of basic attack or any weapon art.
         /// </summary>
         private bool WithinAttackRange(Combatant target)
         {
-            if (target == null)
-            {
-                Debug.LogWarning("Target is null");
-                return false;
-            }
-            foreach(var art in _combatant.WeaponArts)
+            if (target == null) return false;
+            var dist = Pathfinding.GetNodeDistance(_combatant.Node, target.Node);
+
+            foreach (var art in _combatant.WeaponArts)
             {
                 // Will need to add a variable to arts for if they are offensive or defensive
-                if (Pathfinding.GetNodeDistance(_combatant.Node, target.Node) <= art.Range) return true;
+                if (dist <= art.Range) return true;
             }
-            if (Pathfinding.GetNodeDistance(_combatant.Node, target.Node) <= _combatant.AttackRange) return true;
-            return false;
+
+            return (Pathfinding.GetNodeDistance(_combatant.Node, target.Node) <= _combatant.AttackRange);
         }
 
         private bool TryAttack(Combatant target)

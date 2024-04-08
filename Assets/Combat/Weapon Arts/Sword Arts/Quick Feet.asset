@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f757d60fa66f16d4bbdcd60a693cee1d, type: 3}
   m_Name: Quick Feet
   m_EditorClassIdentifier: 
+  _type: 1
   _actionPointCost: 4
   _range: 2
   _description: 
+  _sprite: {fileID: 0}

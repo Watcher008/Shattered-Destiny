@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b057e53d41d73934b97c31d51e62625c, type: 3}
   m_Name: Marking Shot
   m_EditorClassIdentifier: 
+  _type: 4
   _actionPointCost: 2
   _range: 10
   _description: 
+  _sprite: {fileID: 0}

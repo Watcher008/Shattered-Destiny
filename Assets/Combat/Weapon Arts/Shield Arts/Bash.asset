@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd294bad79dbde44094979d8b842e665, type: 3}
   m_Name: Bash
   m_EditorClassIdentifier: 
+  _type: 2
   _actionPointCost: 2
   _range: 1
   _description: 
+  _sprite: {fileID: 0}

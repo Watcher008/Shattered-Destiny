@@ -6,6 +6,7 @@ using SD.Grids;
 using SD.Characters;
 using SD.Combat;
 using SD.Combat.WeaponArts;
+using SD.Combat.Effects;
 
 public class Combatant : MonoBehaviour, IComparable<Combatant>
 {
@@ -34,9 +35,17 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
     private Weapon _weapon;
 
     private List<WeaponArt> _weaponArts = new();
-    private List<ActiveEffect> _activeEffects = new();
+    private List<ActiveStatusEffect> _activeEffects = new();
 
-    public bool IsPlayer => _isPlayer;
+    public bool IsPlayer
+    {
+        get
+        {
+            if (HasEffect<Charm>()) return !_isPlayer;
+
+            return _isPlayer;
+        }
+    }
     public PathNode Node => _currentNode;
     public List<WeaponArt> WeaponArts => _weaponArts;
 
@@ -132,9 +141,10 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
         transform.position = new Vector3(node.X, 0, node.Y);
     }
 
-    public void OnTurnStart()
+    public void OnTurnStart(bool regainAP)
     {
-        if (!HasEffect<Stun>())
+        // Do not regain AP on first round
+        if (!HasEffect<Stun>() && regainAP)
         {
             // Regain action points, up to max
             ActionPoints = Mathf.Clamp(ActionPoints + _refreshedActionPoints, 0, MaxActionPoints);
@@ -143,6 +153,8 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
 
         // Regain all movement
         MovementRemaining = _movement;
+        if (HasEffect<Effect_Hurried>()) MovementRemaining += _movement; // 2x if Hurried
+
         CanRest = true;
         Block = 0;
 
@@ -192,14 +204,15 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
             }
         }       
 
-        _activeEffects.Add(new ActiveEffect(effect, duration));
+        _activeEffects.Add(new ActiveStatusEffect(effect, duration));
     }
 
+    #region - Health -
     public void TakeDamage(int damage)
     {
         float damageMultiplier = 1.0f;
         if (HasEffect<Vulnerable>()) damageMultiplier += 0.25f;
-        if (HasEffect<Reinforced>()) damageMultiplier -= 0.25f;
+        if (HasEffect<Effect_Reinforced>()) damageMultiplier -= 0.25f;
         damage = Mathf.RoundToInt(damage * damageMultiplier);
 
         damage -= Block;
@@ -213,12 +226,23 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
         onHealthChange?.Invoke();
         // flash sprite
 
-        if (Health <= 0)
-        {
-            _currentNode.SetOccupant(Occupant.None);
-            CombatManager.Instance.OnCombatantDefeated(this);
-        }
+        if (Health <= 0) OnDeath();
     }
+
+    public void RestoreHealth(int health)
+    {
+        if (health <= 0) return;
+
+        Health += health;
+        onHealthChange?.Invoke();
+    }
+
+    private void OnDeath()
+    {
+        _currentNode.SetOccupant(Occupant.None);
+        CombatManager.Instance.OnCombatantDefeated(this);
+    }
+    #endregion
 
     public int GetAttribute(Attributes attribute)
     {
@@ -350,7 +374,14 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
     {
         float damageMultiplier = 1.0f;
         if (HasEffect<Weaken>()) damageMultiplier -= 0.25f;
-        if (HasEffect<Empowered>()) damageMultiplier += 0.25f;
+        if (HasEffect<Effect_Empowered>()) damageMultiplier += 0.25f;
+
+        if (CombatManager.Instance.NodeHasEffect<Effect_Barrier>(Node, out var areaEffect))
+        {
+            // +50% bonus if targeting a unit outside the effect
+            if (!areaEffect.Area.Contains(target.Node)) damageMultiplier += 0.5f;
+        }
+
         dmg = Mathf.RoundToInt(dmg * damageMultiplier);
 
         target.TakeDamage(dmg);

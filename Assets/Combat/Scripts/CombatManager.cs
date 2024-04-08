@@ -9,6 +9,7 @@ using TMPro;
 using SD.Grids;
 using SD.Characters;
 using SD.Combat.WeaponArts;
+using SD.Combat.Effects;
 
 namespace SD.Combat
 {
@@ -26,6 +27,7 @@ namespace SD.Combat
         private bool _combatActive = true;
 
         [SerializeField] private PlayerData _playerData;
+        [SerializeField] private PlayerWeaponData _weaponData;
         [SerializeField] private CreatureCodex _creatureCodex;
         [SerializeField] private ItemCodex _itemCodex;
         
@@ -45,6 +47,10 @@ namespace SD.Combat
         public List<Combatant> EnemyCombatants { get; private set; } = new();
         #endregion
 
+        private int _currentRound;
+
+        private List<ActiveAreaEffect> _areaEffects = new();
+
         #region - Testing -
         [Header("Testing")]
         [SerializeField] private Button _endCombatButton;
@@ -57,7 +63,9 @@ namespace SD.Combat
         private void ForTestingOnly()
         {
             _playerData.PlayerStats.EquipWeapon(_itemCodex.GetWeapon("Sword"));
-            _playerData.PlayerStats.WeaponArts.AddRange(_playerData.WeaponArts);
+            _playerData.PlayerStats.WeaponArts.Clear();
+            _playerData.PlayerStats.WeaponArts.AddRange(_weaponData.RightHandArts);
+            _playerData.PlayerStats.WeaponArts.AddRange(_weaponData.LeftHandArts);
         }
 
         private void Awake()
@@ -81,6 +89,8 @@ namespace SD.Combat
             _interface.AddPortraits();
 
             yield return new WaitForSeconds(1.5f);
+
+            _currentRound = 1;
 
             OnStartTurn(Combatants[0]);
         }
@@ -176,11 +186,27 @@ namespace SD.Combat
         }
 
         #region - Turn Handling -
+        private void OnNewRound()
+        {
+            _currentRound++;
+
+            // Decrement effects
+            for (int i = _areaEffects.Count - 1; i >= 0; i--)
+            {
+                _areaEffects[i].Duration--;
+                if (_areaEffects[i].Duration <= 0)
+                {
+                    _areaEffects.RemoveAt(i);
+                    // Destroy any visual effects
+                }
+            }
+        }
+
         private void OnStartTurn(Combatant combatant)
         {
             //Debug.Log("Turn start for " + combatant.gameObject.name);
             CurrentActor = combatant;
-            CurrentActor.OnTurnStart();
+            CurrentActor.OnTurnStart(_currentRound > 1);
             _interface.OnNewActor();
         }
 
@@ -190,7 +216,11 @@ namespace SD.Combat
 
             int index = Combatants.IndexOf(CurrentActor) + 1;
 
-            if (index >= Combatants.Count) index = 0;
+            if (index >= Combatants.Count)
+            {
+                OnNewRound();
+                index = 0;
+            }
 
             OnStartTurn(Combatants[index]);
         }
@@ -221,6 +251,30 @@ namespace SD.Combat
         }
         #endregion
 
+        #region - Area Effects -
+        public void AddNewAreaEffect(AreaEffects effect, int duration, List<PathNode> area)
+        {
+            _areaEffects.Add(new ActiveAreaEffect(effect, duration, area));
+            // Add any visual effects
+        }
+
+        public bool NodeHasEffect<T>(PathNode node, out ActiveAreaEffect areaEffect) where T : AreaEffects
+        {
+            areaEffect = null;
+            foreach(var effect in _areaEffects)
+            {
+                if (effect.Effect is T && effect.Area.Contains(node))
+                {
+                    areaEffect = effect;
+                    return true;
+
+                }
+            }
+            return false;
+        }
+
+        #endregion
+
         public bool CheckNode(PathNode node, out Combatant combatant)
         {
             combatant = null;
@@ -242,9 +296,24 @@ namespace SD.Combat
         public bool AttackHits(Combatant attacker, Combatant target)
         {
             // OP Auto-hit
-            if (attacker.HasEffect<Focused>()) return true;
+            if (attacker.HasEffect<Effect_Focused>()) return true;
 
             float chanceToHit = 0.8f; // - 0.05f * attacker.Weapon.Tier
+
+            // Rolling to hit the terrain
+            if (target == null)
+            {
+                bool hits = Random.value <= chanceToHit;
+                if (!hits) Debug.Log("Attack miss!");
+                return hits;
+            }
+
+            // Check for Barrier effect and apply if present
+            if (NodeHasEffect<Effect_Barrier>(target.Node, out var areaEffect))
+            {
+                if (!areaEffect.Area.Contains(attacker.Node)) return false;
+            }
+
 
             // Bonus to hit if attacker is in a Mountain tile
             if (attacker.Node.Terrain == TerrainType.Mountain) chanceToHit += 0.2f;
