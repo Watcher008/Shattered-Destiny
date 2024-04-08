@@ -1,15 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using SD.Inventories;
-using SD.Combat.WeaponArts;
 
 namespace SD.Characters
 {
     [CreateAssetMenu(menuName = "Scriptable Objects/Player Data", fileName = "Player Data")]
     public class PlayerData : ScriptableObject
     {
-        public List<WeaponArt> WeaponArts = new List<WeaponArt>();
-
         private string _name;
         public string Name
         {
@@ -78,17 +75,4 @@ namespace SD.Characters
             }
         }
     }
-}
-
-public enum Hand { Right, Left };
-
-public enum WeaponTypes
-{
-    None,
-    Sword,
-    Shield,
-    Warhammer,
-    Bow,
-    Staff,
-    Book
 }

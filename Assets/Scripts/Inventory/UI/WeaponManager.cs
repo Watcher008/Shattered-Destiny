@@ -19,14 +19,17 @@ public class WeaponManager : MonoBehaviour
     [SerializeField] private Button _cancelSelectButton;
     [SerializeField] private Button[] _weaponButtons;
 
-    [Header("To be moved")]
-    [SerializeField] private Button _showInventoryButton;
-    [SerializeField] private Button _showWeaponsButton;
-    [SerializeField] private GameObject _inventoryPanel;
-    [SerializeField] private GameObject _miscPanel;
-    [SerializeField] private GameObject _weaponsPanel;
-    [SerializeField] private GameObject _tooltipPanel;
+    [Space]
 
+    [SerializeField] private Image[] _rightHandWeaponArts;
+    [SerializeField] private Image[] _leftHandWeaponArts;
+
+    [Space]
+
+    [SerializeField] private RectTransform _rightHandPoolParent;
+    [SerializeField] private RectTransform _leftHandPoolParent;
+
+    [SerializeField] private Sprite _lock;
     private readonly Color _occupied = new Color(1.0f, 1.0f, 1.0f, 200.0f / 255.0f);
 
     private readonly string[] _spritePaths =
@@ -47,15 +50,10 @@ public class WeaponManager : MonoBehaviour
         _rightHandImage = _rightHandButton.GetComponent<Image>();
         _leftHandImage = _leftHandButton.GetComponent<Image>();
 
-        UpdateWeaponSprites();
-
         _rightHandButton.onClick.AddListener(OnSelectRightHand);
         _leftHandButton.onClick.AddListener(OnSelectLeftHand);
 
         _cancelSelectButton.image.raycastTarget = false;
-
-        _showInventoryButton.onClick.AddListener(ShowInventoryPanel);
-        _showWeaponsButton.onClick.AddListener(ShowWeaponsPanel);
 
         for (int i = 0; i < _weaponButtons.Length; i++)
         {
@@ -68,8 +66,7 @@ public class WeaponManager : MonoBehaviour
             });
         }
 
-        ShowInventoryPanel();
-        UpdateWeaponSprites();
+        UpdateWeapons();
     }
 
     private void OnDestroy()
@@ -77,8 +74,6 @@ public class WeaponManager : MonoBehaviour
         _cancelSelectButton.onClick.RemoveAllListeners();
         _rightHandButton.onClick.RemoveAllListeners();
         _leftHandButton.onClick.RemoveAllListeners();
-        _showInventoryButton.onClick.RemoveAllListeners();
-        _showWeaponsButton.onClick.RemoveAllListeners();
 
         for (int i = 0; i < _weaponButtons.Length; i++)
         {
@@ -86,29 +81,41 @@ public class WeaponManager : MonoBehaviour
         }
     }
 
-    private void ShowInventoryPanel()
+    private void OnSelectRightHand()
     {
-        OnCancelSelection();
-        _inventoryPanel.SetActive(true);
-        _miscPanel.SetActive(true);
+        _hand = Hand.Right;
 
-        _weaponsPanel.SetActive(false);
-        _tooltipPanel.SetActive(false);
-
-        _showInventoryButton.interactable = false;
-        _showWeaponsButton.interactable = true;
+        for (int i = 0; i < _weaponButtons.Length; i++)
+        {
+            _weaponButtons[i].interactable = true;
+        }
     }
 
-    private void ShowWeaponsPanel()
+    private void OnSelectLeftHand()
     {
-        _inventoryPanel.SetActive(false);
-        _miscPanel.SetActive(false);
+        _hand = Hand.Left;
 
-        _weaponsPanel.SetActive(true);
-        _tooltipPanel.SetActive(true);
+        for (int i = 0; i < _weaponButtons.Length; i++)
+        {
+            _weaponButtons[i].interactable = true;
+        }
+    }
 
-        _showInventoryButton.interactable = true;
-        _showWeaponsButton.interactable = false;
+    private void SetWeapon(int index)
+    {
+        _playerWeapons.SetWeapon((WeaponTypes)index, _hand);
+        UpdateWeapons();
+
+        for (int i = 0; i < _weaponButtons.Length; i++)
+        {
+            _weaponButtons[i].interactable = false;
+        }
+    }
+
+    private void UpdateWeapons()
+    {
+        UpdateWeaponSprites();
+        UpdateWeaponArts();
     }
 
     /// <summary>
@@ -146,37 +153,51 @@ public class WeaponManager : MonoBehaviour
         }
     }
 
-    private void OnSelectRightHand()
+    private void UpdateWeaponArts()
     {
-        _hand = Hand.Right;
-
-        for (int i = 0; i < _weaponButtons.Length; i++)
+        // Right Hand
+        for (int i = 0; i < _rightHandWeaponArts.Length; i++)
         {
-            _weaponButtons[i].interactable = true;
+            if (i >= _playerWeapons.RightHandArts.Length)
+            {
+                _rightHandWeaponArts[i].sprite = _lock;
+                continue;
+            }
+
+            // This will need to become a specific UI element to handle tooltips, drag and drop, etc.
+            if (_playerWeapons.RightHandArts[i] != null)
+            {
+                _rightHandWeaponArts[i].sprite = _playerWeapons.RightHandArts[i].Sprite;
+            }
+            else
+            {
+                _rightHandWeaponArts[i].sprite = null;
+            }
         }
+
+        // Left Hand
+        for (int i = 0; i < _leftHandWeaponArts.Length; i++)
+        {
+            if (i >= _playerWeapons.LeftHandArts.Length)
+            {
+                _leftHandWeaponArts[i].sprite = _lock;
+                continue;
+            }
+
+            if (_playerWeapons.LeftHandArts[i] != null)
+            {
+                _leftHandWeaponArts[i].sprite = _playerWeapons.LeftHandArts[i].Sprite;
+            }
+            else
+            {
+                _leftHandWeaponArts[i].sprite = null;
+            }
+        }
+
+        // Spawn in 
     }
 
-    private void OnSelectLeftHand()
-    {
-        _hand = Hand.Left;
 
-        for (int i = 0; i < _weaponButtons.Length; i++)
-        {
-            _weaponButtons[i].interactable = true;
-        }
-    }
-
-    private void SetWeapon(int index)
-    {
-        _playerWeapons.SetWeapon((WeaponTypes)index, _hand);
-        UpdateWeaponSprites();
-        // Update Weapon Arts
-
-        for (int i = 0; i < _weaponButtons.Length; i++)
-        {
-            _weaponButtons[i].interactable = false;
-        }
-    }
 
     private void OnCancelSelection()
     {

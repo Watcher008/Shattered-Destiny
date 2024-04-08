@@ -21,6 +21,9 @@ namespace SD.Characters
         private WeaponArt[] _rightHandWeaponArts;
         private WeaponArt[] _leftHandWeaponArts;
 
+        public WeaponArt[] RightHandArts => _rightHandWeaponArts;
+        public WeaponArt[] LeftHandArts => _leftHandWeaponArts;
+
         public void Init()
         {
             // first will go unused... oh well
@@ -130,7 +133,45 @@ namespace SD.Characters
             }
 
             _knownWeaponArts[art.Type].Add(art);
+
+            // Auto-equip in any empty slots
+            if (art.Type == _rightHand)
+            {
+                for (int i = 0; i < _rightHandWeaponArts.Length; i++)
+                {
+                    if (_rightHandWeaponArts[i] == null)
+                    {
+                        _rightHandWeaponArts[i] = art;
+                        break;
+                    }
+                }
+            }
+            else if (art.Type == _leftHand)
+            {
+                for (int i = 0; i < _leftHandWeaponArts.Length; i++)
+                {
+                    if (_leftHandWeaponArts[i] == null)
+                    {
+                        _leftHandWeaponArts[i] = art;
+                        break;
+                    }
+                }
+            }
+
             return true;
         }
     }
+}
+
+public enum Hand { Right, Left };
+
+public enum WeaponTypes
+{
+    None,
+    Sword,
+    Shield,
+    Warhammer,
+    Bow,
+    Staff,
+    Book
 }

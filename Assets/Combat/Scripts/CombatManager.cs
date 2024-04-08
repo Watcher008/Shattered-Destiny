@@ -27,6 +27,7 @@ namespace SD.Combat
         private bool _combatActive = true;
 
         [SerializeField] private PlayerData _playerData;
+        [SerializeField] private PlayerWeaponData _weaponData;
         [SerializeField] private CreatureCodex _creatureCodex;
         [SerializeField] private ItemCodex _itemCodex;
         
@@ -62,7 +63,9 @@ namespace SD.Combat
         private void ForTestingOnly()
         {
             _playerData.PlayerStats.EquipWeapon(_itemCodex.GetWeapon("Sword"));
-            _playerData.PlayerStats.WeaponArts.AddRange(_playerData.WeaponArts);
+            _playerData.PlayerStats.WeaponArts.Clear();
+            _playerData.PlayerStats.WeaponArts.AddRange(_weaponData.RightHandArts);
+            _playerData.PlayerStats.WeaponArts.AddRange(_weaponData.LeftHandArts);
         }
 
         private void Awake()

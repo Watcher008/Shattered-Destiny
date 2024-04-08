@@ -37,7 +37,15 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
     private List<WeaponArt> _weaponArts = new();
     private List<ActiveStatusEffect> _activeEffects = new();
 
-    public bool IsPlayer => _isPlayer;
+    public bool IsPlayer
+    {
+        get
+        {
+            if (HasEffect<Charm>()) return !_isPlayer;
+
+            return _isPlayer;
+        }
+    }
     public PathNode Node => _currentNode;
     public List<WeaponArt> WeaponArts => _weaponArts;
 
