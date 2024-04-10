@@ -1,3 +1,5 @@
+using SD.Combat.WeaponArts;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +11,10 @@ public class InventoryUIManager : MonoBehaviour
     [SerializeField] private GameObject _miscPanel;
     [SerializeField] private GameObject _weaponsPanel;
     [SerializeField] private GameObject _tooltipPanel;
+
+    [Header("Tooltip")]
+    [SerializeField] private TMP_Text _tooltipHeader;
+    [SerializeField] private TMP_Text _tooltipText;
 
     private void Awake()
     {
@@ -46,5 +52,17 @@ public class InventoryUIManager : MonoBehaviour
 
         _showInventoryButton.interactable = true;
         _showWeaponsButton.interactable = false;
+    }
+
+    public void ShowTooltip(WeaponArt art)
+    {
+        _tooltipHeader.text = art.name;
+        _tooltipText.text = art.Description;
+    }
+
+    public void HideTooltip()
+    {
+        _tooltipHeader.text = string.Empty;
+        _tooltipText.text = string.Empty;
     }
 }

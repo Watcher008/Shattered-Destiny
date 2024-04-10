@@ -1,5 +1,7 @@
 using SD.Characters;
+using SD.Combat.WeaponArts;
 using System;
+using System.Collections.Generic;
 using System.Net.NetworkInformation;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,7 +9,11 @@ using UnityEngine.UI;
 public class WeaponManager : MonoBehaviour
 {
     [SerializeField] private PlayerWeaponData _playerWeapons;
-    
+    [SerializeField] private InventoryUIManager _manager;
+    [SerializeField] private Canvas _canvas;
+
+    [Space]
+
     [SerializeField] private Button _rightHandButton;
     [SerializeField] private Button _leftHandButton;
 
@@ -21,11 +27,12 @@ public class WeaponManager : MonoBehaviour
 
     [Space]
 
-    [SerializeField] private Image[] _rightHandWeaponArts;
-    [SerializeField] private Image[] _leftHandWeaponArts;
+    [SerializeField] private ActiveWeaponArtElement[] _rightHandWeaponArts;
+    [SerializeField] private ActiveWeaponArtElement[] _leftHandWeaponArts;
 
     [Space]
 
+    [SerializeField] private WeaponArtElement _elementPrefab;
     [SerializeField] private RectTransform _rightHandPoolParent;
     [SerializeField] private RectTransform _leftHandPoolParent;
 
@@ -116,6 +123,7 @@ public class WeaponManager : MonoBehaviour
     {
         UpdateWeaponSprites();
         UpdateWeaponArts();
+        UpdateWeaponArtPool();
     }
 
     /// <summary>
@@ -158,43 +166,93 @@ public class WeaponManager : MonoBehaviour
         // Right Hand
         for (int i = 0; i < _rightHandWeaponArts.Length; i++)
         {
-            if (i >= _playerWeapons.RightHandArts.Length)
+            if (_playerWeapons.RightHandArts == null) // no weapon
             {
-                _rightHandWeaponArts[i].sprite = _lock;
-                continue;
+                _rightHandWeaponArts[i].SetLocked(_lock);
             }
-
-            // This will need to become a specific UI element to handle tooltips, drag and drop, etc.
-            if (_playerWeapons.RightHandArts[i] != null)
+            else if (i >= _playerWeapons.RightHandArts.Length)
             {
-                _rightHandWeaponArts[i].sprite = _playerWeapons.RightHandArts[i].Sprite;
+                _rightHandWeaponArts[i].SetLocked(_lock);
+            }
+            // This will need to become a specific UI element to handle tooltips, drag and drop, etc.
+            else if (_playerWeapons.RightHandArts[i] != null)
+            {
+                _rightHandWeaponArts[i].SetValue(_manager, _playerWeapons.RightHandArts[i]);
             }
             else
             {
-                _rightHandWeaponArts[i].sprite = null;
+                _rightHandWeaponArts[i].SetValue(_manager, null);
             }
         }
 
         // Left Hand
         for (int i = 0; i < _leftHandWeaponArts.Length; i++)
         {
-            if (i >= _playerWeapons.LeftHandArts.Length)
+            if (_playerWeapons.LeftHandArts == null) // no weapon
             {
-                _leftHandWeaponArts[i].sprite = _lock;
-                continue;
+                _leftHandWeaponArts[i].SetLocked(_lock);
             }
-
-            if (_playerWeapons.LeftHandArts[i] != null)
+            else if (i >= _playerWeapons.LeftHandArts.Length)
             {
-                _leftHandWeaponArts[i].sprite = _playerWeapons.LeftHandArts[i].Sprite;
+                _leftHandWeaponArts[i].SetLocked(_lock);
+            }
+            else if (_playerWeapons.LeftHandArts[i] != null)
+            {
+                _leftHandWeaponArts[i].SetValue(_manager, _playerWeapons.LeftHandArts[i]);
             }
             else
             {
-                _leftHandWeaponArts[i].sprite = null;
+                _leftHandWeaponArts[i].SetValue(_manager, null);
+            }
+        }
+    }
+
+    private void UpdateWeaponArtPool()
+    {
+        // Clear parent pools
+        for (int i = _rightHandPoolParent.childCount - 1; i >= 0; i--)
+        {
+            Destroy(_rightHandPoolParent.GetChild(i).gameObject);
+        }
+        for (int i = _leftHandPoolParent.childCount - 1; i >= 0; i--)
+        {
+            Destroy(_leftHandPoolParent.GetChild(i).gameObject);
+        }
+
+        // Spawn in new element for each art, set parent and values
+        if (_playerWeapons.RightHand != WeaponTypes.None)
+        {
+            // Get full list
+            var newList = new List<WeaponArt>();
+            newList.AddRange(_playerWeapons.KnownWeaponArts[_playerWeapons.RightHand]);
+            // Remove already-equipped arts
+            for (int i = 0; i < _playerWeapons.RightHandArts.Length; i++)
+            {
+                newList.Remove(_playerWeapons.RightHandArts[i]);
+            }
+
+            for (int i = 0; i < newList.Count; i++)
+            {
+                var element = Instantiate(_elementPrefab, _rightHandPoolParent);
+                element.SetValue(newList[i], _canvas);
             }
         }
 
-        // Spawn in 
+        if (_playerWeapons.LeftHand != WeaponTypes.None)
+        {
+            var newList = new List<WeaponArt>();
+            newList.AddRange(_playerWeapons.KnownWeaponArts[_playerWeapons.LeftHand]);
+            for (int i = 0; i < _playerWeapons.LeftHandArts.Length; i++)
+            {
+                newList.Remove(_playerWeapons.LeftHandArts[i]);
+            }
+
+            for (int i = 0; i < newList.Count; i++)
+            {
+                var element = Instantiate(_elementPrefab, _leftHandPoolParent);
+                element.SetValue(newList[i], _canvas);
+            }
+        }
     }
 
 

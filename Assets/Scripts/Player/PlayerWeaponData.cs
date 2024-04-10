@@ -10,13 +10,14 @@ namespace SD.Characters
         private readonly int[] _slotsPerTier = { 2, 4, 6, 9};
         private int[] _weaponTiers;
 
-         private WeaponTypes _rightHand = WeaponTypes.Sword;
-        private WeaponTypes _leftHand = WeaponTypes.Shield;
+        private WeaponTypes _rightHand;
+        private WeaponTypes _leftHand;
 
         public WeaponTypes RightHand => _rightHand;
         public WeaponTypes LeftHand => _leftHand;
 
         private Dictionary<WeaponTypes, List<WeaponArt>> _knownWeaponArts;
+        public Dictionary<WeaponTypes, List<WeaponArt>> KnownWeaponArts => _knownWeaponArts;
 
         private WeaponArt[] _rightHandWeaponArts;
         private WeaponArt[] _leftHandWeaponArts;
@@ -36,6 +37,8 @@ namespace SD.Characters
             {
                 _knownWeaponArts.Add((WeaponTypes)i, new List<WeaponArt>());
             }
+
+            SetWeapon(WeaponTypes.Sword, Hand.Right);
         }
 
         public void SetWeapon(WeaponTypes weapon, Hand hand)
@@ -104,12 +107,24 @@ namespace SD.Characters
                 _rightHandWeaponArts = new WeaponArt[GetWeaponArtSlotCount(_rightHand)];
 
                 // Fill in with first from list
+                for (int i = 0; i < _rightHandWeaponArts.Length; i++)
+                {
+                    if (i >= _knownWeaponArts[_rightHand].Count) break;
+
+                    _rightHandWeaponArts[i] = _knownWeaponArts[_rightHand][i];
+                }
             }
             if (_leftHand != WeaponTypes.None)
             {
                 _leftHandWeaponArts = new WeaponArt[GetWeaponArtSlotCount(_leftHand)];
 
                 // Fill in with first from list
+                for (int i = 0; i < _leftHandWeaponArts.Length; i++)
+                {
+                    if (i >= _knownWeaponArts[_leftHand].Count) break;
+
+                    _leftHandWeaponArts[i] = _knownWeaponArts[_leftHand][i];
+                }
             }
 
             // Note that I could (should) also have a stored list of the previously used weapon arts for this weapon
