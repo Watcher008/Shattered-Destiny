@@ -9738,10 +9738,6 @@ MonoBehaviour:
   _playerWeapons: {fileID: 11400000, guid: cf5af98684926e548aa2f748aad22401, type: 2}
   _manager: {fileID: 2046736426}
   _canvas: {fileID: 927544843}
-  _rightHandButton: {fileID: 1157742598}
-  _leftHandButton: {fileID: 1662284006}
-  _rightHandImage02: {fileID: 732254796}
-  _leftHandImage02: {fileID: 1745473425}
   _cancelSelectButton: {fileID: 1041377691}
   _weaponButtons:
   - {fileID: 1769045024}
@@ -9750,6 +9746,14 @@ MonoBehaviour:
   - {fileID: 1591485185}
   - {fileID: 1950921540}
   - {fileID: 52928280}
+  _elementPrefab: {fileID: 5271171544582473571, guid: 7799ce035c2aa2d45a5d17b64756d683, type: 3}
+  _rightHandPoolParent: {fileID: 1369882066}
+  _leftHandPoolParent: {fileID: 944530480}
+  _lock: {fileID: 621560956, guid: 3f015a5c1e6633f48a0669377a1e992c, type: 3}
+  _rightHandButton: {fileID: 1157742598}
+  _rightHandName: {fileID: 386773213}
+  _rightHandTier: {fileID: 1882338616}
+  _rightHandImage02: {fileID: 732254796}
   _rightHandWeaponArts:
   - {fileID: 45747352}
   - {fileID: 901689143}
@@ -9760,6 +9764,10 @@ MonoBehaviour:
   - {fileID: 1944767165}
   - {fileID: 1754493539}
   - {fileID: 17668755}
+  _leftHandButton: {fileID: 1662284006}
+  _leftHandName: {fileID: 2116723892}
+  _leftHandTier: {fileID: 437715273}
+  _leftHandImage02: {fileID: 1745473425}
   _leftHandWeaponArts:
   - {fileID: 429953137}
   - {fileID: 1164407985}
@@ -9770,10 +9778,8 @@ MonoBehaviour:
   - {fileID: 1898090505}
   - {fileID: 565519100}
   - {fileID: 430372547}
-  _elementPrefab: {fileID: 5271171544582473571, guid: 7799ce035c2aa2d45a5d17b64756d683, type: 3}
-  _rightHandPoolParent: {fileID: 1369882066}
-  _leftHandPoolParent: {fileID: 944530480}
-  _lock: {fileID: 621560956, guid: 3f015a5c1e6633f48a0669377a1e992c, type: 3}
+  _tooltipHeader: {fileID: 1801559827}
+  _tooltipText: {fileID: 6324964}
 --- !u!114 &2046736426
 MonoBehaviour:
   m_ObjectHideFlags: 0

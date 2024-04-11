@@ -8,13 +8,16 @@ namespace SD.Characters
     public class PlayerWeaponData : ScriptableObject
     {
         private readonly int[] _slotsPerTier = { 2, 4, 6, 9};
-        private int[] _weaponTiers;
 
+        private int[] _weaponTiers;
+        public int[] WeaponTiers => _weaponTiers;
+
+        #region - Weapons -
         private WeaponTypes _rightHand;
         private WeaponTypes _leftHand;
-
         public WeaponTypes RightHand => _rightHand;
         public WeaponTypes LeftHand => _leftHand;
+        #endregion
 
         private Dictionary<WeaponTypes, List<WeaponArt>> _knownWeaponArts;
         public Dictionary<WeaponTypes, List<WeaponArt>> KnownWeaponArts => _knownWeaponArts;
@@ -38,7 +41,10 @@ namespace SD.Characters
                 _knownWeaponArts.Add((WeaponTypes)i, new List<WeaponArt>());
             }
 
+            _rightHandWeaponArts = null;
+            _leftHandWeaponArts = null;
             SetWeapon(WeaponTypes.Sword, Hand.Right);
+            UpdateWeaponArts();
         }
 
         public void SetWeapon(WeaponTypes weapon, Hand hand)
@@ -174,6 +180,23 @@ namespace SD.Characters
             }
 
             return true;
+        }
+
+        public void SetArt(WeaponArt art, Hand hand, int index)
+        {
+            if (art == null) return;
+            if (hand == Hand.Right)
+            {
+                if (_rightHand != art.Type) return;
+                if (index >= _rightHandWeaponArts.Length) return;
+                _rightHandWeaponArts[index] = art;
+            }
+            else
+            {
+                if (_leftHand != art.Type) return;
+                if (index >= _leftHandWeaponArts.Length) return;
+                _leftHandWeaponArts[index] = art;
+            }
         }
     }
 }

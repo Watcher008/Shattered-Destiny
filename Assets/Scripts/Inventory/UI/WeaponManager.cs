@@ -3,6 +3,7 @@ using SD.Combat.WeaponArts;
 using System;
 using System.Collections.Generic;
 using System.Net.NetworkInformation;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,21 +15,13 @@ public class WeaponManager : MonoBehaviour
 
     [Space]
 
-    [SerializeField] private Button _rightHandButton;
-    [SerializeField] private Button _leftHandButton;
 
-    private Image _rightHandImage;
-    private Image _leftHandImage;
-    [SerializeField] private Image _rightHandImage02;
-    [SerializeField] private Image _leftHandImage02;
 
     [SerializeField] private Button _cancelSelectButton;
     [SerializeField] private Button[] _weaponButtons;
 
     [Space]
 
-    [SerializeField] private ActiveWeaponArtElement[] _rightHandWeaponArts;
-    [SerializeField] private ActiveWeaponArtElement[] _leftHandWeaponArts;
 
     [Space]
 
@@ -38,6 +31,28 @@ public class WeaponManager : MonoBehaviour
 
     [SerializeField] private Sprite _lock;
     private readonly Color _occupied = new Color(1.0f, 1.0f, 1.0f, 200.0f / 255.0f);
+
+    [Header("Right Hand")]
+    [SerializeField] private Button _rightHandButton;
+    [SerializeField] private TMP_Text _rightHandName;
+    [SerializeField] private TMP_Text _rightHandTier;
+
+    private Image _rightHandImage;
+    [SerializeField] private Image _rightHandImage02;
+    [SerializeField] private ActiveWeaponArtElement[] _rightHandWeaponArts;
+
+    [Header("Left Hand")]
+    [SerializeField] private Button _leftHandButton;
+    [SerializeField] private TMP_Text _leftHandName;
+    [SerializeField] private TMP_Text _leftHandTier;
+
+    private Image _leftHandImage;
+    [SerializeField] private Image _leftHandImage02;
+    [SerializeField] private ActiveWeaponArtElement[] _leftHandWeaponArts;
+
+    [Header("Tooltip")]
+    [SerializeField] private TMP_Text _tooltipHeader;
+    [SerializeField] private TMP_Text _tooltipText;
 
     private readonly string[] _spritePaths =
     {
@@ -159,6 +174,28 @@ public class WeaponManager : MonoBehaviour
             _leftHandImage.color = _occupied;
             _leftHandImage02.color = _occupied;
         }
+
+        // Text
+        if (_playerWeapons.RightHand == WeaponTypes.None)
+        {
+            _rightHandName.text = string.Empty;
+            _rightHandTier.text = string.Empty;
+        }
+        else
+        {
+            _rightHandName.text = _playerWeapons.RightHand.ToString();
+            _rightHandTier.text = $"Tier {_playerWeapons.WeaponTiers[(int)_playerWeapons.RightHand] + 1}";
+        }
+        if (_playerWeapons.LeftHand == WeaponTypes.None)
+        {
+            _leftHandName.text = string.Empty;
+            _leftHandTier.text = string.Empty;
+        }
+        else
+        {
+            _leftHandName.text = _playerWeapons.LeftHand.ToString();
+            _leftHandTier.text = $"Tier {_playerWeapons.WeaponTiers[(int)_playerWeapons.LeftHand] + 1}";
+        }
     }
 
     private void UpdateWeaponArts()
@@ -177,11 +214,11 @@ public class WeaponManager : MonoBehaviour
             // This will need to become a specific UI element to handle tooltips, drag and drop, etc.
             else if (_playerWeapons.RightHandArts[i] != null)
             {
-                _rightHandWeaponArts[i].SetValue(_manager, _playerWeapons.RightHandArts[i]);
+                _rightHandWeaponArts[i].SetValue(this, Hand.Right, i, _playerWeapons.RightHandArts[i]);
             }
             else
             {
-                _rightHandWeaponArts[i].SetValue(_manager, null);
+                _rightHandWeaponArts[i].SetValue(this, Hand.Right, i, null);
             }
         }
 
@@ -198,11 +235,11 @@ public class WeaponManager : MonoBehaviour
             }
             else if (_playerWeapons.LeftHandArts[i] != null)
             {
-                _leftHandWeaponArts[i].SetValue(_manager, _playerWeapons.LeftHandArts[i]);
+                _leftHandWeaponArts[i].SetValue(this, Hand.Left, i, _playerWeapons.LeftHandArts[i]);
             }
             else
             {
-                _leftHandWeaponArts[i].SetValue(_manager, null);
+                _leftHandWeaponArts[i].SetValue(this, Hand.Left, i, null);
             }
         }
     }
@@ -234,7 +271,7 @@ public class WeaponManager : MonoBehaviour
             for (int i = 0; i < newList.Count; i++)
             {
                 var element = Instantiate(_elementPrefab, _rightHandPoolParent);
-                element.SetValue(newList[i], _canvas);
+                element.SetValue(this, newList[i], _canvas);
             }
         }
 
@@ -250,15 +287,33 @@ public class WeaponManager : MonoBehaviour
             for (int i = 0; i < newList.Count; i++)
             {
                 var element = Instantiate(_elementPrefab, _leftHandPoolParent);
-                element.SetValue(newList[i], _canvas);
+                element.SetValue(this, newList[i], _canvas);
             }
         }
     }
-
-
 
     private void OnCancelSelection()
     {
 
     }
+
+    internal void OnTryEquipArt(ActiveWeaponArtElement element, WeaponArt newArt)
+    {
+        _playerWeapons.SetArt(newArt, element.Hand, element.Index);
+        UpdateWeapons();
+    }
+
+    #region - Tooltip -
+    public void ShowTooltip(WeaponArt art)
+    {
+        _tooltipHeader.text = art.name;
+        _tooltipText.text = art.Description;
+    }
+
+    public void HideTooltip()
+    {
+        _tooltipHeader.text = string.Empty;
+        _tooltipText.text = string.Empty;
+    }
+    #endregion
 }

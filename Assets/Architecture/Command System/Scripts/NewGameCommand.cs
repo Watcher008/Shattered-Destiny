@@ -41,9 +41,6 @@ namespace SD.CommandSystem
             _playerData.PlayerEquip = new PlayerEquipment(_playerData);
 
             _weaponData.Init();
-            _weaponData.SetWeapon(WeaponTypes.Sword, Hand.Right);
-            _weaponData.SetWeapon(WeaponTypes.Shield, Hand.Left);
-
             for (int i = 0; i < _startingArts.Length; i++)
             {
                 _weaponData.LearnArt(_startingArts[i]);
