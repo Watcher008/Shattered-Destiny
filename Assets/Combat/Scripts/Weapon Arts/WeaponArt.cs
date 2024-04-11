@@ -18,6 +18,7 @@ namespace SD.Combat.WeaponArts
         public int Cost => _actionPointCost;
         public int Range => _range;
         public Sprite Sprite => _sprite;
+        public string Description => _description;
 
         public abstract void OnUse(Combatant combatant, PathNode node);
 

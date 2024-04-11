@@ -16,4 +16,4 @@ MonoBehaviour:
   _actionPointCost: 2
   _range: 3
   _description: 
-  _sprite: {fileID: 0}
+  _sprite: {fileID: 21300000, guid: cd4d0c25ee299964d9d985c29d536d68, type: 3}

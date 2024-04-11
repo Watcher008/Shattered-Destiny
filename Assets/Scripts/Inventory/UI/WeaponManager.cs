@@ -1,36 +1,58 @@
 using SD.Characters;
+using SD.Combat.WeaponArts;
 using System;
+using System.Collections.Generic;
 using System.Net.NetworkInformation;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class WeaponManager : MonoBehaviour
 {
     [SerializeField] private PlayerWeaponData _playerWeapons;
-    
-    [SerializeField] private Button _rightHandButton;
-    [SerializeField] private Button _leftHandButton;
+    [SerializeField] private InventoryUIManager _manager;
+    [SerializeField] private Canvas _canvas;
 
-    private Image _rightHandImage;
-    private Image _leftHandImage;
-    [SerializeField] private Image _rightHandImage02;
-    [SerializeField] private Image _leftHandImage02;
+    [Space]
+
+
 
     [SerializeField] private Button _cancelSelectButton;
     [SerializeField] private Button[] _weaponButtons;
 
     [Space]
 
-    [SerializeField] private Image[] _rightHandWeaponArts;
-    [SerializeField] private Image[] _leftHandWeaponArts;
 
     [Space]
 
+    [SerializeField] private WeaponArtElement _elementPrefab;
     [SerializeField] private RectTransform _rightHandPoolParent;
     [SerializeField] private RectTransform _leftHandPoolParent;
 
     [SerializeField] private Sprite _lock;
     private readonly Color _occupied = new Color(1.0f, 1.0f, 1.0f, 200.0f / 255.0f);
+
+    [Header("Right Hand")]
+    [SerializeField] private Button _rightHandButton;
+    [SerializeField] private TMP_Text _rightHandName;
+    [SerializeField] private TMP_Text _rightHandTier;
+
+    private Image _rightHandImage;
+    [SerializeField] private Image _rightHandImage02;
+    [SerializeField] private ActiveWeaponArtElement[] _rightHandWeaponArts;
+
+    [Header("Left Hand")]
+    [SerializeField] private Button _leftHandButton;
+    [SerializeField] private TMP_Text _leftHandName;
+    [SerializeField] private TMP_Text _leftHandTier;
+
+    private Image _leftHandImage;
+    [SerializeField] private Image _leftHandImage02;
+    [SerializeField] private ActiveWeaponArtElement[] _leftHandWeaponArts;
+
+    [Header("Tooltip")]
+    [SerializeField] private TMP_Text _tooltipHeader;
+    [SerializeField] private TMP_Text _tooltipText;
 
     private readonly string[] _spritePaths =
     {
@@ -116,6 +138,7 @@ public class WeaponManager : MonoBehaviour
     {
         UpdateWeaponSprites();
         UpdateWeaponArts();
+        UpdateWeaponArtPool();
     }
 
     /// <summary>
@@ -151,6 +174,28 @@ public class WeaponManager : MonoBehaviour
             _leftHandImage.color = _occupied;
             _leftHandImage02.color = _occupied;
         }
+
+        // Text
+        if (_playerWeapons.RightHand == WeaponTypes.None)
+        {
+            _rightHandName.text = string.Empty;
+            _rightHandTier.text = string.Empty;
+        }
+        else
+        {
+            _rightHandName.text = _playerWeapons.RightHand.ToString();
+            _rightHandTier.text = $"Tier {_playerWeapons.WeaponTiers[(int)_playerWeapons.RightHand] + 1}";
+        }
+        if (_playerWeapons.LeftHand == WeaponTypes.None)
+        {
+            _leftHandName.text = string.Empty;
+            _leftHandTier.text = string.Empty;
+        }
+        else
+        {
+            _leftHandName.text = _playerWeapons.LeftHand.ToString();
+            _leftHandTier.text = $"Tier {_playerWeapons.WeaponTiers[(int)_playerWeapons.LeftHand] + 1}";
+        }
     }
 
     private void UpdateWeaponArts()
@@ -158,49 +203,117 @@ public class WeaponManager : MonoBehaviour
         // Right Hand
         for (int i = 0; i < _rightHandWeaponArts.Length; i++)
         {
-            if (i >= _playerWeapons.RightHandArts.Length)
+            if (_playerWeapons.RightHandArts == null) // no weapon
             {
-                _rightHandWeaponArts[i].sprite = _lock;
-                continue;
+                _rightHandWeaponArts[i].SetLocked(_lock);
             }
-
-            // This will need to become a specific UI element to handle tooltips, drag and drop, etc.
-            if (_playerWeapons.RightHandArts[i] != null)
+            else if (i >= _playerWeapons.RightHandArts.Length)
             {
-                _rightHandWeaponArts[i].sprite = _playerWeapons.RightHandArts[i].Sprite;
+                _rightHandWeaponArts[i].SetLocked(_lock);
+            }
+            // This will need to become a specific UI element to handle tooltips, drag and drop, etc.
+            else if (_playerWeapons.RightHandArts[i] != null)
+            {
+                _rightHandWeaponArts[i].SetValue(this, Hand.Right, i, _playerWeapons.RightHandArts[i]);
             }
             else
             {
-                _rightHandWeaponArts[i].sprite = null;
+                _rightHandWeaponArts[i].SetValue(this, Hand.Right, i, null);
             }
         }
 
         // Left Hand
         for (int i = 0; i < _leftHandWeaponArts.Length; i++)
         {
-            if (i >= _playerWeapons.LeftHandArts.Length)
+            if (_playerWeapons.LeftHandArts == null) // no weapon
             {
-                _leftHandWeaponArts[i].sprite = _lock;
-                continue;
+                _leftHandWeaponArts[i].SetLocked(_lock);
             }
-
-            if (_playerWeapons.LeftHandArts[i] != null)
+            else if (i >= _playerWeapons.LeftHandArts.Length)
             {
-                _leftHandWeaponArts[i].sprite = _playerWeapons.LeftHandArts[i].Sprite;
+                _leftHandWeaponArts[i].SetLocked(_lock);
+            }
+            else if (_playerWeapons.LeftHandArts[i] != null)
+            {
+                _leftHandWeaponArts[i].SetValue(this, Hand.Left, i, _playerWeapons.LeftHandArts[i]);
             }
             else
             {
-                _leftHandWeaponArts[i].sprite = null;
+                _leftHandWeaponArts[i].SetValue(this, Hand.Left, i, null);
+            }
+        }
+    }
+
+    private void UpdateWeaponArtPool()
+    {
+        // Clear parent pools
+        for (int i = _rightHandPoolParent.childCount - 1; i >= 0; i--)
+        {
+            Destroy(_rightHandPoolParent.GetChild(i).gameObject);
+        }
+        for (int i = _leftHandPoolParent.childCount - 1; i >= 0; i--)
+        {
+            Destroy(_leftHandPoolParent.GetChild(i).gameObject);
+        }
+
+        // Spawn in new element for each art, set parent and values
+        if (_playerWeapons.RightHand != WeaponTypes.None)
+        {
+            // Get full list
+            var newList = new List<WeaponArt>();
+            newList.AddRange(_playerWeapons.KnownWeaponArts[_playerWeapons.RightHand]);
+            // Remove already-equipped arts
+            for (int i = 0; i < _playerWeapons.RightHandArts.Length; i++)
+            {
+                newList.Remove(_playerWeapons.RightHandArts[i]);
+            }
+
+            for (int i = 0; i < newList.Count; i++)
+            {
+                var element = Instantiate(_elementPrefab, _rightHandPoolParent);
+                element.SetValue(this, newList[i], _canvas);
             }
         }
 
-        // Spawn in 
+        if (_playerWeapons.LeftHand != WeaponTypes.None)
+        {
+            var newList = new List<WeaponArt>();
+            newList.AddRange(_playerWeapons.KnownWeaponArts[_playerWeapons.LeftHand]);
+            for (int i = 0; i < _playerWeapons.LeftHandArts.Length; i++)
+            {
+                newList.Remove(_playerWeapons.LeftHandArts[i]);
+            }
+
+            for (int i = 0; i < newList.Count; i++)
+            {
+                var element = Instantiate(_elementPrefab, _leftHandPoolParent);
+                element.SetValue(this, newList[i], _canvas);
+            }
+        }
     }
-
-
 
     private void OnCancelSelection()
     {
 
     }
+
+    internal void OnTryEquipArt(ActiveWeaponArtElement element, WeaponArt newArt)
+    {
+        _playerWeapons.SetArt(newArt, element.Hand, element.Index);
+        UpdateWeapons();
+    }
+
+    #region - Tooltip -
+    public void ShowTooltip(WeaponArt art)
+    {
+        _tooltipHeader.text = art.name;
+        _tooltipText.text = art.Description;
+    }
+
+    public void HideTooltip()
+    {
+        _tooltipHeader.text = string.Empty;
+        _tooltipText.text = string.Empty;
+    }
+    #endregion
 }
