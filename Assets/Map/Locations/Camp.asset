@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e0832d127033c164385d84e2ee0239b7, type: 3}
-  m_Name: Cave
+  m_Name: Camp
   m_EditorClassIdentifier: 
-  m_DefaultSprite: {fileID: -553467683, guid: 3f015a5c1e6633f48a0669377a1e992c, type: 3}
+  m_DefaultSprite: {fileID: 221845604, guid: 3f015a5c1e6633f48a0669377a1e992c, type: 3}
   m_DefaultGameObject: {fileID: 0}
   m_DefaultColliderType: 1
   m_TilingRules: []
-  _type: 1
+  _type: 2

@@ -774,7 +774,7 @@ TextureImporter:
         width: 1
         height: 1
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -782,6 +782,90 @@ TextureImporter:
       bones: []
       spriteID: 64ba23bdd9241fa40b727fdca031bae0
       internalID: 608396945
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: camp
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 208
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 339cc6720aa8ec1478a7e0f08bc39e1c
+      internalID: 221845604
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trap
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 208
+        width: 16
+        height: 16
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8f9991302d18d874c97bab798e986b5c
+      internalID: 1763288878
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wall
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 208
+        width: 16
+        height: 16
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 27aca6ec811885747bb0bed126af129c
+      internalID: 1300671899
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tower
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 208
+        width: 16
+        height: 16
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8215bf57bcc99b844bbe4b1861af2e10
+      internalID: -1319994591
       vertices: []
       indices: 
       edges: []
@@ -804,6 +888,7 @@ TextureImporter:
       boots: 1204141666
       boots2: 1336918598
       bow: 1149609292
+      camp: 221845604
       castle: -879106632
       cave: -553467683
       diamond: -970150729
@@ -827,8 +912,11 @@ TextureImporter:
       staff: -1045763832
       sword: 1058067343
       tent: 793463657
+      tower: -1319994591
+      trap: 1763288878
       tree: -197989759
       unarmed: -1593459416
+      wall: 1300671899
       warhammer: -1800140695
       water: -1285521761
   mipmapLimitGroupName: 

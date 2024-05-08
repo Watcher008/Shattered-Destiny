@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using SD.Grids;
+using System.Net.NetworkInformation;
 
 namespace SD.Combat
 {
@@ -27,12 +28,47 @@ namespace SD.Combat
         [SerializeField] private GameObject _forest;
         [SerializeField] private GameObject _mountain;
 
+        [Header("Camps")]
+        [SerializeField] private GameObject _wall;
+        [SerializeField] private GameObject _trap;
+        [SerializeField] private GameObject _tower;
+
         // So... when building the battlefield, the following factors need to be taken into account
         // the current world tile of the player, e.g. where the combat is taking place in world space
         // the surrounding tiles of that tile, and the terrain
 
         // combat initiated on a road should have that road present on the battlefield
         // Refer to the Town example from dawnlike since that's what I'm working with atm.
+
+        public void BuildGrid(string[] template)
+        {
+            for (int y = 0; y < template.Length; y++)
+            {
+                for (int x = 0; x < template[y].Length; x++)
+                {
+                    char c = template[x][y];
+                    GameObject go = GetObject(c);
+                    if (go == null) continue;
+
+                    var node = CombatManager.Instance.GetNode(x, y);
+                    if (node == null) continue;
+
+                    var pos = new Vector3Int(node.X, 0, node.Y);
+                    Instantiate(go, pos, Quaternion.identity, transform);
+                }
+            }
+        }
+
+        private GameObject GetObject(char c)
+        {
+            switch (c)
+            {
+                case '#': return _wall;
+                case 'T': return _trap;
+                case 'W': return _tower;
+                default: return null;
+            }
+        }
 
         public void BuildGrid()
         {

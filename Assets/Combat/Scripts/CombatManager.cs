@@ -28,9 +28,13 @@ namespace SD.Combat
 
         [SerializeField] private PlayerData _playerData;
         [SerializeField] private PlayerWeaponData _weaponData;
+
+        [Space]
+
         [SerializeField] private CreatureCodex _creatureCodex;
         [SerializeField] private ItemCodex _itemCodex;
-        
+        [SerializeField] private LocationCodex _locationCodex;
+
         [Space]
         
         [SerializeField] private BattlefieldBuilder _battlefield;
@@ -81,7 +85,8 @@ namespace SD.Combat
         {
             while (gameObject.scene != SceneManager.GetActiveScene()) yield return null;
 
-            _battlefield.BuildGrid();
+            _battlefield.BuildGrid(_locationCodex.GetBlueprint());
+            //_battlefield.BuildGrid();
             PlaceCombatants();
 
             Combatants.Sort(); // Sort by initiative

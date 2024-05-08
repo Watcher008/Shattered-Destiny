@@ -2639,6 +2639,9 @@ MonoBehaviour:
   _rockTile: {fileID: 11400000, guid: 8f841780b0610c841ad07e57c8d300a2, type: 2}
   _forest: {fileID: 2480052604721032723, guid: 8aa693ffc6457f544969c8b66a6d0c3e, type: 3}
   _mountain: {fileID: 2199712360926784111, guid: 001cdbb2a36fda6458c15433a9044e9b, type: 3}
+  _wall: {fileID: 2199712360926784111, guid: 02fdfce0e7b08464691e2177b08b086c, type: 3}
+  _trap: {fileID: 2199712360926784111, guid: 8822c08b7fe2ef049814b1a8464c05ae, type: 3}
+  _tower: {fileID: 2199712360926784111, guid: ecbd8e023c3c3bf4fbce05bc8d11a998, type: 3}
 --- !u!4 &535866797
 Transform:
   m_ObjectHideFlags: 0
@@ -7490,8 +7493,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerData: {fileID: 11400000, guid: 964da513a2d1311478cf1791204336b2, type: 2}
+  _weaponData: {fileID: 0}
   _creatureCodex: {fileID: 11400000, guid: 13e795fec2e995a428a0c9358e4e568b, type: 2}
   _itemCodex: {fileID: 11400000, guid: 9e398e1c45748b2458e7253033a9e6e2, type: 2}
+  _locationCodex: {fileID: 11400000, guid: 8ff30e611f76fa2439d0817a4c77f966, type: 2}
   _battlefield: {fileID: 535866796}
   _interface: {fileID: 720241472}
   _prefab: {fileID: 5675029148953810745, guid: 02a3ce4e377655b4493b04e8542b266b, type: 3}
