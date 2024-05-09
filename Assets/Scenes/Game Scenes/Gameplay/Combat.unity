@@ -7493,7 +7493,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerData: {fileID: 11400000, guid: 964da513a2d1311478cf1791204336b2, type: 2}
-  _weaponData: {fileID: 0}
+  _weaponData: {fileID: 11400000, guid: cf5af98684926e548aa2f748aad22401, type: 2}
   _creatureCodex: {fileID: 11400000, guid: 13e795fec2e995a428a0c9358e4e568b, type: 2}
   _itemCodex: {fileID: 11400000, guid: 9e398e1c45748b2458e7253033a9e6e2, type: 2}
   _locationCodex: {fileID: 11400000, guid: 8ff30e611f76fa2439d0817a4c77f966, type: 2}

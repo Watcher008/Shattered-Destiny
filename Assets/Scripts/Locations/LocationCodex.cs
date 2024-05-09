@@ -33,6 +33,8 @@ public class LocationCodex : ScriptableObject
 
         foreach(var item in codex.Items)
         {
+            // Reverse because JSON layout is how it should be seen, but reverse is easier to parse
+            System.Array.Reverse(item.Layout);
             _locationBlueprints.Add(item.Layout);
         }
     }

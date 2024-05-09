@@ -46,7 +46,7 @@ namespace SD.Combat
             {
                 for (int x = 0; x < template[y].Length; x++)
                 {
-                    char c = template[x][y];
+                    char c = template[y][x];
                     GameObject go = GetObject(c);
                     if (go == null) continue;
 
@@ -55,6 +55,7 @@ namespace SD.Combat
 
                     var pos = new Vector3Int(node.X, 0, node.Y);
                     Instantiate(go, pos, Quaternion.identity, transform);
+                    node.SetOccupant(Occupant.Object);
                 }
             }
         }
