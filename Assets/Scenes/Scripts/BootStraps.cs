@@ -24,8 +24,9 @@ namespace SD.SceneManagement
         [SerializeField] private Image loadingProgressBar;
 
         [Header("Codices")]
-        [SerializeField] private CreatureCodex _codex;
+        [SerializeField] private CreatureCodex _creatureCodex;
         [SerializeField] private ItemCodex _itemCodex;
+        [SerializeField] private LocationCodex _locationCodex;
 
         private List<AsyncOperation> scenesToLoad = new List<AsyncOperation>();
         private List<GameEvent> eventsToInvokeAfterLoading = new List<GameEvent>();
@@ -44,8 +45,9 @@ namespace SD.SceneManagement
 
         private void Boot()
         {
-            _codex.Init();
+            _creatureCodex.Init();
             _itemCodex.Init();
+            _locationCodex.Init();
 
             bootEvent?.Invoke();
             LoadSceneCollectionAdditive(bootScenes);

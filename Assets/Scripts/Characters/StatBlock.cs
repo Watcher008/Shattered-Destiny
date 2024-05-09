@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace SD.Characters
 {
     /// <summary>
@@ -8,15 +10,26 @@ namespace SD.Characters
     public class StatBlock
     {
         public string Name;
+        public string Sprite;
         public int[] Attributes;
         public int MaxHealth;
         public int Movement;
         public int Initiative;
 
-        public int MaxActionPoints;
-        public int StartingActionPoints;
-        public int RefreshActionPoints;
+        public int MAP;
+        public int SAP;
+        public int RAP;
 
-        public string DefaultWeapon;
+        public string Weapon;
+        public string[] WeaponArts;
+
+        /// <summary>
+        /// Returns the 10th place value of the requested attribute, minimum 1.
+        /// </summary>
+        public int GetAttributeBonus(Attributes attribute)
+        {
+            var value = Mathf.Clamp(Mathf.RoundToInt(Attributes[(int)attribute] / 10), 1, 10);
+            return value;
+        }
     }
 }

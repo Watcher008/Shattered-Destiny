@@ -1,11 +1,13 @@
-namespace SD.PathingSystem
+namespace SD.Grids
 {
-    public class PathNode
+    public class PathNode : IHeapItem<PathNode>
     {
-        private readonly Grid<PathNode> _grid;
+        public Grid<PathNode> grid { get; private set; }
+
         public int X { get; private set; }
         public int Y { get; private set; }
 
+        #region - A* -
         //the movement cost to move from the start node to this node, following the existing path
         public int gCost;
         //the estimated movement cost to move from this node to the end node
@@ -14,16 +16,36 @@ namespace SD.PathingSystem
         public int fCost => gCost + hCost;
 
         public PathNode cameFromNode;
+        #endregion
+
+        #region - Heap -
+        private int heapIndex;
+        public int HeapIndex
+        {
+            get => heapIndex;
+            set
+            {
+                heapIndex = value;
+            }
+        }
+
+        public int CompareTo(PathNode other)
+        {
+            int compare = fCost.CompareTo(other.fCost);
+            if (compare == 0) compare = hCost.CompareTo(other.hCost);
+            return -compare; //want to return 1 if it's lower, so return negative value
+        }
+        #endregion
 
         public Occupant Occupant { get; private set; } // the creature/object occupying this node
         public bool IsWalkable { get; private set; } = true; //if this node can be traversed at all
-        public float MovementModifier { get; private set; } = 0.0f;
+        public int MovementCost { get; private set; } // Additional cost for moving to this node
 
         public TerrainType Terrain { get; private set; }
 
         public PathNode(Grid<PathNode> grid, int x, int y)
         {
-            _grid = grid;
+            this.grid = grid;
             X = x;
             Y = y;
         }
@@ -31,24 +53,24 @@ namespace SD.PathingSystem
         public void SetOccupant(Occupant occupant)
         {
             Occupant = occupant;
-            _grid.TriggerGridObjectChanged(X, Y);
+            grid.TriggerGridObjectChanged(X, Y);
         }
 
         public void SetWalkable(bool isWalkable)
         {
             IsWalkable = isWalkable;
-            _grid.TriggerGridObjectChanged(X, Y);
+            grid.TriggerGridObjectChanged(X, Y);
         }
 
         public void SetTerrain(TerrainType terrain)
         {
             Terrain = terrain;
-            _grid.TriggerGridObjectChanged(X, Y);
+            grid.TriggerGridObjectChanged(X, Y);
         }
 
-        public void SetMovementCost(float cost)
+        public void SetMovementCost(int cost)
         {
-            MovementModifier = cost;
+            MovementCost = cost;
         }
     }
 

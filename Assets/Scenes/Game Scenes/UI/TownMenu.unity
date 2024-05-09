@@ -178,6 +178,9 @@ MonoBehaviour:
   _quickTalk01Button: {fileID: 1047529307}
   _quickTalk02Button: {fileID: 1134996492}
   _quickTalk03Button: {fileID: 373442888}
+  _conversation01: Test Conversation 1
+  _conversation02: 
+  _conversation03: 
 --- !u!1 &215743335
 GameObject:
   m_ObjectHideFlags: 0

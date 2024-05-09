@@ -1,6 +1,10 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Art/5000FantasyIcons/ArmorIcons/BasicArmor_Icons.meta
 guid: faeeaac09ffbb2047804f914fde817fb
 folderAsset: yes
+========
+guid: d04dae1efd4c20f42801fa99bfb48c71
+>>>>>>>> dev:Assets/Plugins/Pixel Crushers/Dialogue System/Third Party Support/DoozyUI Support.unitypackage.meta
 DefaultImporter:
   externalObjects: {}
   userData: 

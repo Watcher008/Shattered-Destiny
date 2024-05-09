@@ -1,6 +1,10 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Art/5000FantasyIcons/ArmorIcons.meta
 guid: b1733d8acaa025941b8ed2c93a597886
 folderAsset: yes
+========
+guid: 9d6eeb26838ae2140a98c7b012c07610
+>>>>>>>> dev:Assets/Plugins/Pixel Crushers/Common/Third Party Support/HUD Navigation System Support.unitypackage.meta
 DefaultImporter:
   externalObjects: {}
   userData: 

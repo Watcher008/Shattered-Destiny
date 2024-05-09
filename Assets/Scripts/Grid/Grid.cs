@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace SD.PathingSystem
+namespace SD.Grids
 {
     public class Grid<TGridObject>
     {
@@ -19,6 +19,14 @@ namespace SD.PathingSystem
 
         private Vector3 originPosition;
         private TGridObject[,] gridArray;
+
+        public int MaxSize
+        {
+            get
+            {
+                return width * height;
+            }
+        }
 
         public Grid(int width, int height, float cellSize, Vector3 originPosition, Func<Grid<TGridObject>, int, int, TGridObject> createdGribObject)
         {

@@ -1,28 +1,149 @@
 {
+    "Items":[
+        {
+            "Name": "Ration",
+            "Value": 5,
+            "MaxStack": 10,
+            "Sprite": "misc/food"
+        },
+        {
+            "Name": "Potion",
+            "Value": 5,
+            "MaxStack": 10,
+            "Sprite": "misc/potion"
+        },
+        {
+            "Name": "Jewel",
+            "Value": 5,
+            "MaxStack": 10,
+            "Sprite": "misc/jewel"
+        },
+        {
+            "Name": "Diamond",
+            "Value": 5,
+            "MaxStack": 10,
+            "Sprite": "misc/diamond"
+        },
+        {
+            "Name": "Tent",
+            "Value": 5,
+            "MaxStack": 10,
+            "Sprite": "misc/tent"
+        }
+    ],
+    "Equipment":[
+        {
+            "Name": "Armor",
+            "Value": 5,
+            "MaxStack": 1,
+            "Sprite": "misc/armor",
+
+            "Slot": 0,
+            "Effects": [
+                { "Stat" : "HP", "Value": 20 },
+                { "Stat" : "MAP", "Value": 3 },
+                { "Stat" : "SAP", "Value": 2 },
+                { "Stat" : "RAP", "Value": 1 }
+            ]
+        },
+        {
+            "Name": "Steel Armor",
+            "Value": 5,
+            "MaxStack": 1,
+            "Sprite": "misc/armor2",
+
+            "Slot": 0,
+            "Effects": [
+                { "Stat" : "HP", "Value": 20 },
+                { "Stat" : "MAP", "Value": 3 },
+                { "Stat" : "SAP", "Value": 2 },
+                { "Stat" : "RAP", "Value": 1 }
+            ]
+        },
+        {
+            "Name": "Boots",
+            "Value": 5,
+            "MaxStack": 1,
+            "Sprite": "misc/boots",
+
+            "Slot": 1,
+            "Effects": [
+                { "Stat" : "INIT", "Value": 1 },
+                { "Stat" : "MARCH", "Value": 1 },
+                { "Stat" : "MOVE", "Value": 5 }
+            ]
+        }
+    ],
     "Weapons":[
         {
-            "Name": "Basic Sword",
+            "Name": "Natural",
+            "Value": 5,
+            "MaxStack": 1,
+            "Sprite": "misc/unarmed",
+
             "Damage": 1,
             "Range": 1,
-            "Attribute": 1
+            "Attribute": 0
         },
         {
-            "Name": "Basic Warhammer",
+            "Name": "Sword",
+            "Value": 5,
+            "MaxStack": 1,
+            "Sprite": "misc/sword",
+
             "Damage": 1,
             "Range": 1,
-            "Attribute": 1
+            "Attribute": 0
         },
         {
-            "Name": "Basic Bow",
+            "Name": "Shield",
+            "Value": 5,
+            "MaxStack": 1,
+            "Sprite": "misc/shield",
+
+            "Damage": 1,
+            "Range": 1,
+            "Attribute": 0
+        },
+        {
+            "Name": "Warhammer",
+            "Value": 1,
+            "MaxStack": 1,
+            "Sprite": "misc/warhammer",
+
+            "Damage": 1,
+            "Range": 1,
+            "Attribute": 0
+        },
+        {
+            "Name": "Bow",
+            "Value": 1,
+            "MaxStack": 1,
+            "Sprite": "misc/sword",
+
+            "Damage": 1,
+            "Range": 2,
+            "Attribute": 0
+        },
+        {
+            "Name": "Staff",
+            "Value": 1,
+            "MaxStack": 1,
+            "Sprite": "misc/sword",
+
             "Damage": 1,
             "Range": 2,
             "Attribute": 1
         },
         {
-            "Name": "Basic Staff",
+            "Name": "Book",
+            "Value": 1,
+            "MaxStack": 1,
+            "Sprite": "misc/sword",
+
             "Damage": 1,
             "Range": 2,
-            "Attribute": 2
+            "Attribute": 1
         }
     ]
 }

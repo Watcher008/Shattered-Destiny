@@ -1,45 +1,45 @@
 using System.Collections.Generic;
 using UnityEngine;
-using SD.Primitives;
+using SD.Inventories;
 
 namespace SD.Characters
 {
     [CreateAssetMenu(menuName = "Scriptable Objects/Player Data", fileName = "Player Data")]
     public class PlayerData : ScriptableObject
     {
-        #region - World Map Location
-        private int x, y;
-        public int X
+        private string _name;
+        public string Name
         {
-            get => x;
-            set => x = value;
+            get => _name;
+            set => _name = value;
         }
-        public int Y
+
+        private Sprite _sprite;
+        public Sprite Sprite
         {
-            get => y;
-            set => y = value;
+            get => _sprite;
+            set => _sprite = value;
         }
-        #endregion
+        private Vector2Int _worldPosition; 
+        public Vector2Int WorldPos
+        {
+            get => _worldPosition;
+            set => _worldPosition = value;
+        }
 
-        private static int[] defaultStats = { 15, 15, 15, 15 };
-        private static int[] defaultXP = {0, 0, 0, 0};
-
-        private CharacterSheet _playerStats = new CharacterSheet(defaultStats, defaultXP, 5, 5, 3, 1);
+        private CharacterSheet _playerStats;
+        private PlayerEquipment _equipment;
         private List<CharacterSheet> _companions = new();
+        private Inventory _inventory = new(new Vector2Int(10, 10));
 
-        private int _travelSpeed;
+        private int _marchSpeed;
         private int _exhaustion;
 
-        public CharacterSheet PlayerStats
-        {
-            get => _playerStats;
-            set => _playerStats = value;
-        }
         public List<CharacterSheet> Companions => _companions;
-        public int TravelSpeed
+        public int MarchSpeed
         {
-            get => _travelSpeed;
-            set => _travelSpeed = value;
+            get => _marchSpeed;
+            set => _marchSpeed = value;
         }
         public int Exhaustion
         {
@@ -47,11 +47,21 @@ namespace SD.Characters
             set => _exhaustion = Mathf.Clamp(value, 0, 10);
         }
 
-        #region - Reputation & Influence - 
-        [SerializeField] private IntReference[] _factionReputation;
-        [SerializeField] private IntReference[] _factionInfluence;
-        #endregion
-
+        public CharacterSheet PlayerStats
+        {
+            get => _playerStats;
+            set => _playerStats = value;
+        }
+        public Inventory Inventory
+        {
+            get => _inventory;
+            set => _inventory = value;
+        }
+        public PlayerEquipment PlayerEquip
+        {
+            get => _equipment;
+            set => _equipment = value;
+        }
 
         /// <summary>
         /// Regain health for all party members during rest.
@@ -64,24 +74,5 @@ namespace SD.Characters
                 _companions[i].RegainHealth(value);
             }
         }
-
-        public void SetReputation(Factions faction, int value)
-        {
-            _factionReputation[(int)faction].Value += value;
-        }
-
-        public int GetReputation(Factions faction)
-        {
-            return _factionReputation[(int)faction].Value;
-        }
     }
-}
-
-
-public enum Factions
-{
-    KingdomOfZodia,
-    ImperiumVitalis,
-    Ath_rakTribes,
-    EderanMerchantConglomerate,
 }

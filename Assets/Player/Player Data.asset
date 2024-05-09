@@ -12,6 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83d432c943b8995479a1ad246553f48e, type: 3}
   m_Name: Player Data
   m_EditorClassIdentifier: 
+  WeaponArts:
+  - {fileID: 11400000, guid: 0e963d9d48a53e048a757917427917ce, type: 2}
+  - {fileID: 11400000, guid: 83f606c3cd414e544ae53cc6db608e78, type: 2}
+  - {fileID: 11400000, guid: 793e3c6039451cc46bb21b673f0dad17, type: 2}
   _factionReputation:
   - {fileID: 11400000, guid: 1c3771c6625acfd479d5926d540ed9d7, type: 2}
   - {fileID: 11400000, guid: cf39ad740695f964ebc482b6124969f5, type: 2}

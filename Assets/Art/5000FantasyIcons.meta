@@ -1,6 +1,10 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Art/5000FantasyIcons.meta
 guid: 02f31d4039d3e4049bbc7c913129c29a
 folderAsset: yes
+========
+guid: 79d6a8f7106f5a949afdf0f9fce6e5c9
+>>>>>>>> dev:Assets/Plugins/Pixel Crushers/Common/Third Party Support/TopDown Engine Support.unitypackage.meta
 DefaultImporter:
   externalObjects: {}
   userData: 

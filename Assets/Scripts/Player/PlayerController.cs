@@ -1,5 +1,5 @@
 using UnityEngine;
-using SD.PathingSystem;
+using SD.Grids;
 using System.Collections;
 using System.Collections.Generic;
 using SD.Characters;
@@ -24,10 +24,10 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         _transform = transform;
-        _transform.position = Pathfinding.instance.GetNodeWorldPosition(_playerData.X, _playerData.Y);
+        _currentNode = WorldMap.GetNode(_transform.position);
+        _transform.position = WorldMap.GetNodePosition(_currentNode.X, _currentNode.Y);
 
-        _currentNode = Pathfinding.instance.GetNode(_transform.position);
-        _transform.position = Pathfinding.instance.GetNodeWorldPosition(_currentNode.X, _currentNode.Y);
+        GetComponentInChildren<SpriteRenderer>().sprite = _playerData.Sprite;
 
         WorldMapManager.Instance.onPauseInput += PauseInput;
         WorldMapManager.Instance.onResumeInput += ResumeInput;
@@ -61,7 +61,7 @@ public class PlayerController : MonoBehaviour
         if (!_canAct) return;
 
         if (node == null) return;
-        var path = Pathfinding.instance.FindNodePath(_currentNode, node);
+        var path = Pathfinding.FindNodePath(_currentNode, node);
         
         if (path == null) return;
 
@@ -77,7 +77,7 @@ public class PlayerController : MonoBehaviour
             var next = path[0];
             path.RemoveAt(0);
 
-            var end = Pathfinding.instance.GetNodeWorldPosition(next.X, next.Y);
+            var end = WorldMap.GetNodePosition(next.X, next.Y);
             float t = 0f;
             while (t < _moveTime)
             {
@@ -88,8 +88,7 @@ public class PlayerController : MonoBehaviour
             _transform.position = end;
 
             _currentNode = next;
-            _playerData.X = next.X;
-            _playerData.Y = next.Y;
+            _playerData.WorldPos = new Vector2Int(next.X, next.Y);
 
             WorldMapManager.Instance.OnPlayerActed(_currentNode);
 

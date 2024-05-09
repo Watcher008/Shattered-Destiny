@@ -1,123 +1,354 @@
 {
     "Creatures":[
         {
-            "Name": "Bandit",
+            "Name": "Isold Hartman",
+            "Sprite": "creatures/cleric",
             "Attributes": [15, 15, 15, 15],
             "MaxHealth": 5,
             "Movement": 3,
             "Initiative": 1,
 
-            "MaxActionPoints": 5,
-            "StartingActionPoints": 3,
-            "RefreshActionPoints": 1,
+            "MAP": 5,
+            "SAP": 3,
+            "RAP": 1,
 
-            "DefaultWeapon": "Basic Sword"
+            "Weapon": "Book",
+            "WeaponArts": ["Empower", "Reinforce", "Harden"]
+        },
+        {
+            "Name": "Lana of the Wind",
+            "Sprite": "creatures/archer",
+            "Attributes": [15, 15, 15, 15],
+            "MaxHealth": 5,
+            "Movement": 3,
+            "Initiative": 1,
+
+            "MAP": 5,
+            "SAP": 3,
+            "RAP": 1,
+
+            "Weapon": "Bow",
+            "WeaponArts": ["Headshot", "MarkingShot", "Arrow to the Knee"]
+        },
+        {
+            "Name": "Hank the Dog",
+            "Sprite": "creatures/dog",
+            "Attributes": [15, 15, 15, 15],
+            "MaxHealth": 5,
+            "Movement": 3,
+            "Initiative": 1,
+
+            "MAP": 5,
+            "SAP": 3,
+            "RAP": 1,
+
+            "Weapon": "Sword",
+            "WeaponArts": ["Empower", "Reinforce", "Harden"]
+        },
+        {
+            "Name": "Riktor Krem",
+            "Sprite": "creatures/wizard",
+            "Attributes": [15, 15, 15, 15],
+            "MaxHealth": 5,
+            "Movement": 3,
+            "Initiative": 1,
+
+            "MAP": 5,
+            "SAP": 3,
+            "RAP": 1,
+
+            "Weapon": "Staff",
+            "WeaponArts": ["Magic Missile", "Meteor Shower", "Overgrowth"]
+        },
+        {
+            "Name": "Mini",
+            "Sprite": "creatures/barbarian",
+            "Attributes": [15, 15, 15, 15],
+            "MaxHealth": 5,
+            "Movement": 3,
+            "Initiative": 1,
+
+            "MAP": 5,
+            "SAP": 3,
+            "RAP": 1,
+
+            "Weapon": "Warhammer",
+            "WeaponArts": ["Push", "Warcry", "Smash"]
+        },
+
+
+
+        {
+            "Name": "Bandit",
+            "Sprite": "creatures/bandit",
+            "Attributes": [15, 15, 15, 15],
+            "MaxHealth": 5,
+            "Movement": 3,
+            "Initiative": 1,
+
+            "MAP": 5,
+            "SAP": 3,
+            "RAP": 1,
+
+            "Weapon": "Sword",
+            "WeaponArts": []
         },
         {
             "Name": "Bandit Archer",
+            "Sprite": "creatures/bandit",
             "Attributes": [15, 15, 15, 15],
             "MaxHealth": 5,
             "Movement": 3,
             "Initiative": 1,
 
-            "MaxActionPoints": 5,
-            "StartingActionPoints": 3,
-            "RefreshActionPoints": 1,
+            "MAP": 5,
+            "SAP": 3,
+            "RAP": 1,
 
-            "DefaultWeapon": "Basic Bow"
+            "Weapon": "Bow",
+            "WeaponArts": []
         },
 
         {
             "Name": "Mage Acolyte",
+            "Sprite": "creatures/mage",
             "Attributes": [20, 40, 15, 15],
             "MaxHealth": 20,
             "Movement": 2,
             "Initiative": 4,
 
-            "MaxActionPoints": 5,
-            "StartingActionPoints": 3,
-            "RefreshActionPoints": 1,
+            "MAP": 5,
+            "SAP": 3,
+            "RAP": 1,
 
-            "DefaultWeapon": "Basic Staff"
+            "Weapon": "Staff",
+            "WeaponArts": []
         },
         {
             "Name": "Mage Apprentice",
+            "Sprite": "creatures/mage",
             "Attributes": [15, 50, 15, 15],
             "MaxHealth": 30,
             "Movement": 3,
             "Initiative": 6,
 
-            "MaxActionPoints": 8,
-            "StartingActionPoints": 5,
-            "RefreshActionPoints": 2,
+            "MAP": 8,
+            "SAP": 5,
+            "RAP": 2,
 
-            "DefaultWeapon": "Basic Staff"
+            "Weapon": "Staff",
+            "WeaponArts": []
         },
         {
             "Name": "Mage Brute",
+            "Sprite": "creatures/mage",
             "Attributes": [15, 50, 15, 15],
             "MaxHealth": 40,
             "Movement": 3,
             "Initiative": 5,
 
-            "MaxActionPoints": 7,
-            "StartingActionPoints": 5,
-            "RefreshActionPoints": 2,
+            "MAP": 7,
+            "SAP": 5,
+            "RAP": 2,
 
-            "DefaultWeapon": "Basic Staff"
+            "Weapon": "Staff",
+            "WeaponArts": []
         },
 
         {
             "Name": "Imperial Recruit",
+            "Sprite": "creatures/templar",
             "Attributes": [25, 25, 15, 15],
             "MaxHealth": 25,
             "Movement": 3,
             "Initiative": 4,
 
-            "MaxActionPoints": 5,
-            "StartingActionPoints": 3,
-            "RefreshActionPoints": 1,
+            "MAP": 5,
+            "SAP": 3,
+            "RAP": 1,
 
-            "DefaultWeapon": "Basic Sword"
+            "Weapon": "Sword",
+            "WeaponArts": []
         },
         {
             "Name": "Imperial Caster",
+            "Sprite": "creatures/mage",
             "Attributes": [25, 45, 15, 15],
             "MaxHealth": 35,
             "Movement": 3,
             "Initiative": 5,
 
-            "MaxActionPoints": 8,
-            "StartingActionPoints": 5,
-            "RefreshActionPoints": 2,
+            "MAP": 8,
+            "SAP": 5,
+            "RAP": 2,
 
-            "DefaultWeapon": "Basic Staff"
+            "Weapon": "Staff",
+            "WeaponArts": []
         },
         {
             "Name": "Blade",
+            "Sprite": "creatures/champion",
             "Attributes": [75, 25, 15, 15],
             "MaxHealth": 50,
             "Movement": 4,
             "Initiative": 4,
 
-            "MaxActionPoints": 10,
-            "StartingActionPoints": 7,
-            "RefreshActionPoints": 3,
+            "MAP": 10,
+            "SAP": 7,
+            "RAP": 3,
 
-            "DefaultWeapon": "Basic Sword"
+            "Weapon": "Sword",
+            "WeaponArts": []
         },
         {
             "Name": "Imperial Ranger",
+            "Sprite": "creatures/archer",
             "Attributes": [45, 25, 15, 15],
             "MaxHealth": 35,
             "Movement": 3,
             "Initiative": 5,
 
-            "MaxActionPoints": 8,
-            "StartingActionPoints": 5,
-            "RefreshActionPoints": 2,
+            "MAP": 8,
+            "SAP": 5,
+            "RAP": 2,
 
-            "DefaultWeapon": "Basic Bow"
+            "Weapon": "Bow",
+            "WeaponArts": []
+        },
+
+        {
+            "Name": "Battlethirsty Champion",
+            "Sprite": "creatures/champion",
+            "Attributes": [85, 50, 15, 15],
+            "MaxHealth": 70,
+            "Movement": 4,
+            "Initiative": 4,
+
+            "MAP": 12,
+            "SAP": 8,
+            "RAP": 4,
+
+            "Weapon": "Sword",
+            "WeaponArts": []
+        },
+        {
+            "Name": "Battlethirsty Sharpshooter",
+            "Sprite": "creatures/archer",
+            "Attributes": [85, 50, 15, 15],
+            "MaxHealth": 70,
+            "Movement": 4,
+            "Initiative": 4,
+
+            "MAP": 12,
+            "SAP": 8,
+            "RAP": 4,
+
+            "Weapon": "Bow",
+            "WeaponArts": []
+        },
+
+
+        {
+            "Name": "Dreadstag",
+            "Sprite": "creatures/stag",
+            "Attributes": [85, 50, 15, 15],
+            "MaxHealth": 70,
+            "Movement": 4,
+            "Initiative": 4,
+
+            "MAP": 12,
+            "SAP": 8,
+            "RAP": 4,
+
+            "Weapon": "Natural",
+            "WeaponArts": []
+        },
+        {
+            "Name": "Skinfox",
+            "Sprite": "creatures/fox",
+            "Attributes": [85, 50, 15, 15],
+            "MaxHealth": 70,
+            "Movement": 4,
+            "Initiative": 4,
+
+            "MAP": 12,
+            "SAP": 8,
+            "RAP": 4,
+
+            "Weapon": "Natural",
+            "WeaponArts": []
+        },
+        {
+            "Name": "Wolf",
+            "Sprite": "creatures/wolf",
+            "Attributes": [20, 20, 15, 15],
+            "MaxHealth": 25,
+            "Movement": 5,
+            "Initiative": 6,
+
+            "MAP": 5,
+            "SAP": 3,
+            "RAP": 1,
+
+            "Weapon": "Natural",
+            "WeaponArts": []
+        },
+        {
+            "Name": "Bear",
+            "Sprite": "creatures/bear",
+            "Attributes": [40, 20, 15, 15],
+            "MaxHealth": 120,
+            "Movement": 5,
+            "Initiative": 6,
+
+            "MAP": 10,
+            "SAP": 8,
+            "RAP": 3,
+
+            "Weapon": "Natural",
+            "WeaponArts": []
+        },
+        {
+            "Name": "Horse",
+            "Sprite": "creatures/horse",
+            "Attributes": [10, 20, 15, 15],
+            "MaxHealth": 20,
+            "Movement": 3,
+            "Initiative": 5,
+
+            "MAP": 6,
+            "SAP": 4,
+            "RAP": 1,
+
+            "Weapon": "Natural",
+            "WeaponArts": []
+        }
+    ],
+    "Squads":[
+        {
+            "Name": "Bandits",
+            "Terrain": ["Road", "Grassland"],
+            "Units": ["Bandit", "Bandit", "Bandit"]
+        },
+        {
+            "Name": "Wolf Pack",
+            "Terrain": ["Forest"],
+            "Units": ["Wolf", "Wolf", "Wolf"]
+        },
+        {
+            "Name": "Dreadstag Herd",
+            "Terrain": ["Forest", "Grassland"],
+            "Units": ["Dreadstag", "Dreadstag"]
+        },
+        {
+            "Name": "Lone Bear",
+            "Terrain": ["Forest"],
+            "Units": ["Bear"]
+        },
+        {
+            "Name": "Imperial Patrol",
+            "Terrain": ["Road"],
+            "Units": ["Imperial Recruit", "Imperial Recruit", "Imperial Caster"]
         }
     ]
 }

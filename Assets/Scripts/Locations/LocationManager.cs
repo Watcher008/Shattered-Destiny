@@ -1,17 +1,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using SD.PathingSystem;
+using SD.Grids;
 using SD.EventSystem;
 
 public class LocationManager : MonoBehaviour
 {
     [SerializeField] private Tilemap _locationMap;
     [SerializeField] private GameEvent _enterTownEvent;
-    private List<PathNode> _locations = new List<PathNode>();
+    private Dictionary<PathNode, LocationType> _locations;
 
     private void Start()
     {
+        _locations = new Dictionary<PathNode, LocationType>();
         _locationMap.CompressBounds();
 
         var bounds = _locationMap.cellBounds;
@@ -24,23 +25,37 @@ public class LocationManager : MonoBehaviour
             {
                 var pos = new Vector3Int(bounds.xMin + x, bounds.yMin + y, 0);
 
-                var tile = _locationMap.GetTile(pos);
+                var tile = _locationMap.GetTile(pos) as LocationTile;
                 if (tile == null) continue;
 
-                var node = Pathfinding.instance.GetNode(pos);
-                _locations.Add(node);
+                var node = WorldMap.GetNode(pos);
+                _locations.Add(node, tile.Type);
             }
         }
     }
 
     public bool IsLocation(PathNode node)
     {
-        if (_locations.Contains(node))
+        if (_locations.ContainsKey(node))
         {
-            _enterTownEvent?.Invoke();
-            WorldMapManager.Instance.onPauseInput?.Invoke();
+            switch (_locations[node])
+            {
+                case LocationType.Town:
+                    Debug.Log("Town");
+                    _enterTownEvent?.Invoke();
+                    WorldMapManager.Instance.onPauseInput?.Invoke();
+                    break;
+                case LocationType.Cave:
+                    Debug.Log("Cave");
+                    break;
+                case LocationType.Camp:
+                    Debug.Log("Camp");
+                    break;
+            }
             return true;
         }
         return false;
     }
+
+    
 }
