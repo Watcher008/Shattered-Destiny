@@ -198,6 +198,7 @@ namespace SD.Combat
 
             foreach (var art in _combatant.WeaponArts)
             {
+                if (art == null) continue;
                 // Will need to add a variable to arts for if they are offensive or defensive
                 if (dist <= art.Range) return true;
             }
