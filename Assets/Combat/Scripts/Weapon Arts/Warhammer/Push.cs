@@ -8,7 +8,7 @@ namespace SD.Combat.WeaponArts
     {
         public override void OnUse(Combatant combatant, PathNode node)
         {
-            if (CombatManager.Instance.CheckNode(node, out var target))
+            if (CombatManager.Instance.CheckNode(node, out Combatant target))
             {
                 bool stunTarget = true;
                 var direction = new Vector2Int(target.Node.X - combatant.Node.X, target.Node.Y - combatant.Node.Y);
@@ -16,12 +16,12 @@ namespace SD.Combat.WeaponArts
                 // Make sure to not try to push them out of bounds
                 var newNode = CombatManager.Instance.GetNode(target.Node.X + direction.x, target.Node.Y + direction.y);
 
-                if (newNode != null)
+                if (newNode != null && newNode.Occupant == Occupant.None)
                 {
                     // Is the node occupied? Don't know what happens
-                    bool nodeOccupied = CombatManager.Instance.CheckNode(newNode, out _);
+                    //bool nodeOccupied = CombatManager.Instance.CheckNode(newNode, out _);
 
-                    if (!nodeOccupied)
+                    //if (!nodeOccupied)
                     {
                         target.ForceMove(newNode);
                         if ((int)newNode.Terrain <= (int)TerrainType.Road) stunTarget = false;

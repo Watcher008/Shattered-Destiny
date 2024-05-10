@@ -1,11 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Tilemaps;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using UnityEngine.InputSystem;
-using TMPro;
 using SD.Grids;
 using SD.Characters;
 using SD.Combat.WeaponArts;
@@ -49,6 +46,8 @@ namespace SD.Combat
         public List<Combatant> Combatants { get; private set; } = new();
         public List<Combatant> PlayerCombatants { get; private set; } = new();
         public List<Combatant> EnemyCombatants { get; private set; } = new();
+
+        public List<CombatObstacle> Obstacles { get; private set; } = new();
         #endregion
 
         private int _currentRound;
@@ -209,7 +208,7 @@ namespace SD.Combat
 
         private void OnStartTurn(Combatant combatant)
         {
-            //Debug.Log("Turn start for " + combatant.gameObject.name);
+            CombatLog.Log($"{combatant.gameObject.name} turn");
             CurrentActor = combatant;
             CurrentActor.OnTurnStart(_currentRound > 1);
             _interface.OnNewActor();
@@ -294,46 +293,74 @@ namespace SD.Combat
             return false;
         }
 
+        public bool CheckNode(PathNode node, out IDamageable target)
+        {
+            target = null;
+            foreach (var combatant in Combatants)
+            {
+                if (combatant.Node == node)
+                {
+                    target = combatant;
+                    return true;
+                }
+            }
+
+            foreach(var obstacle in Obstacles)
+            {
+                if (obstacle.GetNode() == node)
+                {
+                    target = obstacle;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         /// <summary>
         /// Calculates chance to hit based on terrain and status effect variables.
         /// </summary>
         /// <returns>True if the attack hits.</returns>
-        public bool AttackHits(Combatant attacker, Combatant target)
+        public bool AttackHits(Combatant attacker, IDamageable target)
         {
             // OP Auto-hit
             if (attacker.HasEffect<Effect_Focused>()) return true;
 
             float chanceToHit = 0.8f; // - 0.05f * attacker.Weapon.Tier
 
-            // Rolling to hit the terrain
-            if (target == null)
+            // Rolling to hit an object or terrain
+            if (target == null || target is not Combatant)
             {
                 bool hits = Random.value <= chanceToHit;
-                if (!hits) Debug.Log("Attack miss!");
+                if (!hits) CombatLog.Log("Attack miss!");
                 return hits;
             }
 
+            var targetNode = target.GetNode();
+
             // Check for Barrier effect and apply if present
-            if (NodeHasEffect<Effect_Barrier>(target.Node, out var areaEffect))
+            if (NodeHasEffect<Effect_Barrier>(targetNode, out var areaEffect))
             {
                 if (!areaEffect.Area.Contains(attacker.Node)) return false;
             }
-
 
             // Bonus to hit if attacker is in a Mountain tile
             if (attacker.Node.Terrain == TerrainType.Mountain) chanceToHit += 0.2f;
 
             // Penalty to hit if target is in a Forest tile
-            if (target.Node.Terrain == TerrainType.Forest) chanceToHit -= 0.2f;
+            if (targetNode.Terrain == TerrainType.Forest) chanceToHit -= 0.2f;
 
             // Apply Penalty if target is Hard ;)
-            if (target.HasEffect<Hardened>()) chanceToHit -= 0.25f;
-
+            if (target is Combatant targetUnit)
+            {
+                if (targetUnit.HasEffect<Hardened>()) chanceToHit -= 0.25f;
+            }
+            
             // Lastly check for terrain between the two
-            var points = Bresenham.PlotLine(attacker.Node.X, attacker.Node.Y, target.Node.X, target.Node.Y);
+            var points = Bresenham.PlotLine(attacker.Node.X, attacker.Node.Y, targetNode.X, targetNode.Y);
             var nodes = Pathfinding.ConvertToNodes(_grid, points);
             nodes.Remove(attacker.Node);
-            nodes.Remove(target.Node);
+            nodes.Remove(targetNode);
 
             foreach (var node in nodes)
             {
@@ -344,10 +371,11 @@ namespace SD.Combat
                 }
             }
 
+
             var roll = Random.value;
             bool attackHits = roll <= chanceToHit; // Roll under
             Debug.Log($"Chance to hit: {chanceToHit}, Roll: {roll}");
-            if (!attackHits) Debug.Log("Attack miss!");
+            if (!attackHits) CombatLog.Log("Attack miss!");
             return attackHits;
         }
 
@@ -391,5 +419,60 @@ namespace SD.Combat
             _combatActive = false;
             _interface.Invoke(nameof(_interface.OnCombatEnd), 2.5f);
         }
+
+        /*
+        public bool AttackHits(Combatant attacker, Combatant target)
+        {
+            // OP Auto-hit
+            if (attacker.HasEffect<Effect_Focused>()) return true;
+
+            float chanceToHit = 0.8f; // - 0.05f * attacker.Weapon.Tier
+
+            // Rolling to hit an object or terrain
+            if (target == null)
+            {
+                bool hits = Random.value <= chanceToHit;
+                if (!hits) CombatLog.Log("Attack miss!");
+                return hits;
+            }
+
+            // Check for Barrier effect and apply if present
+            if (NodeHasEffect<Effect_Barrier>(target.Node, out var areaEffect))
+            {
+                if (!areaEffect.Area.Contains(attacker.Node)) return false;
+            }
+
+
+            // Bonus to hit if attacker is in a Mountain tile
+            if (attacker.Node.Terrain == TerrainType.Mountain) chanceToHit += 0.2f;
+
+            // Penalty to hit if target is in a Forest tile
+            if (target.Node.Terrain == TerrainType.Forest) chanceToHit -= 0.2f;
+
+            // Apply Penalty if target is Hard ;)
+            if (target.HasEffect<Hardened>()) chanceToHit -= 0.25f;
+
+            // Lastly check for terrain between the two
+            var points = Bresenham.PlotLine(attacker.Node.X, attacker.Node.Y, target.Node.X, target.Node.Y);
+            var nodes = Pathfinding.ConvertToNodes(_grid, points);
+            nodes.Remove(attacker.Node);
+            nodes.Remove(target.Node);
+
+            foreach (var node in nodes)
+            {
+                if (node.Terrain == TerrainType.Mountain || node.Terrain == TerrainType.Forest)
+                {
+                    chanceToHit /= 2;
+                    break;
+                }
+            }
+
+            var roll = Random.value;
+            bool attackHits = roll <= chanceToHit; // Roll under
+            Debug.Log($"Chance to hit: {chanceToHit}, Roll: {roll}");
+            if (!attackHits) CombatLog.Log("Attack miss!");
+            return attackHits;
+        }
+        */
     }
 }

@@ -19,10 +19,11 @@ namespace SD.Combat.WeaponArts
 
             foreach (var newNode in nodes)
             {
-                CombatManager.Instance.CheckNode(newNode, out var target);
-                // Ignore empty nodes and allies
-                if (target == null || target.IsPlayer == combatant.IsPlayer) continue;
-                combatant.DealDamage(dmg, target);
+                if (CombatManager.Instance.CheckNode(newNode, out IDamageable target))
+                {
+                    if (target is Combatant c && c.IsPlayer == combatant.IsPlayer) continue;
+                    combatant.DealDamage(dmg, target);
+                }
             }
             combatant.SpendActionPoints(_actionPointCost);
         }

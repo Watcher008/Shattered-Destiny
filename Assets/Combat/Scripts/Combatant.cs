@@ -7,8 +7,10 @@ using SD.Characters;
 using SD.Combat;
 using SD.Combat.WeaponArts;
 using SD.Combat.Effects;
+using UnityEditor.Experimental.GraphView;
+using static UnityEngine.GraphicsBuffer;
 
-public class Combatant : MonoBehaviour, IComparable<Combatant>
+public class Combatant : MonoBehaviour, IComparable<Combatant>, IDamageable
 {
     #region - Callback Events
     public delegate void OnTurnChanged();
@@ -47,6 +49,7 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
         }
     }
     public PathNode Node => _currentNode;
+    public PathNode GetNode() => _currentNode;
     public List<WeaponArt> WeaponArts => _weaponArts;
 
     // Prevents further input until current action has resolved
@@ -357,10 +360,11 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
         IsActing = false;
     }
 
-    public void Attack(Combatant target)
+    public void Attack(IDamageable target)
     {
-        //Debug.Log($"{gameObject.name} is attacking {target.gameObject.name}.");
-        StartCoroutine(Stab(target));
+        Debug.Log("add func for getting name");
+        //CombatLog.Log($"{gameObject.name} attacks {target.gameObject.name}.");
+        StartCoroutine(Stab(target.GetNode()));
 
         // Deal damage to target
         var dmg = _weapon != null ? _weapon.Damage : 1;
@@ -368,6 +372,26 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
         DealDamage(dmg, target);
 
         SpendActionPoints();
+    }
+
+    public void DealDamage(int dmg, IDamageable target)
+    {
+        if (target is Combatant combatant)
+        {
+            Debug.Log("Is combatant");
+        }
+        float damageMultiplier = 1.0f;
+        if (HasEffect<Weaken>()) damageMultiplier -= 0.25f;
+        if (HasEffect<Effect_Empowered>()) damageMultiplier += 0.25f;
+
+        if (CombatManager.Instance.NodeHasEffect<Effect_Barrier>(Node, out var areaEffect))
+        {
+            // +50% bonus if targeting a unit outside the effect
+            if (!areaEffect.Area.Contains(target.GetNode())) damageMultiplier += 0.5f;
+        }
+
+        dmg = Mathf.RoundToInt(dmg * damageMultiplier);
+        target.TakeDamage(dmg);
     }
 
     public void DealDamage(int dmg, Combatant target)
@@ -401,11 +425,12 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
         }
     }
 
-    private IEnumerator Stab(Combatant target)
+    private IEnumerator Stab(PathNode node)
     {
         IsActing = true;
         var start = transform.position;
-        var end = (transform.position + target.transform.position) / 2;
+        var pos = new Vector3(node.X, 0, node.Y);
+        var end = (transform.position + pos) / 2;
         float t = 0, timeToAct = 0.25f;
 
         while (t < timeToAct)
@@ -419,7 +444,6 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
         }
         transform.position = start;
 
-        //CombatManager.Instance.EndTurn(this);
         IsActing = false;
     }
     #endregion
@@ -442,4 +466,43 @@ public class Combatant : MonoBehaviour, IComparable<Combatant>
             return 0; // Then it just doesn't matter
         }
     }
+
+    #region - Obsolete -
+    [Obsolete]
+    public void Attack(Combatant target)
+    {
+        CombatLog.Log($"{gameObject.name} attacks {target.gameObject.name}.");
+        StartCoroutine(Stab(target));
+
+        // Deal damage to target
+        var dmg = _weapon != null ? _weapon.Damage : 1;
+        dmg += GetDamageBonus();
+        DealDamage(dmg, target);
+
+        SpendActionPoints();
+    }
+
+    [Obsolete]
+    private IEnumerator Stab(Combatant target)
+    {
+        IsActing = true;
+        var start = transform.position;
+        var end = (transform.position + target.transform.position) / 2;
+        float t = 0, timeToAct = 0.25f;
+
+        while (t < timeToAct)
+        {
+            t += Time.deltaTime;
+
+            if (t >= timeToAct / 2) transform.position = Vector3.Lerp(end, start, t / timeToAct);
+            else transform.position = Vector3.Lerp(start, end, t / timeToAct);
+
+            yield return null;
+        }
+        transform.position = start;
+
+        //CombatManager.Instance.EndTurn(this);
+        IsActing = false;
+    }
+    #endregion
 }

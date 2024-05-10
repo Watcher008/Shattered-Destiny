@@ -12,13 +12,17 @@ namespace SD.Combat.WeaponArts
 
         public override void OnUse(Combatant combatant, PathNode node)
         {
-            if (CombatManager.Instance.CheckNode(node, out var target))
+            if (CombatManager.Instance.CheckNode(node, out IDamageable target))
             {
                 if (CombatManager.Instance.AttackHits(combatant, target))
                 {
                     int dmg = combatant.GetAttributeBonus(Attributes.Physicality) * MODIFIER;
                     combatant.DealDamage(dmg, target);
-                    target.AddEffect(new Vulnerable(), DURATION);
+
+                    if (target is Combatant targetUnit)
+                    {
+                        targetUnit.AddEffect(new Vulnerable(), DURATION);
+                    }
                 }
 
                 combatant.SpendActionPoints(_actionPointCost);

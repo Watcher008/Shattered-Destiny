@@ -12,20 +12,18 @@ namespace SD.Combat.WeaponArts
 
         public override void OnUse(Combatant combatant, PathNode node)
         {
-            if (CombatManager.Instance.CheckNode(node, out var target))
+            if (CombatManager.Instance.CheckNode(node, out IDamageable target))
             {
                 int dmg = DAMAGE_MOD * combatant.GetAttributeBonus(Attributes.Physicality);
 
                 var nodes = Pathfinding.GetArea(combatant.Node, RANGE);
                 foreach (var areaNode in nodes)
                 {
-                    if (CombatManager.Instance.CheckNode(areaNode, out var nextTarget))
+                    if (CombatManager.Instance.CheckNode(areaNode, out IDamageable nextTarget))
                     {
-                        if (nextTarget.IsPlayer != combatant.IsPlayer)
-                        {
-                            Debug.Log($"Dealing {dmg} Cleave dmg to {nextTarget.gameObject.name}");
-                            combatant.DealDamage(dmg, nextTarget);
-                        }
+                        if (nextTarget is Combatant unit && unit.IsPlayer == combatant.IsPlayer) continue;
+
+                        combatant.DealDamage(dmg, nextTarget);
                     }
                 }
 

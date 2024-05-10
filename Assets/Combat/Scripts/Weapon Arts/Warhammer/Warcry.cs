@@ -10,14 +10,14 @@ namespace SD.Combat.WeaponArts
 
         public override void OnUse(Combatant combatant, PathNode node)
         {
-            if (CombatManager.Instance.CheckNode(node, out var target))
+            if (CombatManager.Instance.CheckNode(node, out Combatant target))
             {
                 if (target.IsPlayer != combatant.IsPlayer) return;
 
                 var nodes = Pathfinding.GetArea(target.Node, RANGE);
                 foreach (var newNode in nodes)
                 {
-                    if (CombatManager.Instance.CheckNode(newNode, out var nextTarget))
+                    if (CombatManager.Instance.CheckNode(newNode, out Combatant nextTarget))
                     {
                         if (nextTarget.IsPlayer != combatant.IsPlayer) continue;
                         nextTarget.AddEffect(new Effect_Empowered());
