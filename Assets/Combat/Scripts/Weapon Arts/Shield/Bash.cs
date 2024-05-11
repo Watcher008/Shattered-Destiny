@@ -9,12 +9,15 @@ namespace SD.Combat.WeaponArts
     {
         public override void OnUse(Combatant combatant, PathNode node)
         {
-            if (CombatManager.Instance.CheckNode(node, out var target))
+            if (CombatManager.Instance.CheckNode(node, out IDamageable target))
             {
                 int dmg = combatant.GetAttributeBonus(Attributes.Physicality);
 
                 combatant.DealDamage(dmg, target);
-                target.AddEffect(new Stun());
+                if (target is Combatant c)
+                {
+                    c.AddEffect(new Stun());
+                }
 
                 combatant.SpendActionPoints(_actionPointCost);
             }

@@ -10,7 +10,7 @@ namespace SD.Combat.WeaponArts
 
         public override void OnUse(Combatant combatant, PathNode node)
         {
-            if (CombatManager.Instance.CheckNode(node, out var target))
+            if (CombatManager.Instance.CheckNode(node, out Combatant target))
             {
                 //if (target.IsPlayer == combatant.IsPlayer) return;
 

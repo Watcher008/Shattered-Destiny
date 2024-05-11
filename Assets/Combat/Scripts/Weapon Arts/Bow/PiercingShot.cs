@@ -18,9 +18,9 @@ namespace SD.Combat.WeaponArts
 
             foreach (var newNode in nodes)
             {
-                CombatManager.Instance.CheckNode(newNode, out var target);
-                // Ignore empty nodes, allies can be hit
-                if (target == null) continue;// || target.IsPlayer == combatant.IsPlayer) continue;
+                CombatManager.Instance.CheckNode(newNode, out IDamageable target);
+                
+                if (target == null) continue;// Ignore empty nodes, allies can be hit
 
                 if (CombatManager.Instance.AttackHits(combatant, target))
                 {
