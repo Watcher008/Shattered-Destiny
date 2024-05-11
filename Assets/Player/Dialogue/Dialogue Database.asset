@@ -1652,7 +1652,7 @@ MonoBehaviour:
   - id: 1
     fields:
     - title: Name
-      value: Kingdom Influence
+      value: Zodia Influence
       type: 0
       typeString: 
     - title: Initial Value
@@ -1680,7 +1680,7 @@ MonoBehaviour:
   - id: 3
     fields:
     - title: Name
-      value: Tribes Influence
+      value: Village Influence
       type: 0
       typeString: 
     - title: Initial Value
@@ -1708,7 +1708,7 @@ MonoBehaviour:
   - id: 5
     fields:
     - title: Name
-      value: Kingdom Reputation
+      value: Zodia Reputation
       type: 0
       typeString: 
     - title: Initial Value
@@ -1736,7 +1736,7 @@ MonoBehaviour:
   - id: 7
     fields:
     - title: Name
-      value: Tribes Reputation
+      value: Village Reputation
       type: 0
       typeString: 
     - title: Initial Value

@@ -1143,7 +1143,217 @@ MonoBehaviour:
     spritePortrait: {fileID: 0}
     alternatePortraits: []
     spritePortraits: []
-  items: []
+  items:
+  - id: 1
+    fields:
+    - title: Name
+      value: The Healer
+      type: 0
+      typeString: 
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: Isold's Companion Quest -
+      type: 0
+      typeString: 
+    - title: Success Description
+      value: 
+      type: 0
+      typeString: 
+    - title: Failure Description
+      value: 
+      type: 0
+      typeString: 
+    - title: State
+      value: unassigned
+      type: 0
+      typeString: 
+    - title: Is Item
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+  - id: 2
+    fields:
+    - title: Name
+      value: A Good Boy
+      type: 0
+      typeString: 
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: Hank's Companion Quest -
+      type: 0
+      typeString: 
+    - title: Success Description
+      value: 
+      type: 0
+      typeString: 
+    - title: Failure Description
+      value: 
+      type: 0
+      typeString: 
+    - title: State
+      value: unassigned
+      type: 0
+      typeString: 
+    - title: Is Item
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+  - id: 3
+    fields:
+    - title: Name
+      value: A Small Problem
+      type: 0
+      typeString: 
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: 'Mini''s Companion Quest - '
+      type: 0
+      typeString: 
+    - title: Success Description
+      value: 
+      type: 0
+      typeString: 
+    - title: Failure Description
+      value: 
+      type: 0
+      typeString: 
+    - title: State
+      value: unassigned
+      type: 0
+      typeString: 
+    - title: Is Item
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+  - id: 4
+    fields:
+    - title: Name
+      value: The Great Hunt
+      type: 0
+      typeString: 
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: Lana's Companion Quest -
+      type: 0
+      typeString: 
+    - title: Success Description
+      value: 
+      type: 0
+      typeString: 
+    - title: Failure Description
+      value: 
+      type: 0
+      typeString: 
+    - title: State
+      value: unassigned
+      type: 0
+      typeString: 
+    - title: Is Item
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+  - id: 5
+    fields:
+    - title: Name
+      value: Knowledge is Power
+      type: 0
+      typeString: 
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: Krem's Companion Quest -
+      type: 0
+      typeString: 
+    - title: Success Description
+      value: 
+      type: 0
+      typeString: 
+    - title: Failure Description
+      value: 
+      type: 0
+      typeString: 
+    - title: State
+      value: unassigned
+      type: 0
+      typeString: 
+    - title: Is Item
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+  - id: 6
+    fields:
+    - title: Name
+      value: A Helping Hand
+      type: 0
+      typeString: 
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: Village Quest(s) -
+      type: 0
+      typeString: 
+    - title: Success Description
+      value: 
+      type: 0
+      typeString: 
+    - title: Failure Description
+      value: 
+      type: 0
+      typeString: 
+    - title: State
+      value: unassigned
+      type: 0
+      typeString: 
+    - title: Is Item
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+  - id: 7
+    fields:
+    - title: Name
+      value: Neighbors In Need
+      type: 0
+      typeString: 
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: Village Quest(s) -
+      type: 0
+      typeString: 
+    - title: Success Description
+      value: 
+      type: 0
+      typeString: 
+    - title: Failure Description
+      value: 
+      type: 0
+      typeString: 
+    - title: State
+      value: unassigned
+      type: 0
+      typeString: 
+    - title: Is Item
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
   locations:
   - id: 1
     fields:
@@ -1353,18 +1563,96 @@ MonoBehaviour:
   - id: 18
     fields:
     - title: Name
-      value: Rowanshyre & Hunaspire (E4
+      value: Rowanshyre (E4)
       type: 0
       typeString: CustomFieldType_Text
     - title: Description
-      value: 
+      value: "Joint villages that grow and fish their own resources and then process
+        each other\u2019s productions. It\u2019s a stable and equal exchange that
+        provides plenty of opportunity for its villagers and serves as its own miniature
+        economy. Regardless of the outcome of the war, Rowanshyre and Hunaspire are
+        confident that they can be self-proficient. "
+      type: 0
+      typeString: CustomFieldType_Text
+  - id: 19
+    fields:
+    - title: Name
+      value: Hunaspire (E4)
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Description
+      value: "Joint villages that grow and fish their own resources and then process
+        each other\u2019s productions. It\u2019s a stable and equal exchange that
+        provides plenty of opportunity for its villagers and serves as its own miniature
+        economy. Regardless of the outcome of the war, Rowanshyre and Hunaspire are
+        confident that they can be self-proficient. "
+      type: 0
+      typeString: CustomFieldType_Text
+  - id: 20
+    fields:
+    - title: Name
+      value: Ashborne Tower (D3)
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Description
+      value: "A rare venture between the Imperium and Ath\u2019rak. During The Great
+        Divide, during the inception of the nomadic tribe-nation of Ath\u2019rak,
+        The Imperium gifted the opportunity to certain tribes to industrialize certain
+        aspects of their lives so that they would remain dominant over the rest -
+        such as farming via mechanic moisture collectors, or hunting via crossbow
+        vs. bows and arrows. Though small in contribution, these towers act as a
+        link and proof of the continued agreement. The southern tower, belonging
+        to the Imperium, produces the raw materials, while the north tower, belonging
+        to Ath\u2019rak and acting as its own embassy, collects and creates in the
+        visions of the tribes, in exchange for different goods to support the Imperium
+        war effort. Many reference the tower as a symbolic treaty between the two
+        nations, showing Ath\u2019rak favoritism towards Vitale, but it is more likely
+        that it is meant to ensure the Imperium does not suffer threats from two
+        sides. What the future holds for the towers, depends on actions of the Imperium
+        after the conclusion of the war. "
+      type: 0
+      typeString: CustomFieldType_Text
+  - id: 21
+    fields:
+    - title: Name
+      value: Ashborne Tower (D4)
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Description
+      value: "A rare venture between the Imperium and Ath\u2019rak. During The Great
+        Divide, during the inception of the nomadic tribe-nation of Ath\u2019rak,
+        The Imperium gifted the opportunity to certain tribes to industrialize certain
+        aspects of their lives so that they would remain dominant over the rest -
+        such as farming via mechanic moisture collectors, or hunting via crossbow
+        vs. bows and arrows. Though small in contribution, these towers act as a
+        link and proof of the continued agreement. The southern tower, belonging
+        to the Imperium, produces the raw materials, while the north tower, belonging
+        to Ath\u2019rak and acting as its own embassy, collects and creates in the
+        visions of the tribes, in exchange for different goods to support the Imperium
+        war effort. Many reference the tower as a symbolic treaty between the two
+        nations, showing Ath\u2019rak favoritism towards Vitale, but it is more likely
+        that it is meant to ensure the Imperium does not suffer threats from two
+        sides. What the future holds for the towers, depends on actions of the Imperium
+        after the conclusion of the war. "
+      type: 0
+      typeString: CustomFieldType_Text
+  - id: 22
+    fields:
+    - title: Name
+      value: "Pella\u2019s Wish (D2)"
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Description
+      value: "Outpost between The Imperium Vitale and Ath\u2019rak. Responsible for
+        traffic between Ath\u2019rak, the northern Ashborne Tower, and back. They
+        have limited borders, but still less restrictive than that of Zodia."
       type: 0
       typeString: CustomFieldType_Text
   variables:
   - id: 1
     fields:
     - title: Name
-      value: Kingdom Influence
+      value: Zodia Influence
       type: 0
       typeString: 
     - title: Initial Value
@@ -1392,7 +1680,7 @@ MonoBehaviour:
   - id: 3
     fields:
     - title: Name
-      value: Tribes Influence
+      value: Village Influence
       type: 0
       typeString: 
     - title: Initial Value
@@ -1420,7 +1708,7 @@ MonoBehaviour:
   - id: 5
     fields:
     - title: Name
-      value: Kingdom Reputation
+      value: Zodia Reputation
       type: 0
       typeString: 
     - title: Initial Value
@@ -1448,7 +1736,7 @@ MonoBehaviour:
   - id: 7
     fields:
     - title: Name
-      value: Tribes Reputation
+      value: Village Reputation
       type: 0
       typeString: 
     - title: Initial Value
