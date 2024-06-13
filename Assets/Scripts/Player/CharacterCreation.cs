@@ -7,6 +7,11 @@ using UnityEngine.UI;
 public class CharacterCreation : MonoBehaviour
 {
     [SerializeField] private PlayerData _playerData;
+    [SerializeField] private ItemCodex _itemCodex;
+
+    [Space]
+
+    [SerializeField] private PlayerBackgrounds[] _backgrounds;
 
     [Space]
 
@@ -31,12 +36,6 @@ public class CharacterCreation : MonoBehaviour
         "creatures/barbarian",
         "creatures/wizard",
         "creatures/cleric",
-    };
-
-    private readonly Dictionary<string, Vector2Int> _testBackgrounds = new()
-    {
-        {"Background 1", new Vector2Int(75, 26)},
-        {"Background 2", new Vector2Int(78, 29) }
     };
 
     private void Awake()
@@ -70,11 +69,12 @@ public class CharacterCreation : MonoBehaviour
             Destroy(_toggleGroup.transform.GetChild(i).gameObject);
         }
 
-        foreach(var pair in _testBackgrounds)
+        for (int i = 0; i < _backgrounds.Length; i++)
         {
             var toggle = Instantiate(_prefab, _toggleGroup.transform);
-            toggle.GetComponentInChildren<TMP_Text>().text = pair.Key;
+            toggle.GetComponentInChildren<TMP_Text>().text = _backgrounds[i].Name;
             toggle.group = _toggleGroup;
+            if (i == 0) toggle.isOn = true;
         }
     }
 
@@ -101,9 +101,20 @@ public class CharacterCreation : MonoBehaviour
 
         // Set world position based on background
         // This has got to be the worst possible way to do this
-        var background = _toggleGroup.GetFirstActiveToggle();
-        var s = background.GetComponentInChildren<TMP_Text>().text;
-        _playerData.WorldPos = _testBackgrounds[s];
+        Toggle activeToggle = _toggleGroup.GetFirstActiveToggle();
+        int index = activeToggle.transform.GetSiblingIndex();
+
+        _playerData.WorldPos = _backgrounds[index].StartingCoords;
+
+        // Add starting gear
+        for (int i = 0; i < _backgrounds[index].ItemIds.Length; i++)
+        {
+            for (int j = 0; j < _backgrounds[index].ItemCounts[i]; j++)
+            {
+                var item = _itemCodex.GetItem(_backgrounds[index].ItemIds[i]);
+                _playerData.Inventory.TryFitItem(new InventoryItem(item, Vector2Int.zero));
+            }
+        }
 
         // Load World Map
     }

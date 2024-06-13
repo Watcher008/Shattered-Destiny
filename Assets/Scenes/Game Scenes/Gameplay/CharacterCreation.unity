@@ -3261,6 +3261,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerData: {fileID: 11400000, guid: 964da513a2d1311478cf1791204336b2, type: 2}
+  _itemCodex: {fileID: 11400000, guid: 9e398e1c45748b2458e7253033a9e6e2, type: 2}
+  _backgrounds:
+  - {fileID: 11400000, guid: 5cef64d3c65e8ca4fb5735bf06899170, type: 2}
+  - {fileID: 11400000, guid: d9224abc99ae41f4ba2fa07370e3c198, type: 2}
   _nameInput: {fileID: 1333219300}
   _playerModel: {fileID: 368802183}
   _cycleLeftButton: {fileID: 750111663}
