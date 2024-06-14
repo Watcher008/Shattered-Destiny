@@ -16,7 +16,7 @@ namespace SD.Combat.WeaponArts
                 combatant.DealDamage(dmg, target);
                 if (target is Combatant c)
                 {
-                    c.AddEffect(new Stun());
+                    c.AddEffect(StatusEffects.STUNNED);
                 }
 
                 combatant.SpendActionPoints(_actionPointCost);

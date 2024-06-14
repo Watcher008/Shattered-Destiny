@@ -60,16 +60,7 @@ namespace SD.Combat
         [SerializeField] private GameObject _blood;
         #endregion
 
-
         private Coroutine _delayCoroutine;
-
-        private void ForTestingOnly()
-        {
-            _playerData.PlayerStats.EquipWeapon(_itemCodex.GetWeapon("Sword"));
-            _playerData.PlayerStats.WeaponArts.Clear();
-            _playerData.PlayerStats.WeaponArts.AddRange(_weaponData.RightHandArts);
-            _playerData.PlayerStats.WeaponArts.AddRange(_weaponData.LeftHandArts);
-        }
 
         private void Awake()
         {
@@ -85,7 +76,6 @@ namespace SD.Combat
             while (gameObject.scene != SceneManager.GetActiveScene()) yield return null;
 
             _battlefield.BuildGrid(_locationCodex.GetBlueprint());
-            //_battlefield.BuildGrid();
             PlaceCombatants();
 
             Combatants.Sort(); // Sort by initiative
@@ -133,22 +123,18 @@ namespace SD.Combat
         private void PlaceCombatants()
         {
             //Select group randomly based on current terrain
-            var terrain = WorldMap.GetNode(_playerData.WorldPos.x, _playerData.WorldPos.y).Terrain.ToString();
-            var units = _creatureCodex.GetSquad(terrain);
+            var terrain = WorldMap.GetNode(_playerData.WorldPos.x, _playerData.WorldPos.y).Terrain;
+            var group = _creatureCodex.GetGroupByTerrain(terrain);
 
             // Spawn enemies based on chosen encounter
-            for (int i = 0; i < units.Length; i++)
+            for (int i = 0; i < group.Units.Length; i++)
             {
-                var statBlock = _creatureCodex.GetCreatureByName(units[i]);
                 var enemy = Instantiate(_prefab, transform);
-                var weapon = _itemCodex.GetWeapon(statBlock.Weapon);
-                enemy.SetInitialValues(statBlock, weapon);
+                enemy.SetInitialValues(group.Units[i]);
 
                 Combatants.Add(enemy);
                 EnemyCombatants.Add(enemy);
             }
-
-            ForTestingOnly();
 
             // Spawn player
             var player = Instantiate(_prefab, transform);
@@ -169,6 +155,7 @@ namespace SD.Combat
                 PlayerCombatants.Add(newPlayer);
             }
 
+            // Randomly places combatants
             for (int i = 0; i < Combatants.Count; i++)
             {
                 while (true)
@@ -324,7 +311,7 @@ namespace SD.Combat
         public bool AttackHits(Combatant attacker, IDamageable target)
         {
             // OP Auto-hit
-            if (attacker.HasEffect<Effect_Focused>()) return true;
+            if (attacker.HasEffect(StatusEffects.FOCUSED)) return true;
 
             float chanceToHit = 0.8f; // - 0.05f * attacker.Weapon.Tier
 
@@ -353,7 +340,7 @@ namespace SD.Combat
             // Apply Penalty if target is Hard ;)
             if (target is Combatant targetUnit)
             {
-                if (targetUnit.HasEffect<Hardened>()) chanceToHit -= 0.25f;
+                if (targetUnit.HasEffect(StatusEffects.HARDENED)) chanceToHit -= 0.25f;
             }
             
             // Lastly check for terrain between the two
@@ -475,4 +462,33 @@ namespace SD.Combat
         }
         */
     }
+}
+
+public enum WeaponTypes
+{
+    None,
+    Sword,
+    Shield,
+    Warhammer,
+    Bow,
+    Staff,
+    Book
+}
+
+public enum StatusEffects
+{
+    CHARMED,
+    STUNNED,
+    SLOWED,
+    CONFUSED,
+    WEAKENED,
+    DAZED,
+    VULNERABLE,
+    CURSED,
+    FOCUSED,
+    EMPOWERED,
+    REINFORCED,
+    HARDENED,
+    HURRIED,
+    count,
 }

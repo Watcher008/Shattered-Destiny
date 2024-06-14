@@ -12,3 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a6c5436a3e082a4fba16885e81f8143, type: 3}
   m_Name: Creature Codex
   m_EditorClassIdentifier: 
+  _groups:
+  - {fileID: 11400000, guid: 4d10092b099fedf45ae66780234f25c9, type: 2}
+  - {fileID: 11400000, guid: 3ab025b4f554dda4b87eb28b70aa936b, type: 2}
+  - {fileID: 11400000, guid: 485595eb3bc305b43b60813f61cbf926, type: 2}
+  - {fileID: 11400000, guid: 35c59cfb75d14414ebaa6302deb9c009, type: 2}

@@ -76,3 +76,12 @@ namespace SD.Characters
         }
     }
 }
+
+public enum Factions
+{
+    Conglomerate,
+    Imperium,
+    Kingdom,
+    Tribes,
+    count,
+}

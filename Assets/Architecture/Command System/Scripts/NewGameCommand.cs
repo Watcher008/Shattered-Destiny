@@ -11,8 +11,6 @@ namespace SD.CommandSystem
     [CreateAssetMenu(menuName = "Command System/New Game Command")]
     public class NewGameCommand : CommandBase
     {
-        [Space]
-
         [SerializeField] private PlayerData _playerData;
         [SerializeField] private PlayerWeaponData _weaponData;
 
@@ -21,8 +19,8 @@ namespace SD.CommandSystem
         [SerializeField] private WeaponArt[] _startingArts;
 
 
-        private int[] defaultStats = { 15, 15, 15, 15 };
-        private int[] defaultXP = { 0, 0, 0, 0 };
+        private readonly int[] defaultStats = { 15, 15, 15, 15 };
+        private readonly int[] defaultXP = { 0, 0, 0, 0 };
 
         protected override bool ExecuteCommand()
         {
@@ -47,8 +45,6 @@ namespace SD.CommandSystem
             {
                 _weaponData.LearnArt(_startingArts[i]);
             }
-
-
 
             return true;
         }

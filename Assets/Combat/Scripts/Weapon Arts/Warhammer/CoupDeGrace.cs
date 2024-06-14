@@ -14,7 +14,7 @@ namespace SD.Combat.WeaponArts
             {
                 if ((float)target.Health / target.MaxHealth <= THRESHOLD)
                 {
-                    combatant.DealDamage(int.MaxValue, target);
+                    combatant.DealDamage(int.MaxValue, target as IDamageable);
                     combatant.SpendActionPoints(_actionPointCost);
                 }
             }

@@ -1,8 +1,8 @@
-using SD.Characters;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
+using SD.Characters;
+using SD.Primitives;
 
 public class CharacterCreation : MonoBehaviour
 {
@@ -12,6 +12,11 @@ public class CharacterCreation : MonoBehaviour
     [Space]
 
     [SerializeField] private PlayerBackgrounds[] _backgrounds;
+
+    [Space]
+
+    [SerializeField] private IntReference[] _factionInfluenceRefs;
+    [SerializeField] private IntReference[] _factionReputationRefs;
 
     [Space]
 
@@ -27,25 +32,10 @@ public class CharacterCreation : MonoBehaviour
     [SerializeField] private Toggle _prefab;
 
     private int _spriteIndex;
-    private Sprite[] _sprites;
-    private readonly string[] _spritePaths =
-    {
-        "creatures/base",
-        "creatures/knight",
-        "creatures/archer",
-        "creatures/barbarian",
-        "creatures/wizard",
-        "creatures/cleric",
-    };
+    [SerializeField] private Sprite[] _sprites;
 
     private void Awake()
     {
-        _sprites = new Sprite[_spritePaths.Length];
-        for (int i = 0; i < _spritePaths.Length; i++)
-        {
-            _sprites[i] = SpriteHelper.GetSprite(_spritePaths[i]);
-        }
-
         _playerModel.sprite = _sprites[0];
 
         _cycleLeftButton.onClick.AddListener(CycleSpriteLeft);
@@ -106,6 +96,15 @@ public class CharacterCreation : MonoBehaviour
 
         _playerData.WorldPos = _backgrounds[index].StartingCoords;
 
+
+        // Set starting influence/reputation
+        for (int i = 0; i < (int)Factions.count; i++)
+        {
+            _factionInfluenceRefs[i].Value = _backgrounds[index].FactionInfluence[i];
+            _factionReputationRefs[i].Value = _backgrounds[index].FactionReputation[i];
+        }
+
+
         // Add starting gear
         for (int i = 0; i < _backgrounds[index].ItemIds.Length; i++)
         {
@@ -115,7 +114,5 @@ public class CharacterCreation : MonoBehaviour
                 _playerData.Inventory.TryFitItem(new InventoryItem(item, Vector2Int.zero));
             }
         }
-
-        // Load World Map
     }
 }

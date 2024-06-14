@@ -20,8 +20,8 @@ namespace SD.Combat.WeaponArts
                     if (CombatManager.Instance.CheckNode(newNode, out Combatant nextTarget))
                     {
                         if (nextTarget.IsPlayer != combatant.IsPlayer) continue;
-                        nextTarget.AddEffect(new Effect_Empowered());
-                        nextTarget.AddEffect(new Hardened());
+                        nextTarget.AddEffect(StatusEffects.EMPOWERED);
+                        nextTarget.AddEffect(StatusEffects.HARDENED);
                     }
                 }
                 combatant.SpendActionPoints(_actionPointCost);

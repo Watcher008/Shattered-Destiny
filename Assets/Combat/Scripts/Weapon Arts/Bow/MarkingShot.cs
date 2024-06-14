@@ -8,7 +8,7 @@ namespace SD.Combat.WeaponArts
     public class MarkingShot : WeaponArt
     {
         private const int MODIFIER = 3;
-        private const int DURATION = 2;
+        private const byte DURATION = 2;
 
         public override void OnUse(Combatant combatant, PathNode node)
         {
@@ -21,7 +21,7 @@ namespace SD.Combat.WeaponArts
 
                     if (target is Combatant targetUnit)
                     {
-                        targetUnit.AddEffect(new Vulnerable(), DURATION);
+                        targetUnit.AddEffect(StatusEffects.VULNERABLE, DURATION);
                     }
                 }
 

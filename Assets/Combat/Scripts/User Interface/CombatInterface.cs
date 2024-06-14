@@ -345,7 +345,7 @@ namespace SD.Combat
         private void OnAttackTarget(RaycastHit hit, PathNode node)
         {
             // Check if they clicked onto a character sprite
-            if (hit.collider.TryGetComponent(out IDamageable target)) CurrentActor.Attack(target);
+            if (hit.collider.TryGetComponent(out IDamageable target)) CurrentActor.PerformBasicAttack(target);
             //if (hit.collider.TryGetComponent(out Combatant target)) CurrentActor.Attack(target);
             else if (node != null) // else check if they clicked on a node
             {
@@ -353,7 +353,7 @@ namespace SD.Combat
                 {
                     if (CombatManager.Instance.EnemyCombatants[i].Node == node)
                     {
-                        CurrentActor.Attack(CombatManager.Instance.EnemyCombatants[i] as IDamageable);
+                        CurrentActor.PerformBasicAttack(CombatManager.Instance.EnemyCombatants[i] as IDamageable);
                         break;
                     }
                 }
