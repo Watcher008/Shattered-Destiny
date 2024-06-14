@@ -13,7 +13,14 @@ MonoBehaviour:
   m_Name: Creature Codex
   m_EditorClassIdentifier: 
   _groups:
+  - {fileID: 11400000, guid: 88b864b13baad354da3ac0181c7e6338, type: 2}
   - {fileID: 11400000, guid: 4d10092b099fedf45ae66780234f25c9, type: 2}
-  - {fileID: 11400000, guid: 3ab025b4f554dda4b87eb28b70aa936b, type: 2}
   - {fileID: 11400000, guid: 485595eb3bc305b43b60813f61cbf926, type: 2}
+  - {fileID: 11400000, guid: 869ff5d4fe8916a4d9edc19c3b3ae53c, type: 2}
   - {fileID: 11400000, guid: 35c59cfb75d14414ebaa6302deb9c009, type: 2}
+  - {fileID: 11400000, guid: f4cabc0cc012d72478354e72cf0bb4a2, type: 2}
+  - {fileID: 11400000, guid: 2bf189460ec13174dadd64644be1ec37, type: 2}
+  - {fileID: 11400000, guid: 2c20c04686046984ba48918b2f37d0ea, type: 2}
+  - {fileID: 11400000, guid: e03abc1aabb21c44fb093f8f645c405c, type: 2}
+  - {fileID: 11400000, guid: ed660b1ad6bfe584dbeb2c95ef57c390, type: 2}
+  - {fileID: 11400000, guid: 7e717698d6f647e4f9ed5996efb52ec7, type: 2}

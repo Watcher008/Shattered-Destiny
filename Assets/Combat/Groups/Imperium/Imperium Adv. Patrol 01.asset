@@ -10,9 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e595a286789434c46b508f2dbb78af3f, type: 3}
-  m_Name: Lone Bear
+  m_Name: Imperium Adv. Patrol 01
   m_EditorClassIdentifier: 
-  _id: lone_bear
-  _terrain: 02000000
+  _terrain: 01000000
   _units:
-  - {fileID: 11400000, guid: 1e3299f634437d24dbb295410b18d89c, type: 2}
+  - Unit: {fileID: 11400000, guid: 7bf1c5720fe6ab149b9c30deb7d8e22e, type: 2}
+    Min: 1
+    Max: 2
+  - Unit: {fileID: 11400000, guid: a72d1a925fc5a374fa1422e856123630, type: 2}
+    Min: 2
+    Max: 3
+  - Unit: {fileID: 11400000, guid: 7442539365fd1a745b33b045045dcb15, type: 2}
+    Min: 2
+    Max: 4

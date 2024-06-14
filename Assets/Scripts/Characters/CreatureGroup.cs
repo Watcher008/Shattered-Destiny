@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace SD.Characters
@@ -5,12 +6,37 @@ namespace SD.Characters
     [CreateAssetMenu(menuName = "Combat/Group", fileName = "New Group")]
     public class CreatureGroup : ScriptableObject
     {
-        [SerializeField] private string _id;
-        [SerializeField] private TerrainType[] _terrain;
-        [SerializeField] private StatBlock[] _units;
+        [System.Serializable]
+        public class UnitSize
+        {
+            public StatBlock Unit;
+            public int Min = 1;
+            public int Max = 1;
+        }
 
-        public string Id => _id;
+        [SerializeField] private TerrainType[] _terrain;
+        [SerializeField] private UnitSize[] _units;
+
         public TerrainType[] Terrain => _terrain;
-        public StatBlock[] Units => _units;
+
+        /// <summary>
+        /// Returns a random list of units with counts within listed ranges.
+        /// </summary>
+        /// <returns></returns>
+        public List<StatBlock> GetUnits()
+        {
+            var list = new List<StatBlock>();
+
+            foreach (var unit in _units)
+            {
+                int count = Random.Range(unit.Min, unit.Max + 1);
+                for (int i = 0; i < count; i++)
+                {
+                    list.Add(unit.Unit);
+                }
+            }
+
+            return list;
+        }
     }
 }

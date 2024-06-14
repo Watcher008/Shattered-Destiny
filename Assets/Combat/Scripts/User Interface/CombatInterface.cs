@@ -80,7 +80,6 @@ namespace SD.Combat
                 {
                     // sets to none when clicking same button
                     _action = Action.None;
-
                 }
                 else
                 {
@@ -302,12 +301,13 @@ namespace SD.Combat
             if (CurrentAction == Action.None) return;
 
             // Get the movable area of the unit
-            var area = Pathfinding.GetMovementRange(CurrentActor.Node, CurrentActor.MovementRemaining, Occupant.Player);
+            int range = CurrentActor.MovementRemaining;
+            if (CurrentActor.HasEffect(StatusEffects.SLOWED)) range = Mathf.FloorToInt(range * 0.5f);
+            var area = Pathfinding.GetMovementRange(CurrentActor.Node, range, Occupant.Player);
 
             foreach (var node in area)
             {
                 if (node.Occupant != Occupant.None || !node.IsWalkable) continue;
-
                 var pos = new Vector3Int(node.X, node.Y, 0);
                 _overlay.SetTile(pos, _blueHighlight);
             }

@@ -10,10 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e595a286789434c46b508f2dbb78af3f, type: 3}
-  m_Name: Dreadstag Herd
+  m_Name: The Battlethirsty
   m_EditorClassIdentifier: 
-  _id: dreadstag_herd
-  _terrain: 0200000000000000
+  _terrain: 0100000002000000
   _units:
-  - {fileID: 11400000, guid: f2cde0667c14f0747b248b1f2f0dd121, type: 2}
-  - {fileID: 11400000, guid: f2cde0667c14f0747b248b1f2f0dd121, type: 2}
+  - Unit: {fileID: 11400000, guid: 809ec7bb45c0cc74798f2093ff187c7b, type: 2}
+    Min: 4
+    Max: 8
+  - Unit: {fileID: 11400000, guid: 99fa40f2e1542a04cbd6232faa284e7c, type: 2}
+    Min: 2
+    Max: 4

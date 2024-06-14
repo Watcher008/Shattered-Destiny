@@ -8,7 +8,7 @@ namespace SD.Characters
     {
         [SerializeField] private CreatureGroup[] _groups;
 
-        public CreatureGroup GetGroupByTerrain(TerrainType terrain)
+        public List<StatBlock> GetGroupByTerrain(TerrainType terrain)
         {
             var list = new List<CreatureGroup>();
             foreach(var group in _groups)
@@ -22,7 +22,7 @@ namespace SD.Characters
                     }
                 }
             }
-            return list[Random.Range(0, list.Count)];
+            return list[Random.Range(0, list.Count)].GetUnits();
         }
     }
 }

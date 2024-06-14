@@ -124,13 +124,13 @@ namespace SD.Combat
         {
             //Select group randomly based on current terrain
             var terrain = WorldMap.GetNode(_playerData.WorldPos.x, _playerData.WorldPos.y).Terrain;
-            var group = _creatureCodex.GetGroupByTerrain(terrain);
+            var units = _creatureCodex.GetGroupByTerrain(terrain);
 
             // Spawn enemies based on chosen encounter
-            for (int i = 0; i < group.Units.Length; i++)
+            for (int i = 0; i < units.Count; i++)
             {
                 var enemy = Instantiate(_prefab, transform);
-                enemy.SetInitialValues(group.Units[i]);
+                enemy.SetInitialValues(units[i]);
 
                 Combatants.Add(enemy);
                 EnemyCombatants.Add(enemy);
@@ -406,61 +406,6 @@ namespace SD.Combat
             _combatActive = false;
             _interface.Invoke(nameof(_interface.OnCombatEnd), 2.5f);
         }
-
-        /*
-        public bool AttackHits(Combatant attacker, Combatant target)
-        {
-            // OP Auto-hit
-            if (attacker.HasEffect<Effect_Focused>()) return true;
-
-            float chanceToHit = 0.8f; // - 0.05f * attacker.Weapon.Tier
-
-            // Rolling to hit an object or terrain
-            if (target == null)
-            {
-                bool hits = Random.value <= chanceToHit;
-                if (!hits) CombatLog.Log("Attack miss!");
-                return hits;
-            }
-
-            // Check for Barrier effect and apply if present
-            if (NodeHasEffect<Effect_Barrier>(target.Node, out var areaEffect))
-            {
-                if (!areaEffect.Area.Contains(attacker.Node)) return false;
-            }
-
-
-            // Bonus to hit if attacker is in a Mountain tile
-            if (attacker.Node.Terrain == TerrainType.Mountain) chanceToHit += 0.2f;
-
-            // Penalty to hit if target is in a Forest tile
-            if (target.Node.Terrain == TerrainType.Forest) chanceToHit -= 0.2f;
-
-            // Apply Penalty if target is Hard ;)
-            if (target.HasEffect<Hardened>()) chanceToHit -= 0.25f;
-
-            // Lastly check for terrain between the two
-            var points = Bresenham.PlotLine(attacker.Node.X, attacker.Node.Y, target.Node.X, target.Node.Y);
-            var nodes = Pathfinding.ConvertToNodes(_grid, points);
-            nodes.Remove(attacker.Node);
-            nodes.Remove(target.Node);
-
-            foreach (var node in nodes)
-            {
-                if (node.Terrain == TerrainType.Mountain || node.Terrain == TerrainType.Forest)
-                {
-                    chanceToHit /= 2;
-                    break;
-                }
-            }
-
-            var roll = Random.value;
-            bool attackHits = roll <= chanceToHit; // Roll under
-            Debug.Log($"Chance to hit: {chanceToHit}, Roll: {roll}");
-            if (!attackHits) CombatLog.Log("Attack miss!");
-            return attackHits;
-        }
-        */
     }
 }
 

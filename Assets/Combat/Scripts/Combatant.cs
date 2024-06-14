@@ -155,12 +155,17 @@ namespace SD.Combat
         public void OnTurnStart(bool regainAP)
         {
             // Do not regain AP on first round
-            
             if (!HasEffect(StatusEffects.STUNNED) && regainAP)
             {
                 // Regain action points, up to max
                 ActionPoints = Mathf.Clamp(ActionPoints + _refreshedActionPoints, 0, MaxActionPoints);
                 onActionPointChange?.Invoke();
+            }
+
+            if (HasEffect(StatusEffects.CURSED))
+            {
+                int index = UnityEngine.Random.Range(0, (int)StatusEffects.CURSED);
+                AddEffect((StatusEffects)index);
             }
 
             // Regain all movement
@@ -267,8 +272,11 @@ namespace SD.Combat
             {
                 var next = path[0];
                 path.RemoveAt(0);
+
+                var moveCost = 1 + next.MovementCost;
+                if (HasEffect(StatusEffects.SLOWED)) moveCost *= 2;
                 // This shouldn't happen, but let's just make sure
-                if (MovementRemaining < next.MovementCost + 1) break;
+                if (MovementRemaining < moveCost) break;
 
                 var temp = CombatManager.Instance.GetNodePosition(next.X, next.Y);
                 var end = new Vector3(temp.x, 0, temp.y);
@@ -292,7 +300,7 @@ namespace SD.Combat
                 if (_isPlayer) _currentNode.SetOccupant(Occupant.Player);
                 else _currentNode.SetOccupant(Occupant.Enemy);
 
-                MovementRemaining -= 1 + _currentNode.MovementCost;
+                MovementRemaining -= moveCost;
                 yield return null;
             }
             IsActing = false;
