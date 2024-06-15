@@ -2975,7 +2975,6 @@ MonoBehaviour:
   eventLogger: {fileID: 11400000, guid: 15559cfe407e15945a2ea758ce65e070, type: 2}
   loadingScreen: {fileID: 1007872873}
   loadingProgressBar: {fileID: 323476863}
-  _creatureCodex: {fileID: 11400000, guid: 13e795fec2e995a428a0c9358e4e568b, type: 2}
   _itemCodex: {fileID: 11400000, guid: 9e398e1c45748b2458e7253033a9e6e2, type: 2}
   _locationCodex: {fileID: 11400000, guid: 8ff30e611f76fa2439d0817a4c77f966, type: 2}
 --- !u!4 &1227738018
