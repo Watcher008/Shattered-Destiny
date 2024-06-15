@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 935899b62f48ae5498594680ed17d133, type: 3}
   m_Name: Dialogue Database
   m_EditorClassIdentifier: 
-  version: 
-  author: 
-  description: 
+  version: 1
+  author: Ocho
+  description: Baseline for Shattered Destinty
   globalUserScript: 
   emphasisSettings:
   - color: {r: 1, g: 1, b: 1, a: 1}
@@ -1149,211 +1149,547 @@ MonoBehaviour:
     - title: Name
       value: The Healer
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Pictures
       value: '[]'
       type: 3
       typeString: CustomFieldType_Files
     - title: Description
-      value: Isold's Companion Quest -
+      value: Isold Hartman, the land's most famed healer needs your help. Find 15
+        herbs in the nearby forrest and bring them back for her patients.
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Success Description
-      value: 
+      value: 'You''ve found the herbs and saved Isold''s patients! '
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Failure Description
-      value: 
+      value: People died because of your negligence.
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: State
       value: unassigned
       type: 0
-      typeString: 
+      typeString: CustomFieldType_QuestState
     - title: Is Item
       value: False
       type: 2
       typeString: CustomFieldType_Boolean
+    - title: Trackable
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Track
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Entry Count
+      value: 4
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Entry 1 State
+      value: active
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Entry 1
+      value: Find 15 herbs in the nearby forrests.
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 2 State
+      value: success
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Entry 2
+      value: 'You''ve found the herbs and saved Isold''s patients! '
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 3 State
+      value: failure
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Entry 3
+      value: People died because of your negligence.
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 4 State
+      value: done
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Entry 4
+      value: You've found the herbs, return to Isold.
+      type: 0
+      typeString: CustomFieldType_Text
   - id: 2
     fields:
     - title: Name
       value: A Good Boy
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Pictures
       value: '[]'
       type: 3
       typeString: CustomFieldType_Files
     - title: Description
-      value: Hank's Companion Quest -
+      value: You've heard rumor of an incredible four legged specimen for sale. Seek
+        out the special merchant, Woodward Allen, for more information.
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Success Description
-      value: 
+      value: Oh! He's such a good boy! Yes he is!
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Failure Description
-      value: 
+      value: Maybe it just wasn't meant to be...
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: State
       value: unassigned
       type: 0
-      typeString: 
+      typeString: CustomFieldType_QuestState
     - title: Is Item
       value: False
       type: 2
       typeString: CustomFieldType_Boolean
+    - title: Trackable
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Track
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Entry Count
+      value: 4
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Entry 1 State
+      value: active
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Entry 1
+      value: Hunt down 10 wolves to prove yourself to Woodward Allen.
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 2 State
+      value: success
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Entry 2
+      value: Oh! He's such a good boy! Yes he is!
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 3 State
+      value: failure
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Entry 3
+      value: Maybe it just wasn't meant to be...
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 4 State
+      value: done
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Entry 4
+      value: Oh! He's such a good boy! Yes he is!
+      type: 0
+      typeString: CustomFieldType_Text
   - id: 3
     fields:
     - title: Name
       value: A Small Problem
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Pictures
       value: '[]'
       type: 3
       typeString: CustomFieldType_Files
     - title: Description
-      value: 'Mini''s Companion Quest - '
+      value: Actions speak louder than words...or so you've been told. Kill a great
+        beast to show your worth to your new friend.
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Success Description
-      value: 
+      value: You've got a new friend...I think.
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Failure Description
-      value: 
+      value: Maybe you're better off...
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: State
       value: unassigned
       type: 0
-      typeString: 
+      typeString: CustomFieldType_QuestState
     - title: Is Item
       value: False
       type: 2
       typeString: CustomFieldType_Boolean
+    - title: Trackable
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Track
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Entry Count
+      value: 4
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Entry 1 State
+      value: active
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: hasKilledAGreatBeast
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Entry 1
+      value: Kill a great beast.
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 2 State
+      value: success
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Entry 2
+      value: You've got a new friend...I think.
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 3 State
+      value: failure
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Entry 3
+      value: Maybe you're better off...
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 4 State
+      value: done
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: hasKilledAGreatBeast
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Entry 4
+      value: You've killed a great beast. Go back to see what happens.
+      type: 0
+      typeString: CustomFieldType_Text
   - id: 4
     fields:
     - title: Name
       value: The Great Hunt
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Pictures
       value: '[]'
       type: 3
       typeString: CustomFieldType_Files
     - title: Description
-      value: Lana's Companion Quest -
+      value: A wandering huntress has challenged you. Kill a great beast to prove
+        her wrong.
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Success Description
-      value: 
+      value: You've proved your worth.
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Failure Description
-      value: 
+      value: Pathetic...
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: State
       value: unassigned
       type: 0
-      typeString: 
+      typeString: CustomFieldType_QuestState
     - title: Is Item
       value: False
       type: 2
       typeString: CustomFieldType_Boolean
+    - title: Trackable
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Entry Count
+      value: 4
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Track
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Entry 1 State
+      value: active
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: hasKilledAGreatBeast hasKilledAGreatBeast
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Entry 1
+      value: Kill a great beast to prove your worth.
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 2 State
+      value: active
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Entry 2
+      value: You've proved your worth.
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 3 State
+      value: failure
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Entry 3
+      value: Pathetic...
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 4 State
+      value: done
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: hasKilledAGreatBeast
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Entry 4
+      value: You've found glory on the hunt. Return to Lana.
+      type: 0
+      typeString: CustomFieldType_Text
   - id: 5
     fields:
     - title: Name
       value: Knowledge is Power
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Pictures
       value: '[]'
       type: 3
       typeString: CustomFieldType_Files
     - title: Description
-      value: Krem's Companion Quest -
+      value: A young mage needs your help. Seek out his missing tome.
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Success Description
-      value: 
+      value: You've got a friend in me.
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Failure Description
-      value: 
+      value: You've failed terribly. How could you fail so terribly?
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: State
       value: unassigned
       type: 0
-      typeString: 
+      typeString: CustomFieldType_QuestState
     - title: Is Item
       value: False
       type: 2
       typeString: CustomFieldType_Boolean
+    - title: Trackable
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Track
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Entry Count
+      value: 4
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Entry 1 State
+      value: active
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: hasKremTome
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Entry 1
+      value: Find the missing tome near the grey zone.
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 2 State
+      value: success
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Entry 2
+      value: You've got a friend in me.
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 3 State
+      value: failure
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Entry 3
+      value: You've failed terribly. How could you fail so terribly?
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 4 State
+      value: done
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: hasKremTome
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Entry 4
+      value: A friend of magic is a friend of mine. Return the tome.
+      type: 0
+      typeString: CustomFieldType_Text
   - id: 6
     fields:
     - title: Name
       value: A Helping Hand
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Pictures
       value: '[]'
       type: 3
       typeString: CustomFieldType_Files
     - title: Description
-      value: Village Quest(s) -
+      value: A village is in danger. Go to its defense.
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Success Description
-      value: 
+      value: You've helped a village.
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Failure Description
-      value: 
+      value: It is the way it is...
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: State
       value: unassigned
       type: 0
-      typeString: 
+      typeString: CustomFieldType_QuestState
     - title: Is Item
       value: False
       type: 2
       typeString: CustomFieldType_Boolean
+    - title: Trackable
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Track
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Entry Count
+      value: 4
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Entry 1 State
+      value: active
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Entry 1
+      value: Kill 10 bandits
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 2 State
+      value: success
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Entry 2
+      value: You've helped a village.
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 3 State
+      value: failure
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Entry 3
+      value: It is the way it is...
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 4 State
+      value: done
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Entry 4
+      value: You've helped a village.
+      type: 0
+      typeString: CustomFieldType_Text
   - id: 7
     fields:
     - title: Name
       value: Neighbors In Need
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Pictures
       value: '[]'
       type: 3
       typeString: CustomFieldType_Files
     - title: Description
-      value: Village Quest(s) -
+      value: Someone needs your help. Help if you can.
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Success Description
-      value: 
+      value: You've helped someone in need.
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Failure Description
-      value: 
+      value: Selfish aren't we?
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: State
       value: unassigned
       type: 0
-      typeString: 
+      typeString: CustomFieldType_QuestState
     - title: Is Item
       value: False
       type: 2
       typeString: CustomFieldType_Boolean
+    - title: Trackable
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Track
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Entry Count
+      value: 4
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Entry 1 State
+      value: active
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Entry 1
+      value: Bring 4 Healing Potions
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 2 State
+      value: success
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Entry 2
+      value: You've helped someone in need.
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 3 State
+      value: failure
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Entry 3
+      value: Selfish aren't we?
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 4 State
+      value: done
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Entry 4
+      value: You've helped someone in need.
+      type: 0
+      typeString: CustomFieldType_Text
   locations:
   - id: 1
     fields:
@@ -1660,7 +1996,7 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Description
-      value: 
+      value: How much weight does your name carry in Zodia?
       type: 0
       typeString: 
   - id: 2
@@ -1674,7 +2010,7 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Description
-      value: 
+      value: How much weight does your name carry in the Imperium?
       type: 0
       typeString: 
   - id: 3
@@ -1688,7 +2024,7 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Description
-      value: 
+      value: How much weight does your name carry amongst the common folk?
       type: 0
       typeString: 
   - id: 4
@@ -1702,7 +2038,7 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Description
-      value: 
+      value: How much weight does your name carry amongst the EMC and merchants?
       type: 0
       typeString: 
   - id: 5
@@ -1716,7 +2052,7 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Description
-      value: 
+      value: Faction alignment for Zodia
       type: 0
       typeString: 
   - id: 6
@@ -1730,7 +2066,7 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Description
-      value: 
+      value: Faction alignment for Imperium
       type: 0
       typeString: 
   - id: 7
@@ -1744,7 +2080,7 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Description
-      value: 
+      value: General alignment
       type: 0
       typeString: 
   - id: 8
@@ -1758,7 +2094,7 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Description
-      value: 
+      value: Faction alignment for EMC
       type: 0
       typeString: 
   conversations:

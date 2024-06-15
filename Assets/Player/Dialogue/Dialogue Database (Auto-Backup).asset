@@ -1149,57 +1149,103 @@ MonoBehaviour:
     - title: Name
       value: The Healer
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Pictures
       value: '[]'
       type: 3
       typeString: CustomFieldType_Files
     - title: Description
-      value: Isold's Companion Quest -
+      value: Isold Hartman, the land's most famed healer needs your help. Find 15
+        herbs in the nearby forrest and bring them back for her patients.
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Success Description
-      value: 
+      value: 'You''ve found the herbs and saved Isold''s patients! '
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Failure Description
-      value: 
+      value: People died because of your negligence.
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: State
       value: unassigned
       type: 0
-      typeString: 
+      typeString: CustomFieldType_QuestState
     - title: Is Item
       value: False
       type: 2
       typeString: CustomFieldType_Boolean
+    - title: Trackable
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Track
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Entry Count
+      value: 4
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Entry 1 State
+      value: active
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Entry 1
+      value: Find 15 herbs in the nearby forrests.
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 2 State
+      value: success
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Entry 2
+      value: 'You''ve found the herbs and saved Isold''s patients! '
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 3 State
+      value: failure
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Entry 3
+      value: People died because of your negligence.
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 4 State
+      value: done
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Entry 4
+      value: You've found the herbs, return to Isold.
+      type: 0
+      typeString: CustomFieldType_Text
   - id: 2
     fields:
     - title: Name
       value: A Good Boy
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Pictures
       value: '[]'
       type: 3
       typeString: CustomFieldType_Files
     - title: Description
-      value: Hank's Companion Quest -
+      value: You've heard rumor of an incredible four legged specimen for sale. Seek
+        out the special merchant, Woodward Allen, for more information.
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Success Description
       value: 
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Failure Description
       value: 
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: State
       value: unassigned
       type: 0
-      typeString: 
+      typeString: CustomFieldType_QuestState
     - title: Is Item
       value: False
       type: 2
