@@ -60,16 +60,7 @@ namespace SD.Combat
         [SerializeField] private GameObject _blood;
         #endregion
 
-
         private Coroutine _delayCoroutine;
-
-        private void ForTestingOnly()
-        {
-            _playerData.PlayerStats.EquipWeapon(_itemCodex.GetWeapon("Sword"));
-            _playerData.PlayerStats.WeaponArts.Clear();
-            _playerData.PlayerStats.WeaponArts.AddRange(_weaponData.RightHandArts);
-            _playerData.PlayerStats.WeaponArts.AddRange(_weaponData.LeftHandArts);
-        }
 
         private void Awake()
         {
@@ -85,7 +76,6 @@ namespace SD.Combat
             while (gameObject.scene != SceneManager.GetActiveScene()) yield return null;
 
             _battlefield.BuildGrid(_locationCodex.GetBlueprint());
-            //_battlefield.BuildGrid();
             PlaceCombatants();
 
             Combatants.Sort(); // Sort by initiative
@@ -133,22 +123,18 @@ namespace SD.Combat
         private void PlaceCombatants()
         {
             //Select group randomly based on current terrain
-            var terrain = WorldMap.GetNode(_playerData.WorldPos.x, _playerData.WorldPos.y).Terrain.ToString();
-            var units = _creatureCodex.GetSquad(terrain);
+            var terrain = WorldMap.GetNode(_playerData.WorldPos.x, _playerData.WorldPos.y).Terrain;
+            var units = _creatureCodex.GetGroupByTerrain(terrain);
 
             // Spawn enemies based on chosen encounter
-            for (int i = 0; i < units.Length; i++)
+            for (int i = 0; i < units.Count; i++)
             {
-                var statBlock = _creatureCodex.GetCreatureByName(units[i]);
                 var enemy = Instantiate(_prefab, transform);
-                var weapon = _itemCodex.GetWeapon(statBlock.Weapon);
-                enemy.SetInitialValues(statBlock, weapon);
+                enemy.SetInitialValues(units[i]);
 
                 Combatants.Add(enemy);
                 EnemyCombatants.Add(enemy);
             }
-
-            ForTestingOnly();
 
             // Spawn player
             var player = Instantiate(_prefab, transform);
@@ -169,6 +155,7 @@ namespace SD.Combat
                 PlayerCombatants.Add(newPlayer);
             }
 
+            // Randomly places combatants
             for (int i = 0; i < Combatants.Count; i++)
             {
                 while (true)
@@ -324,7 +311,7 @@ namespace SD.Combat
         public bool AttackHits(Combatant attacker, IDamageable target)
         {
             // OP Auto-hit
-            if (attacker.HasEffect<Effect_Focused>()) return true;
+            if (attacker.HasEffect(StatusEffects.FOCUSED)) return true;
 
             float chanceToHit = 0.8f; // - 0.05f * attacker.Weapon.Tier
 
@@ -353,7 +340,7 @@ namespace SD.Combat
             // Apply Penalty if target is Hard ;)
             if (target is Combatant targetUnit)
             {
-                if (targetUnit.HasEffect<Hardened>()) chanceToHit -= 0.25f;
+                if (targetUnit.HasEffect(StatusEffects.HARDENED)) chanceToHit -= 0.25f;
             }
             
             // Lastly check for terrain between the two
@@ -419,60 +406,34 @@ namespace SD.Combat
             _combatActive = false;
             _interface.Invoke(nameof(_interface.OnCombatEnd), 2.5f);
         }
-
-        /*
-        public bool AttackHits(Combatant attacker, Combatant target)
-        {
-            // OP Auto-hit
-            if (attacker.HasEffect<Effect_Focused>()) return true;
-
-            float chanceToHit = 0.8f; // - 0.05f * attacker.Weapon.Tier
-
-            // Rolling to hit an object or terrain
-            if (target == null)
-            {
-                bool hits = Random.value <= chanceToHit;
-                if (!hits) CombatLog.Log("Attack miss!");
-                return hits;
-            }
-
-            // Check for Barrier effect and apply if present
-            if (NodeHasEffect<Effect_Barrier>(target.Node, out var areaEffect))
-            {
-                if (!areaEffect.Area.Contains(attacker.Node)) return false;
-            }
-
-
-            // Bonus to hit if attacker is in a Mountain tile
-            if (attacker.Node.Terrain == TerrainType.Mountain) chanceToHit += 0.2f;
-
-            // Penalty to hit if target is in a Forest tile
-            if (target.Node.Terrain == TerrainType.Forest) chanceToHit -= 0.2f;
-
-            // Apply Penalty if target is Hard ;)
-            if (target.HasEffect<Hardened>()) chanceToHit -= 0.25f;
-
-            // Lastly check for terrain between the two
-            var points = Bresenham.PlotLine(attacker.Node.X, attacker.Node.Y, target.Node.X, target.Node.Y);
-            var nodes = Pathfinding.ConvertToNodes(_grid, points);
-            nodes.Remove(attacker.Node);
-            nodes.Remove(target.Node);
-
-            foreach (var node in nodes)
-            {
-                if (node.Terrain == TerrainType.Mountain || node.Terrain == TerrainType.Forest)
-                {
-                    chanceToHit /= 2;
-                    break;
-                }
-            }
-
-            var roll = Random.value;
-            bool attackHits = roll <= chanceToHit; // Roll under
-            Debug.Log($"Chance to hit: {chanceToHit}, Roll: {roll}");
-            if (!attackHits) CombatLog.Log("Attack miss!");
-            return attackHits;
-        }
-        */
     }
+}
+
+public enum WeaponTypes
+{
+    None,
+    Sword,
+    Shield,
+    Warhammer,
+    Bow,
+    Staff,
+    Book
+}
+
+public enum StatusEffects
+{
+    CHARMED,
+    STUNNED,
+    SLOWED,
+    CONFUSED,
+    WEAKENED,
+    DAZED,
+    VULNERABLE,
+    CURSED,
+    FOCUSED,
+    EMPOWERED,
+    REINFORCED,
+    HARDENED,
+    HURRIED,
+    count,
 }

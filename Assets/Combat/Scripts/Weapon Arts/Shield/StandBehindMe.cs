@@ -29,7 +29,7 @@ namespace SD.Combat.WeaponArts
 
                 combatant.ForceMove(node);
                 target.ForceMove(newNode);
-                target.AddEffect(new Effect_Reinforced());
+                target.AddEffect(StatusEffects.REINFORCED);
 
                 combatant.SpendActionPoints(_actionPointCost);
             }

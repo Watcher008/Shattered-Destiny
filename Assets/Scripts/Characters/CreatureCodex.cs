@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
 
 namespace SD.Characters
@@ -7,68 +6,23 @@ namespace SD.Characters
     [CreateAssetMenu(menuName = "Scriptable Objects/Creature Codex")]
     public class CreatureCodex : ScriptableObject
     {
-        [System.Serializable]
-        private class Codex 
-        { 
-            public StatBlock[] Creatures;
-            public Squad[] Squads;
-        }
+        [SerializeField] private CreatureGroup[] _groups;
 
-        [System.Serializable]
-        private class  Squad
+        public List<StatBlock> GetGroupByTerrain(TerrainType terrain)
         {
-            public string Name;
-            public string[] Terrain;
-            public string[] Units;
-        }
-
-        private Dictionary<string, StatBlock> _creatures;
-        private Dictionary<string, Squad> _squads;
-
-        public void Init()
-        {
-            _creatures = new Dictionary<string, StatBlock>();
-            _squads = new Dictionary<string, Squad>();
-
-            var textAsset = Resources.Load("Codices/CreatureCodex") as TextAsset;
-            StringReader reader = new StringReader(textAsset.text);
-            string json = reader.ReadToEnd();
-
-            Codex codex = JsonUtility.FromJson<Codex>(json);
-
-            foreach(var entry in codex.Creatures)
+            var list = new List<CreatureGroup>();
+            foreach(var group in _groups)
             {
-                _creatures.Add(entry.Name, entry);
-            }
-
-            foreach(var entry in codex.Squads)
-            {
-                _squads.Add(entry.Name, entry);
-            }
-        }
-
-        public string[] GetSquad(string terrain)
-        {
-            var list = new List<Squad>();
-            foreach(var squad in _squads)
-            {
-                foreach(var location in squad.Value.Terrain)
+                foreach(var ter in group.Terrain)
                 {
-                    if (location == terrain)
+                    if (ter == terrain)
                     {
-                        list.Add(squad.Value);
-                        //Debug.Log("Adding " + squad.Value.Name);
+                        list.Add(group);
                         break;
                     }
                 }
             }
-            return list[Random.Range(0, list.Count)].Units;
-        }
-
-        public StatBlock GetCreatureByName(string name)
-        {
-            if (_creatures.ContainsKey(name)) return _creatures[name];
-            return null;
+            return list[Random.Range(0, list.Count)].GetUnits();
         }
     }
 }

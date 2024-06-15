@@ -29,7 +29,7 @@ namespace SD.Combat.WeaponArts
                 }
 
                 // stun target if forcing out of map, into occupied tile, or into difficult terrain
-                if (stunTarget) target.AddEffect(new Stun());
+                if (stunTarget) target.AddEffect(StatusEffects.STUNNED);
                 combatant.SpendActionPoints(_actionPointCost);
             }
         }

@@ -225,7 +225,7 @@ namespace SD.Combat
             // Cannot use any Weapon Arts, check Basic Attack
             if (dist <= _combatant.AttackRange)
             {
-                _combatant.Attack(target as IDamageable);
+                _combatant.PerformBasicAttack(target as IDamageable);
 
                 if (_waitCoroutine != null) StopCoroutine(_waitCoroutine);
                 _waitCoroutine = StartCoroutine(WaitToAct());

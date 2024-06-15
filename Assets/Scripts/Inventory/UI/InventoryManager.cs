@@ -27,14 +27,14 @@ namespace SD.Inventories
             var armor = _itemCodex.GetItem("Armor");
             var armor2 = _itemCodex.GetItem("Steel Armor");
 
-            _playerData.Inventory.TryFitItem(new InventoryItem(boots, Vector2Int.zero, new Vector2Int(2, 2)));
-            _playerData.Inventory.TryFitItem(new InventoryItem(armor, Vector2Int.zero, new Vector2Int(2, 2)));
-            _playerData.Inventory.TryFitItem(new InventoryItem(armor2, Vector2Int.zero, new Vector2Int(2, 2)));
+            _playerData.Inventory.TryFitItem(new InventoryItem(boots, Vector2Int.zero));
+            _playerData.Inventory.TryFitItem(new InventoryItem(armor, Vector2Int.zero));
+            _playerData.Inventory.TryFitItem(new InventoryItem(armor2, Vector2Int.zero));
 
             for (int i = 0; i < 13; i++)
             {
                 var ration = _itemCodex.GetItem("Ration");
-                _playerData.Inventory.TryFitItem(new InventoryItem(ration, Vector2Int.zero, new Vector2Int(1, 1)));
+                _playerData.Inventory.TryFitItem(new InventoryItem(ration, Vector2Int.zero));
             }
         }
 
@@ -42,7 +42,7 @@ namespace SD.Inventories
         {
             Instance = this;
 
-            ForTestingOnly();
+            //ForTestingOnly();
         }
 
         private void Start()

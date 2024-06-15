@@ -20,7 +20,7 @@ namespace SD.Characters
         private int _startingActionPoints;
         private int _refreshActionPoints;
 
-        private Weapon _weapon;
+        private WeaponTypes _weapon;
         private List<WeaponArt> _weaponArts;
 
         public int MaxHealth => _maxHealth;
@@ -32,7 +32,12 @@ namespace SD.Characters
         public int StartingActionPoints => _startingActionPoints;
         public int RefreshActionPoints => _refreshActionPoints;
 
-        public Weapon Weapon => _weapon;
+        public WeaponTypes Weapon
+        {
+            get => _weapon;
+            set => _weapon = value;
+        }
+
         public List<WeaponArt> WeaponArts => _weaponArts;
 
 
@@ -90,13 +95,6 @@ namespace SD.Characters
             if (_currentHealth > _maxHealth) _currentHealth = _maxHealth;
         }
 
-        public Weapon EquipWeapon(Weapon newWeapon)
-        {
-            var oldWeapon = _weapon;
-            _weapon = newWeapon;
-            return oldWeapon;
-        }
-
         public void AddModifier(Attributes attribute, int value)
         {
             _attributes[(int)attribute].AddModifier(value);
@@ -114,12 +112,5 @@ namespace SD.Characters
         Intelligence,
         Survival,
         Social
-    }
-
-    public enum AP
-    {
-        MAP,
-        SAP,
-        RAP
     }
 }

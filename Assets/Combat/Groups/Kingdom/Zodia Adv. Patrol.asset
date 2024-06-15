@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e595a286789434c46b508f2dbb78af3f, type: 3}
+  m_Name: Zodia Adv. Patrol
+  m_EditorClassIdentifier: 
+  _id: patrol_adv_zodia
+  _terrain: 01000000
+  _units:
+  - Unit: {fileID: 11400000, guid: c1a1b192272b4c14288c88aa6f02a1f8, type: 2}
+    Min: 2
+    Max: 3
+  - Unit: {fileID: 11400000, guid: 960b1d8807aac0543ad47c4ba26acefb, type: 2}
+    Min: 2
+    Max: 3
+  - Unit: {fileID: 11400000, guid: 025be34bfd7712746bca59539ffe894f, type: 2}
+    Min: 3
+    Max: 5

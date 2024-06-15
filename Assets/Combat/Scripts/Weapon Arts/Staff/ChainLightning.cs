@@ -52,7 +52,7 @@ namespace SD.Combat.WeaponArts
 
                 if (hitTargets.Count > 0 && hitTargets[hitTargets.Count - 1] is Combatant unit)
                 {
-                    unit.AddEffect(new Stun());
+                    unit.AddEffect(StatusEffects.STUNNED);
                 }
 
                 combatant.SpendActionPoints(_actionPointCost);

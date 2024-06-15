@@ -6,7 +6,7 @@ namespace SD.Combat.WeaponArts
     [CreateAssetMenu(menuName = "Combat/Weapon Arts/Book/Curse")]
     public class Curse : WeaponArt
     {
-        private const int DURATION = 2;
+        private const byte DURATION = 2;
 
         public override void OnUse(Combatant combatant, PathNode node)
         {
@@ -14,7 +14,7 @@ namespace SD.Combat.WeaponArts
             {
                 //if (target.IsPlayer == combatant.IsPlayer) return;
 
-                target.AddEffect(new Effect_Cursed(), DURATION);
+                target.AddEffect(StatusEffects.CURSED, DURATION);
                 combatant.SpendActionPoints(_actionPointCost);
             }
         }

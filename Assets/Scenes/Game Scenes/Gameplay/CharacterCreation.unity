@@ -3261,6 +3261,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerData: {fileID: 11400000, guid: 964da513a2d1311478cf1791204336b2, type: 2}
+  _itemCodex: {fileID: 11400000, guid: 9e398e1c45748b2458e7253033a9e6e2, type: 2}
+  _backgrounds:
+  - {fileID: 11400000, guid: 5cef64d3c65e8ca4fb5735bf06899170, type: 2}
+  - {fileID: 11400000, guid: d9224abc99ae41f4ba2fa07370e3c198, type: 2}
+  _factionInfluenceRefs:
+  - {fileID: 11400000, guid: 51f0803b4d6aecb4da10f81b4a3b3dc0, type: 2}
+  - {fileID: 11400000, guid: 122357a0c1230c5438ef4579d54c5d80, type: 2}
+  - {fileID: 11400000, guid: 8668db528167ec149a31d8c07025937b, type: 2}
+  - {fileID: 11400000, guid: 1dcf4f8222873714abec0b6fa72d3562, type: 2}
+  _factionReputationRefs:
+  - {fileID: 11400000, guid: 98ae1fa3b25668b4591fac18a5a33f46, type: 2}
+  - {fileID: 11400000, guid: cf39ad740695f964ebc482b6124969f5, type: 2}
+  - {fileID: 11400000, guid: 1c3771c6625acfd479d5926d540ed9d7, type: 2}
+  - {fileID: 11400000, guid: d719ad5ca4a4fe642915590845855a59, type: 2}
   _nameInput: {fileID: 1333219300}
   _playerModel: {fileID: 368802183}
   _cycleLeftButton: {fileID: 750111663}
@@ -3268,6 +3282,13 @@ MonoBehaviour:
   _finishButton: {fileID: 292399150}
   _toggleGroup: {fileID: 575776478}
   _prefab: {fileID: 1076745714882884767, guid: 057fb6f857fc8664fabf3c2fd0502453, type: 3}
+  _sprites:
+  - {fileID: 603775805, guid: 04e46f929967fe44c9b83422525f163f, type: 3}
+  - {fileID: 1990582262, guid: 04e46f929967fe44c9b83422525f163f, type: 3}
+  - {fileID: 1472744649, guid: 04e46f929967fe44c9b83422525f163f, type: 3}
+  - {fileID: 231858709, guid: 04e46f929967fe44c9b83422525f163f, type: 3}
+  - {fileID: -879106632, guid: 04e46f929967fe44c9b83422525f163f, type: 3}
+  - {fileID: 96179749, guid: 04e46f929967fe44c9b83422525f163f, type: 3}
 --- !u!1 &1691644838
 GameObject:
   m_ObjectHideFlags: 0

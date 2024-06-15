@@ -8,7 +8,7 @@ namespace SD.Combat.WeaponArts
     public class AnkleShot : WeaponArt
     {
         private const int MODIFIER = 3;
-        private const int DURATION = 2;
+        private const byte DURATION = 2;
 
         public override void OnUse(Combatant combatant, PathNode targetNode)
         {
@@ -21,7 +21,7 @@ namespace SD.Combat.WeaponArts
 
                     if (target is Combatant c)
                     {
-                        c.AddEffect(new Effect_Slowed(), DURATION);
+                        c.AddEffect(StatusEffects.SLOWED, DURATION);
                     }
                     
                 }

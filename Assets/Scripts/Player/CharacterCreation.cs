@@ -1,12 +1,22 @@
-using SD.Characters;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
+using SD.Characters;
+using SD.Primitives;
 
 public class CharacterCreation : MonoBehaviour
 {
     [SerializeField] private PlayerData _playerData;
+    [SerializeField] private ItemCodex _itemCodex;
+
+    [Space]
+
+    [SerializeField] private PlayerBackgrounds[] _backgrounds;
+
+    [Space]
+
+    [SerializeField] private IntReference[] _factionInfluenceRefs;
+    [SerializeField] private IntReference[] _factionReputationRefs;
 
     [Space]
 
@@ -22,31 +32,10 @@ public class CharacterCreation : MonoBehaviour
     [SerializeField] private Toggle _prefab;
 
     private int _spriteIndex;
-    private Sprite[] _sprites;
-    private readonly string[] _spritePaths =
-    {
-        "creatures/base",
-        "creatures/knight",
-        "creatures/archer",
-        "creatures/barbarian",
-        "creatures/wizard",
-        "creatures/cleric",
-    };
-
-    private readonly Dictionary<string, Vector2Int> _testBackgrounds = new()
-    {
-        {"Background 1", new Vector2Int(75, 26)},
-        {"Background 2", new Vector2Int(78, 29) }
-    };
+    [SerializeField] private Sprite[] _sprites;
 
     private void Awake()
     {
-        _sprites = new Sprite[_spritePaths.Length];
-        for (int i = 0; i < _spritePaths.Length; i++)
-        {
-            _sprites[i] = SpriteHelper.GetSprite(_spritePaths[i]);
-        }
-
         _playerModel.sprite = _sprites[0];
 
         _cycleLeftButton.onClick.AddListener(CycleSpriteLeft);
@@ -70,11 +59,12 @@ public class CharacterCreation : MonoBehaviour
             Destroy(_toggleGroup.transform.GetChild(i).gameObject);
         }
 
-        foreach(var pair in _testBackgrounds)
+        for (int i = 0; i < _backgrounds.Length; i++)
         {
             var toggle = Instantiate(_prefab, _toggleGroup.transform);
-            toggle.GetComponentInChildren<TMP_Text>().text = pair.Key;
+            toggle.GetComponentInChildren<TMP_Text>().text = _backgrounds[i].Name;
             toggle.group = _toggleGroup;
+            if (i == 0) toggle.isOn = true;
         }
     }
 
@@ -101,10 +91,28 @@ public class CharacterCreation : MonoBehaviour
 
         // Set world position based on background
         // This has got to be the worst possible way to do this
-        var background = _toggleGroup.GetFirstActiveToggle();
-        var s = background.GetComponentInChildren<TMP_Text>().text;
-        _playerData.WorldPos = _testBackgrounds[s];
+        Toggle activeToggle = _toggleGroup.GetFirstActiveToggle();
+        int index = activeToggle.transform.GetSiblingIndex();
 
-        // Load World Map
+        _playerData.WorldPos = _backgrounds[index].StartingCoords;
+
+
+        // Set starting influence/reputation
+        for (int i = 0; i < (int)Factions.count; i++)
+        {
+            _factionInfluenceRefs[i].Value = _backgrounds[index].FactionInfluence[i];
+            _factionReputationRefs[i].Value = _backgrounds[index].FactionReputation[i];
+        }
+
+
+        // Add starting gear
+        for (int i = 0; i < _backgrounds[index].ItemIds.Length; i++)
+        {
+            for (int j = 0; j < _backgrounds[index].ItemCounts[i]; j++)
+            {
+                var item = _itemCodex.GetItem(_backgrounds[index].ItemIds[i]);
+                _playerData.Inventory.TryFitItem(new InventoryItem(item, Vector2Int.zero));
+            }
+        }
     }
 }
