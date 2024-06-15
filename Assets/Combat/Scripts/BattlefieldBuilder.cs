@@ -55,7 +55,11 @@ namespace SD.Combat
 
                     var pos = new Vector3Int(node.X, 0, node.Y);
                     Instantiate(go, pos, Quaternion.identity, transform);
-                    node.SetOccupant(Occupant.Object);
+
+                    if (go.TryGetComponent(out CombatObstacle obstacle))
+                    {
+                        obstacle.SetNode(node);
+                    }
                 }
             }
         }

@@ -2,7 +2,6 @@ using UnityEngine;
 using SD.Grids;
 using System.Collections;
 using System.Collections.Generic;
-using static UnityEngine.GraphicsBuffer;
 
 /* I will likely need to implement a Blackboard system to handle group strategy logic
  * Most units will just favor straight damage-dealing so that's no major issue
@@ -211,6 +210,8 @@ namespace SD.Combat
             int dist = Pathfinding.GetNodeDistance(_combatant.Node, target.Node);
             foreach(var art in _combatant.WeaponArts)
             {
+                if (art == null) continue;
+
                 if (_combatant.ActionPoints < art.Cost) continue; // Not enough AP
                 if (dist > art.Range) continue; // Out of range
 
@@ -224,7 +225,7 @@ namespace SD.Combat
             // Cannot use any Weapon Arts, check Basic Attack
             if (dist <= _combatant.AttackRange)
             {
-                _combatant.Attack(target);
+                _combatant.PerformBasicAttack(target as IDamageable);
 
                 if (_waitCoroutine != null) StopCoroutine(_waitCoroutine);
                 _waitCoroutine = StartCoroutine(WaitToAct());

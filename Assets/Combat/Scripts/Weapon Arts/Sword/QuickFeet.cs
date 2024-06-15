@@ -29,11 +29,11 @@ namespace SD.Combat.WeaponArts
             var nodes = Pathfinding.GetArea(combatant.Node, RANGE);
             foreach (var areaNode in nodes)
             {
-                if (CombatManager.Instance.CheckNode(areaNode, out var nextTarget))
+                if (CombatManager.Instance.CheckNode(areaNode, out Combatant nextTarget))
                 {
                     if (nextTarget.IsPlayer != combatant.IsPlayer)
                     {
-                        combatant.DealDamage(dmg, nextTarget);
+                        combatant.DealDamage(dmg, nextTarget as IDamageable);
                     }
                 }
             }

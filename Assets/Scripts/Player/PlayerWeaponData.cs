@@ -12,6 +12,8 @@ namespace SD.Characters
         private int[] _weaponTiers;
         public int[] WeaponTiers => _weaponTiers;
 
+        [SerializeField] private PlayerData _playerData;
+
         #region - Weapons -
         private WeaponTypes _rightHand;
         private WeaponTypes _leftHand;
@@ -93,6 +95,7 @@ namespace SD.Characters
             }
             
             UpdateWeaponArts();
+            SetPrimaryWeapon();
         }
 
         private bool IsTwoHanded(WeaponTypes weapon)
@@ -198,18 +201,52 @@ namespace SD.Characters
                 _leftHandWeaponArts[index] = art;
             }
         }
+
+        /// <summary>
+        /// Sets weapon in Character Sheet for basic attacks in combat.
+        /// Yes I know this is all a huge fucking mess. 
+        /// </summary>
+        private void SetPrimaryWeapon()
+        {
+            // Set to single weapon if Warhammer, Bow, or Staff
+            if (_rightHand == WeaponTypes.None)
+            {
+                _playerData.PlayerStats.Weapon = _leftHand;
+                return;
+            }
+            if (_leftHand == WeaponTypes.None)
+            {
+                _playerData.PlayerStats.Weapon = _rightHand;
+                return;
+            }
+
+            // some combination of sword, shield, and book
+            
+            // sword beats shield in damage 
+            if (_leftHand != WeaponTypes.Book && _rightHand != WeaponTypes.Book)
+            {
+                _playerData.PlayerStats.Weapon = WeaponTypes.Sword;
+                return;
+            }
+
+            // at least one weapon is the book
+
+            // need to compare damage output of sword/shield/book
+            // sword is 1 * phys, shield is 0.5 * phys, book is 0.5 * int
+            var str = _playerData.PlayerStats.GetAttribute(Attributes.Physicality);
+            var intel = _playerData.PlayerStats.GetAttribute(Attributes.Intelligence);
+
+            if (_leftHand == WeaponTypes.Sword ||  _rightHand == WeaponTypes.Sword)
+            {
+                if (str >= intel * 2)
+                {
+                    _playerData.PlayerStats.Weapon = WeaponTypes.Sword;
+                }
+            }
+
+            _playerData.PlayerStats.Weapon = str > intel ? WeaponTypes.Shield : WeaponTypes.Book;
+        }
     }
 }
 
 public enum Hand { Right, Left };
-
-public enum WeaponTypes
-{
-    None,
-    Sword,
-    Shield,
-    Warhammer,
-    Bow,
-    Staff,
-    Book
-}

@@ -11,17 +11,17 @@ namespace SD.Combat.WeaponArts
         public override void OnUse(Combatant combatant, PathNode node)
         {
             Debug.LogWarning("Not Yet Implemented.");
-            if (CombatManager.Instance.CheckNode(node, out var target))
+            if (CombatManager.Instance.CheckNode(node, out Combatant target))
             {
                 // Get all units within range
                 var area = Pathfinding.GetArea(combatant.Node, RANGE);
                 foreach(var areaNode in area)
                 {
-                    if (CombatManager.Instance.CheckNode(areaNode, out var unit))
+                    if (CombatManager.Instance.CheckNode(areaNode, out Combatant unit))
                     {
                         if (unit.IsPlayer == combatant.IsPlayer)
                         {
-                            unit.AddEffect(new Effect_Reinforced());
+                            unit.AddEffect(StatusEffects.REINFORCED);
                             return;
                         }
                         else

@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 935899b62f48ae5498594680ed17d133, type: 3}
   m_Name: Dialogue Database
   m_EditorClassIdentifier: 
-  version: 
-  author: 
-  description: 
+  version: 1
+  author: Ocho
+  description: Baseline for Shattered Destinty
   globalUserScript: 
   emphasisSettings:
   - color: {r: 1, g: 1, b: 1, a: 1}
@@ -35,28 +35,6 @@ MonoBehaviour:
     underline: 0
   baseID: 1
   actors:
-  - id: 1
-    fields:
-    - title: Name
-      value: Player
-      type: 0
-      typeString: 
-    - title: Pictures
-      value: '[]'
-      type: 3
-      typeString: CustomFieldType_Files
-    - title: Description
-      value: 
-      type: 0
-      typeString: 
-    - title: IsPlayer
-      value: True
-      type: 2
-      typeString: CustomFieldType_Boolean
-    portrait: {fileID: 0}
-    spritePortrait: {fileID: 0}
-    alternatePortraits: []
-    spritePortraits: []
   - id: 2
     fields:
     - title: Name
@@ -79,13 +57,1938 @@ MonoBehaviour:
     spritePortrait: {fileID: 0}
     alternatePortraits: []
     spritePortraits: []
-  items: []
-  locations: []
+  - id: 1
+    fields:
+    - title: Name
+      value: Player
+      type: 0
+      typeString: 
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: MC
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: IsPlayer
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 0}
+    alternatePortraits: []
+    spritePortraits: []
+  - id: 3
+    fields:
+    - title: Name
+      value: Isold Hartman
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: 'COMPANION - A foreign healer (presumably from the EMC) trained in both
+        ancient healing arts and modern, more traditional medicine from the Imperium.
+        She is highly skilled and rumored to be able to heal just about anything,
+        including magical ailments (all thanks to her many travels and experiences).
+        Though she lingers mostly in Imperium-controlled locations, she is very neutral
+        to the factions and that of the war. Instead, she spends most of her time
+        ensuring victims of war and injustice have some semblance of comfort in life
+        and mentoring other aspiring healers/doctors from anywhere in the land. '
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: IsPlayer
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 0}
+    alternatePortraits: []
+    spritePortraits: []
+  - id: 4
+    fields:
+    - title: Name
+      value: Hank
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: "COMPANION - Hank is a specimen of an animal (Large Husky). One of the
+        largest, strongest, most obedient breeds you\u2019ve ever seen. Found at
+        the side of none other than Woodward Alten \u2013 the famed dog breeder.
+        Sure, you could buy any dog from Woodward with guaranteed results, but well\u2026Hank.
+        He\u2019s the goodest of boys. Yes, he is!!! "
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: IsPlayer
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 0}
+    alternatePortraits: []
+    spritePortraits: []
+  - id: 5
+    fields:
+    - title: Name
+      value: Lana of the Wind
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: "COMPANION - A wandering huntress from Ath\u2019Rak, seeking glory through
+        the exotic. Strong, fast, surprisingly well-spoken, and the best damn aim
+        you\u2019ll ever see\u2026or not see - Lana has made a name for herself throughout
+        the kingdom. Though her name is as fluid as the breeze that carries her,
+        those who have had the honor of her presence can at least confirm that the
+        stories are more than likely true. Only the best hunters can hope to even
+        survive the greater beasts, but Lana has made a game of it. Will anyone be
+        able to best her at it?  "
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: IsPlayer
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 0}
+    alternatePortraits: []
+    spritePortraits: []
+  - id: 6
+    fields:
+    - title: Name
+      value: Riktor Krem
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: "COMPANION - A young, talented, and studious mage, with a knack for
+        trouble.  Despite his rather comical name, Krem is as dangerous as some of
+        the higher ranked mages, with the only thing holding him back from his advancement
+        exams being a string of failed rebellious acts. For aside from power and
+        knowledge, Krem also seeks and values freedom.  With the war ongoing, and
+        the mages siloed into a singular section of the map, Krem will do everything
+        and anything to see the world outside, even if it means putting his \u2018official\u2019
+        magical career on hold. "
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: IsPlayer
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 0}
+    alternatePortraits: []
+    spritePortraits: []
+  - id: 7
+    fields:
+    - title: Name
+      value: Mini
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: "COMPANION - The name is deceiving. He is not \u2018mini.\u2019 In fact,
+        he\u2019s as big as barbarians come. Tall, buff, scarred, and just about
+        the craziest warrior-being alive.  From the high mountains of Ath\u2019rak,
+        from the Silent Bear Clan, Mini has come to make his name and claim his passage
+        back home. The only problem, is\u2026well, his vocabulary. How else would
+        you know that he has to bathe himself in the blood of his enemies before
+        being allowed back into his clan? "
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: IsPlayer
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 0}
+    alternatePortraits: []
+    spritePortraits: []
+  - id: 8
+    fields:
+    - title: Name
+      value: Marvin the Merchant
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: General Merchant #1
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: IsPlayer
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 0}
+    alternatePortraits: []
+    spritePortraits: []
+  - id: 9
+    fields:
+    - title: Name
+      value: Esmond the Merchant
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: General Merchant #2
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: IsPlayer
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 0}
+    alternatePortraits: []
+    spritePortraits: []
+  - id: 10
+    fields:
+    - title: Name
+      value: Halbert the Merchant
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: General Merchant #3
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: IsPlayer
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 0}
+    alternatePortraits: []
+    spritePortraits: []
+  - id: 11
+    fields:
+    - title: Name
+      value: Donald the Merchant
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: General Merchant #4
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: IsPlayer
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 0}
+    alternatePortraits: []
+    spritePortraits: []
+  - id: 12
+    fields:
+    - title: Name
+      value: Neil the Merchant
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: General Merchant #5
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: IsPlayer
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 0}
+    alternatePortraits: []
+    spritePortraits: []
+  - id: 13
+    fields:
+    - title: Name
+      value: Tara the Merchant
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: General Merchant #6
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: IsPlayer
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 0}
+    alternatePortraits: []
+    spritePortraits: []
+  - id: 14
+    fields:
+    - title: Name
+      value: Guinevere the Merchant
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: General Merchant #7
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: IsPlayer
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 0}
+    alternatePortraits: []
+    spritePortraits: []
+  - id: 15
+    fields:
+    - title: Name
+      value: Willow the Merchant
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: General Merchant #8
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: IsPlayer
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 0}
+    alternatePortraits: []
+    spritePortraits: []
+  - id: 16
+    fields:
+    - title: Name
+      value: Sirena Fox
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: 'High Tier Merchant - Travelling solo merchant. Quality over quantity
+        and at discounted rates. Rare encounter. Learned everything she knows from
+        Haran himself and even led one of his caravans until she broke away to start
+        her own thing. '
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: IsPlayer
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 0}
+    alternatePortraits: []
+    spritePortraits: []
+  - id: 17
+    fields:
+    - title: Name
+      value: Haran Dorado
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: "High Tier Merchant - Travelling caravan owner. Has a lot of top-tier
+        items but is also expensive\u2014also a rare encounter but not as rare as
+        Sirena Fox \u2013 one of his proteges. Has an exclusive deal with Templar
+        Order and thus only gives discounted merchandise deals to high-ranking templars. "
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: IsPlayer
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 0}
+    alternatePortraits: []
+    spritePortraits: []
+  - id: 18
+    fields:
+    - title: Name
+      value: "Aldrich \u2018The Terror\u2019 Knight"
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: Mage Book Merchant
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: IsPlayer
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 0}
+    alternatePortraits: []
+    spritePortraits: []
+  - id: 19
+    fields:
+    - title: Name
+      value: Juliana the book merchant
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: Book Merchant #1
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: IsPlayer
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 0}
+    alternatePortraits: []
+    spritePortraits: []
+  - id: 20
+    fields:
+    - title: Name
+      value: Osmond the book merchant
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: Book Merchant #2
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: IsPlayer
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 0}
+    alternatePortraits: []
+    spritePortraits: []
+  - id: 21
+    fields:
+    - title: Name
+      value: Nurse Audrey
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: Herbalist/Doctor #1
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: IsPlayer
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 0}
+    alternatePortraits: []
+    spritePortraits: []
+  - id: 22
+    fields:
+    - title: Name
+      value: Warwick the Warlock
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: Herbalist/Doctor #2
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: IsPlayer
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 0}
+    alternatePortraits: []
+    spritePortraits: []
+  - id: 23
+    fields:
+    - title: Name
+      value: 'Doctor Warren '
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: Herbalist/Doctor #3
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: IsPlayer
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 0}
+    alternatePortraits: []
+    spritePortraits: []
+  - id: 24
+    fields:
+    - title: Name
+      value: Healer Kelsey
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: Herbalist/Doctor #4
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: IsPlayer
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 0}
+    alternatePortraits: []
+    spritePortraits: []
+  - id: 25
+    fields:
+    - title: Name
+      value: Healer Brooke
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: Herbalist/Doctor #5
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: IsPlayer
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 0}
+    alternatePortraits: []
+    spritePortraits: []
+  - id: 26
+    fields:
+    - title: Name
+      value: Apprentice Percy
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: Blacksmith #1
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: IsPlayer
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 0}
+    alternatePortraits: []
+    spritePortraits: []
+  - id: 27
+    fields:
+    - title: Name
+      value: Apprentice Mart
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: Blacksmith #2
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: IsPlayer
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 0}
+    alternatePortraits: []
+    spritePortraits: []
+  - id: 28
+    fields:
+    - title: Name
+      value: Ivor
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: "High Tier Blacksmith - An Ath\u2019rak blacksmith found at Pella\u2019s
+        Wish, seeking to share his tribal smithing knowledge directly with the imperium.
+        While still small in name, he seeks to make his legacy by introducing a creative
+        mixture of imperium defense with Ath\u2019rak stylings. From time to time,
+        he may have some custom armor and weapons for sale \u2013 though at decently
+        hefty pricing."
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: IsPlayer
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 0}
+    alternatePortraits: []
+    spritePortraits: []
+  - id: 29
+    fields:
+    - title: Name
+      value: Hannah Shaw
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: "High Tier Tanner/Hunter - Famed big-game hunter. That\u2019s all? Far
+        from it. Shaw has a reputation for specifically seeking magical anomalies.
+        Help her find extremely rare creatures and monsters. Who knows \u2013 she
+        might share the loot with you."
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: IsPlayer
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 0}
+    alternatePortraits: []
+    spritePortraits: []
+  - id: 30
+    fields:
+    - title: Name
+      value: Baxter
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: Hunter/Tanner #1
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: IsPlayer
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 0}
+    alternatePortraits: []
+    spritePortraits: []
+  - id: 31
+    fields:
+    - title: Name
+      value: Linette
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: Hunter/Tanner #2
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: IsPlayer
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 0}
+    alternatePortraits: []
+    spritePortraits: []
+  - id: 32
+    fields:
+    - title: Name
+      value: Master Kyla
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: Potioneer/Alchemist #1
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: IsPlayer
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 0}
+    alternatePortraits: []
+    spritePortraits: []
+  - id: 33
+    fields:
+    - title: Name
+      value: Master Philippa
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: Potioneer/Alchemist #2
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: IsPlayer
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 0}
+    alternatePortraits: []
+    spritePortraits: []
+  - id: 34
+    fields:
+    - title: Name
+      value: Master Fern
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: Potioneer/Alchemist #3
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: IsPlayer
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 0}
+    alternatePortraits: []
+    spritePortraits: []
+  - id: 35
+    fields:
+    - title: Name
+      value: Leroy Lamb
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: Black Martket Merchant #1
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: IsPlayer
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 0}
+    alternatePortraits: []
+    spritePortraits: []
+  - id: 36
+    fields:
+    - title: Name
+      value: Leremy Lion
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: Black Market Merchant #2
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: IsPlayer
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 0}
+    alternatePortraits: []
+    spritePortraits: []
+  - id: 37
+    fields:
+    - title: Name
+      value: '''The'' Lordly Lizard'
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: "High Tier Black Market Merchant - Is this his real name? You\u2019ll
+        never know. But the lizard has his way. You won\u2019t find anything more
+        illicit, illegal, or morally questionable outside the Lizard\u2019s wares. 
+        What\u2019s best is that if you can\u2019t immediately afford him, he takes
+        timed labor as payment. \u2018Timed\u2019 being key here. The tasks are generally
+        dangerous, and if you take too long, you might meet the lizard\u2019s bad
+        side \u2013 which is just as equally dangerous. After all, he can\u2019t
+        have you spreading around that he has all that stuff, right? "
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: IsPlayer
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 0}
+    alternatePortraits: []
+    spritePortraits: []
+  - id: 38
+    fields:
+    - title: Name
+      value: Templar
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: Minor Templar NPC
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: IsPlayer
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 0}
+    alternatePortraits: []
+    spritePortraits: []
+  - id: 39
+    fields:
+    - title: Name
+      value: Stranger
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: Stranger
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: IsPlayer
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 0}
+    alternatePortraits: []
+    spritePortraits: []
+  - id: 40
+    fields:
+    - title: Name
+      value: Elder Cassian
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: Village Elder -
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: IsPlayer
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 0}
+    alternatePortraits: []
+    spritePortraits: []
+  - id: 41
+    fields:
+    - title: Name
+      value: Elder Celia
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: Village Elder -
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: IsPlayer
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 0}
+    alternatePortraits: []
+    spritePortraits: []
+  - id: 42
+    fields:
+    - title: Name
+      value: Elder Rosalind
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: 'Village Elder - '
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: IsPlayer
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 0}
+    alternatePortraits: []
+    spritePortraits: []
+  - id: 43
+    fields:
+    - title: Name
+      value: Elder Russel
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: 'Village Elder - '
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: IsPlayer
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 0}
+    alternatePortraits: []
+    spritePortraits: []
+  - id: 44
+    fields:
+    - title: Name
+      value: Elder Warren
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: 'Village Elder - '
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: IsPlayer
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 0}
+    alternatePortraits: []
+    spritePortraits: []
+  - id: 45
+    fields:
+    - title: Name
+      value: Elder Rowan
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: 'Village Elder - '
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: IsPlayer
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 0}
+    alternatePortraits: []
+    spritePortraits: []
+  - id: 46
+    fields:
+    - title: Name
+      value: Elder Runik
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: 'Village Elder - '
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: IsPlayer
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 0}
+    alternatePortraits: []
+    spritePortraits: []
+  - id: 47
+    fields:
+    - title: Name
+      value: Barret
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: Special NPC
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: IsPlayer
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 0}
+    alternatePortraits: []
+    spritePortraits: []
+  - id: 48
+    fields:
+    - title: Name
+      value: Woodward Allen
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: Special NPC
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: IsPlayer
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 0}
+    alternatePortraits: []
+    spritePortraits: []
+  items:
+  - id: 1
+    fields:
+    - title: Name
+      value: The Healer
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: Isold Hartman, the land's most famed healer needs your help. Find 15
+        herbs in the nearby forrest and bring them back for her patients.
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Success Description
+      value: 'You''ve found the herbs and saved Isold''s patients! '
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Failure Description
+      value: People died because of your negligence.
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: State
+      value: unassigned
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Is Item
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Trackable
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Track
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Entry Count
+      value: 4
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Entry 1 State
+      value: active
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Entry 1
+      value: Find 15 herbs in the nearby forrests.
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 2 State
+      value: success
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Entry 2
+      value: 'You''ve found the herbs and saved Isold''s patients! '
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 3 State
+      value: failure
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Entry 3
+      value: People died because of your negligence.
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 4 State
+      value: done
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Entry 4
+      value: You've found the herbs, return to Isold.
+      type: 0
+      typeString: CustomFieldType_Text
+  - id: 2
+    fields:
+    - title: Name
+      value: A Good Boy
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: You've heard rumor of an incredible four legged specimen for sale. Seek
+        out the special merchant, Woodward Allen, for more information.
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Success Description
+      value: Oh! He's such a good boy! Yes he is!
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Failure Description
+      value: Maybe it just wasn't meant to be...
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: State
+      value: unassigned
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Is Item
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Trackable
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Track
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Entry Count
+      value: 4
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Entry 1 State
+      value: active
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Entry 1
+      value: Hunt down 10 wolves to prove yourself to Woodward Allen.
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 2 State
+      value: success
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Entry 2
+      value: Oh! He's such a good boy! Yes he is!
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 3 State
+      value: failure
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Entry 3
+      value: Maybe it just wasn't meant to be...
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 4 State
+      value: done
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Entry 4
+      value: Oh! He's such a good boy! Yes he is!
+      type: 0
+      typeString: CustomFieldType_Text
+  - id: 3
+    fields:
+    - title: Name
+      value: A Small Problem
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: Actions speak louder than words...or so you've been told. Kill a great
+        beast to show your worth to your new friend.
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Success Description
+      value: You've got a new friend...I think.
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Failure Description
+      value: Maybe you're better off...
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: State
+      value: unassigned
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Is Item
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Trackable
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Track
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Entry Count
+      value: 4
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Entry 1 State
+      value: active
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: hasKilledAGreatBeast
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Entry 1
+      value: Kill a great beast.
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 2 State
+      value: success
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Entry 2
+      value: You've got a new friend...I think.
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 3 State
+      value: failure
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Entry 3
+      value: Maybe you're better off...
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 4 State
+      value: done
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: hasKilledAGreatBeast
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Entry 4
+      value: You've killed a great beast. Go back to see what happens.
+      type: 0
+      typeString: CustomFieldType_Text
+  - id: 4
+    fields:
+    - title: Name
+      value: The Great Hunt
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: A wandering huntress has challenged you. Kill a great beast to prove
+        her wrong.
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Success Description
+      value: You've proved your worth.
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Failure Description
+      value: Pathetic...
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: State
+      value: unassigned
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Is Item
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Trackable
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Entry Count
+      value: 4
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Track
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Entry 1 State
+      value: active
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: hasKilledAGreatBeast hasKilledAGreatBeast
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Entry 1
+      value: Kill a great beast to prove your worth.
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 2 State
+      value: active
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Entry 2
+      value: You've proved your worth.
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 3 State
+      value: failure
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Entry 3
+      value: Pathetic...
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 4 State
+      value: done
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: hasKilledAGreatBeast
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Entry 4
+      value: You've found glory on the hunt. Return to Lana.
+      type: 0
+      typeString: CustomFieldType_Text
+  - id: 5
+    fields:
+    - title: Name
+      value: Knowledge is Power
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: A young mage needs your help. Seek out his missing tome.
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Success Description
+      value: You've got a friend in me.
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Failure Description
+      value: You've failed terribly. How could you fail so terribly?
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: State
+      value: unassigned
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Is Item
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Trackable
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Track
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Entry Count
+      value: 4
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Entry 1 State
+      value: active
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: hasKremTome
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Entry 1
+      value: Find the missing tome near the grey zone.
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 2 State
+      value: success
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Entry 2
+      value: You've got a friend in me.
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 3 State
+      value: failure
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Entry 3
+      value: You've failed terribly. How could you fail so terribly?
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 4 State
+      value: done
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: hasKremTome
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Entry 4
+      value: A friend of magic is a friend of mine. Return the tome.
+      type: 0
+      typeString: CustomFieldType_Text
+  - id: 6
+    fields:
+    - title: Name
+      value: A Helping Hand
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: A village is in danger. Go to its defense.
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Success Description
+      value: You've helped a village.
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Failure Description
+      value: It is the way it is...
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: State
+      value: unassigned
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Is Item
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Trackable
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Track
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Entry Count
+      value: 4
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Entry 1 State
+      value: active
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Entry 1
+      value: Kill 10 bandits
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 2 State
+      value: success
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Entry 2
+      value: You've helped a village.
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 3 State
+      value: failure
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Entry 3
+      value: It is the way it is...
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 4 State
+      value: done
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Entry 4
+      value: You've helped a village.
+      type: 0
+      typeString: CustomFieldType_Text
+  - id: 7
+    fields:
+    - title: Name
+      value: Neighbors In Need
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: Someone needs your help. Help if you can.
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Success Description
+      value: You've helped someone in need.
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Failure Description
+      value: Selfish aren't we?
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: State
+      value: unassigned
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Is Item
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Trackable
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Track
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Entry Count
+      value: 4
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Entry 1 State
+      value: active
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Entry 1
+      value: Bring 4 Healing Potions
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 2 State
+      value: success
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Entry 2
+      value: You've helped someone in need.
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 3 State
+      value: failure
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Entry 3
+      value: Selfish aren't we?
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 4 State
+      value: done
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Entry 4
+      value: You've helped someone in need.
+      type: 0
+      typeString: CustomFieldType_Text
+  locations:
+  - id: 1
+    fields:
+    - title: Name
+      value: Porcelain City
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Description
+      value: The last remaining city of Zodia. Once a prosperous trading center known
+        for its vast riches, large ports, and merchant attractions, now a shell of
+        its former self. Far from a ghost town, but with a similar ambiance.
+      type: 0
+      typeString: CustomFieldType_Text
+  - id: 2
+    fields:
+    - title: Name
+      value: Paladia
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Description
+      value: The last remaining magical fortress within the Porcelain City. A guaranteed
+        safe haven for the magically inclined.
+      type: 0
+      typeString: CustomFieldType_Text
+  - id: 3
+    fields:
+    - title: Name
+      value: The Grey Zone
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Description
+      value: "A distinguishable plot of land now identified for separating Zodia
+        from the newly found Imperium Vitalis. While still retaining plenty of its
+        beauty, it is deceivingly dangerous \u2013 especially for mages."
+      type: 0
+      typeString: CustomFieldType_Text
+  - id: 4
+    fields:
+    - title: Name
+      value: FireBend Post (D9)
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Description
+      value: "(D9) \u2013 One of two major templar outpost directly responsible for
+        anti-smuggling operations through the grey zone and to Zodia. They fancy
+        themselves a \u2018last-line\u2019 of defense with the sole purpose of regulating
+        (restricting) magical aspects to and from the Imperium."
+      type: 0
+      typeString: CustomFieldType_Text
+  - id: 5
+    fields:
+    - title: Name
+      value: "Haran\u2019s Outpost (F7)"
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Description
+      value: "(F7) \u2013 Brother Krozo/9th Division \u2018The Blades\u2019 forward
+        military camp. Acting as a twin outpost to FireBend but doubling as the primary
+        HQ of Templar front-line activities. "
+      type: 0
+      typeString: CustomFieldType_Text
+  - id: 6
+    fields:
+    - title: Name
+      value: Tarnstead (C8)
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Description
+      value: "You\u2019re standard run of the mill farming village. Nothing too out
+        of the ordinary here, but you can hear howling in the distance."
+      type: 0
+      typeString: CustomFieldType_Text
+  - id: 7
+    fields:
+    - title: Name
+      value: Lumbermill (B8)
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Description
+      value: A large lumber mill with odd amounts of machinery and a few workers
+        - no doubt imperium-influenced. Responsible for a lot of lumber production
+        in the area. There might be some interesting things nearby.
+      type: 0
+      typeString: CustomFieldType_Text
+  - id: 8
+    fields:
+    - title: Name
+      value: Hythe (A9)
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Description
+      value: "A small but well-known fishing village. It\u2019s villagers are very
+        optimistic and take heavy part in trading, welcoming all to enjoy their way
+        of life."
+      type: 0
+      typeString: CustomFieldType_Text
+  - id: 9
+    fields:
+    - title: Name
+      value: Dark Cave (B7)
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Description
+      value: "A dark and ominous cave. You can hear howling from the inside, but
+        something tells you there\u2019s something else in there. Might be worth
+        investigating, but you best be prepared for anything."
+      type: 0
+      typeString: CustomFieldType_Text
+  - id: 10
+    fields:
+    - title: Name
+      value: Wolfpine Village (B6)
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Description
+      value: Another prosperous fishing village, though less well-known than Hythe.
+        However, they pride themselves on more than just fishing. Many here have
+        successfully domesticated wolves and use them for labor, hunting, and general
+        companionship. The Imperium holds this village and their talents in great
+        interest, which has kept them safe and stable for quite some time. Everyone
+        here lives freely.
+      type: 0
+      typeString: CustomFieldType_Text
+  - id: 11
+    fields:
+    - title: Name
+      value: "Jarren\u2019s Outpost (A5)"
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Description
+      value: "Outpost separating The Imperium Vitale and the Ederan Merchant Comglomorate.
+        Due to the Imperium\u2019s and EMC\u2019s open border agreement, this outpost
+        is a lot more relaxed than the others and mainly keeps an eye out for potential
+        threats \u2013 specifically, illegal mages trying to escape the war."
+      type: 0
+      typeString: CustomFieldType_Text
+  - id: 12
+    fields:
+    - title: Name
+      value: Iyesgarth (B6)
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Description
+      value: "The EMC\u2019s Imperium embassy. Home of the Merchant\u2019s Guild
+        HQ. Has a surrounding town with a little bit of everything to offer."
+      type: 0
+      typeString: CustomFieldType_Text
+  - id: 13
+    fields:
+    - title: Name
+      value: Iceshear Pass (C5)
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Description
+      value: "A foreboding entrance to the mountains. It hasn\u2019t fully been explored
+        or mapped out yet \u2013 at least not officially, but rumor has it that it
+        is one of the few unrestricted passages to Ath\u2019rak, the nomadic nation.
+        This passage is not for the feint of heart."
+      type: 0
+      typeString: CustomFieldType_Text
+  - id: 14
+    fields:
+    - title: Name
+      value: Hollowstead (D6)
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Description
+      value: Town and Homestead of the Templars. Home of The Great Templar Academy.
+      type: 0
+      typeString: CustomFieldType_Text
+  - id: 15
+    fields:
+    - title: Name
+      value: The Great Templar Academy (D6)
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+  - id: 16
+    fields:
+    - title: Name
+      value: Rite of the Templars (D7)
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Description
+      value: An ancient and holy sight, where Templars come to prove themselves.
+        Those who pass the rite and its many rigorous challenges prove their worth
+        and are eligible for Generalship.
+      type: 0
+      typeString: CustomFieldType_Text
+  - id: 17
+    fields:
+    - title: Name
+      value: "Evalandreel/\u2019Tears of Evalandreel (E6)"
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Description
+      value: A poor village now, but once the prosperous home of many mages. Said
+        to be cursed or haunted due to its unjust burning in the beginning of the
+        5th era, when Archmage Soren ruthlessly killed a rival mage sect in opposition
+        to his order.  Today, villagers struggle to survive but are determined to
+        keep their homes, growing and trading what they can when they can.
+      type: 0
+      typeString: CustomFieldType_Text
+  - id: 18
+    fields:
+    - title: Name
+      value: Rowanshyre (E4)
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Description
+      value: "Joint villages that grow and fish their own resources and then process
+        each other\u2019s productions. It\u2019s a stable and equal exchange that
+        provides plenty of opportunity for its villagers and serves as its own miniature
+        economy. Regardless of the outcome of the war, Rowanshyre and Hunaspire are
+        confident that they can be self-proficient. "
+      type: 0
+      typeString: CustomFieldType_Text
+  - id: 19
+    fields:
+    - title: Name
+      value: Hunaspire (E4)
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Description
+      value: "Joint villages that grow and fish their own resources and then process
+        each other\u2019s productions. It\u2019s a stable and equal exchange that
+        provides plenty of opportunity for its villagers and serves as its own miniature
+        economy. Regardless of the outcome of the war, Rowanshyre and Hunaspire are
+        confident that they can be self-proficient. "
+      type: 0
+      typeString: CustomFieldType_Text
+  - id: 20
+    fields:
+    - title: Name
+      value: Ashborne Tower (D3)
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Description
+      value: "A rare venture between the Imperium and Ath\u2019rak. During The Great
+        Divide, during the inception of the nomadic tribe-nation of Ath\u2019rak,
+        The Imperium gifted the opportunity to certain tribes to industrialize certain
+        aspects of their lives so that they would remain dominant over the rest -
+        such as farming via mechanic moisture collectors, or hunting via crossbow
+        vs. bows and arrows. Though small in contribution, these towers act as a
+        link and proof of the continued agreement. The southern tower, belonging
+        to the Imperium, produces the raw materials, while the north tower, belonging
+        to Ath\u2019rak and acting as its own embassy, collects and creates in the
+        visions of the tribes, in exchange for different goods to support the Imperium
+        war effort. Many reference the tower as a symbolic treaty between the two
+        nations, showing Ath\u2019rak favoritism towards Vitale, but it is more likely
+        that it is meant to ensure the Imperium does not suffer threats from two
+        sides. What the future holds for the towers, depends on actions of the Imperium
+        after the conclusion of the war. "
+      type: 0
+      typeString: CustomFieldType_Text
+  - id: 21
+    fields:
+    - title: Name
+      value: Ashborne Tower (D4)
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Description
+      value: "A rare venture between the Imperium and Ath\u2019rak. During The Great
+        Divide, during the inception of the nomadic tribe-nation of Ath\u2019rak,
+        The Imperium gifted the opportunity to certain tribes to industrialize certain
+        aspects of their lives so that they would remain dominant over the rest -
+        such as farming via mechanic moisture collectors, or hunting via crossbow
+        vs. bows and arrows. Though small in contribution, these towers act as a
+        link and proof of the continued agreement. The southern tower, belonging
+        to the Imperium, produces the raw materials, while the north tower, belonging
+        to Ath\u2019rak and acting as its own embassy, collects and creates in the
+        visions of the tribes, in exchange for different goods to support the Imperium
+        war effort. Many reference the tower as a symbolic treaty between the two
+        nations, showing Ath\u2019rak favoritism towards Vitale, but it is more likely
+        that it is meant to ensure the Imperium does not suffer threats from two
+        sides. What the future holds for the towers, depends on actions of the Imperium
+        after the conclusion of the war. "
+      type: 0
+      typeString: CustomFieldType_Text
+  - id: 22
+    fields:
+    - title: Name
+      value: "Pella\u2019s Wish (D2)"
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Description
+      value: "Outpost between The Imperium Vitale and Ath\u2019rak. Responsible for
+        traffic between Ath\u2019rak, the northern Ashborne Tower, and back. They
+        have limited borders, but still less restrictive than that of Zodia."
+      type: 0
+      typeString: CustomFieldType_Text
   variables:
   - id: 1
     fields:
     - title: Name
-      value: Kingdom Influence
+      value: Zodia Influence
       type: 0
       typeString: 
     - title: Initial Value
@@ -93,7 +1996,7 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Description
-      value: 
+      value: How much weight does your name carry in Zodia?
       type: 0
       typeString: 
   - id: 2
@@ -107,13 +2010,13 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Description
-      value: 
+      value: How much weight does your name carry in the Imperium?
       type: 0
       typeString: 
   - id: 3
     fields:
     - title: Name
-      value: Tribes Influence
+      value: Village Influence
       type: 0
       typeString: 
     - title: Initial Value
@@ -121,7 +2024,7 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Description
-      value: 
+      value: How much weight does your name carry amongst the common folk?
       type: 0
       typeString: 
   - id: 4
@@ -135,13 +2038,13 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Description
-      value: 
+      value: How much weight does your name carry amongst the EMC and merchants?
       type: 0
       typeString: 
   - id: 5
     fields:
     - title: Name
-      value: Kingdom Reputation
+      value: Zodia Reputation
       type: 0
       typeString: 
     - title: Initial Value
@@ -149,7 +2052,7 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Description
-      value: 
+      value: Faction alignment for Zodia
       type: 0
       typeString: 
   - id: 6
@@ -163,13 +2066,13 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Description
-      value: 
+      value: Faction alignment for Imperium
       type: 0
       typeString: 
   - id: 7
     fields:
     - title: Name
-      value: Tribes Reputation
+      value: Village Reputation
       type: 0
       typeString: 
     - title: Initial Value
@@ -177,7 +2080,7 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Description
-      value: 
+      value: General alignment
       type: 0
       typeString: 
   - id: 8
@@ -191,7 +2094,7 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Description
-      value: 
+      value: Faction alignment for EMC
       type: 0
       typeString: 
   conversations:
@@ -963,9 +2866,10 @@ MonoBehaviour:
     syncItemsDatabase: {fileID: 0}
     syncLocationsDatabase: {fileID: 0}
     syncVariablesDatabase: {fileID: 0}
-  templateJson: '{"treatItemsAsQuests":true,"actorFields":[{"title":"Name","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Pictures","value":"[]","type":3,"typeString":"CustomFieldType_Files"},{"title":"Description","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"IsPlayer","value":"False","type":2,"typeString":"CustomFieldType_Boolean"}],"itemFields":[{"title":"Name","value":"","type":0,"typeString":""},{"title":"Pictures","value":"[]","type":3,"typeString":"CustomFieldType_Files"},{"title":"Description","value":"","type":0,"typeString":""},{"title":"Is
-    Item","value":"True","type":2,"typeString":"CustomFieldType_Boolean"}],"questFields":[{"title":"Name","value":"","type":0,"typeString":""},{"title":"Pictures","value":"[]","type":3,"typeString":"CustomFieldType_Files"},{"title":"Description","value":"","type":0,"typeString":""},{"title":"Success
-    Description","value":"","type":0,"typeString":""},{"title":"Failure Description","value":"","type":0,"typeString":""},{"title":"State","value":"unassigned","type":0,"typeString":""},{"title":"Is
+  templateJson: '{"treatItemsAsQuests":true,"actorFields":[{"title":"Name","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Pictures","value":"[]","type":3,"typeString":"CustomFieldType_Files"},{"title":"Description","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"IsPlayer","value":"False","type":2,"typeString":"CustomFieldType_Boolean"}],"itemFields":[{"title":"Name","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Pictures","value":"[]","type":3,"typeString":"CustomFieldType_Files"},{"title":"Description","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Is
+    Item","value":"True","type":2,"typeString":"CustomFieldType_Boolean"}],"questFields":[{"title":"Name","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Pictures","value":"[]","type":3,"typeString":"CustomFieldType_Files"},{"title":"Description","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Success
+    Description","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Failure
+    Description","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"State","value":"unassigned","type":0,"typeString":"CustomFieldType_QuestState"},{"title":"Is
     Item","value":"False","type":2,"typeString":"CustomFieldType_Boolean"}],"locationFields":[{"title":"Name","value":"","type":0,"typeString":""},{"title":"Description","value":"","type":0,"typeString":""}],"variableFields":[{"title":"Name","value":"","type":0,"typeString":""},{"title":"Initial
     Value","value":"","type":0,"typeString":""},{"title":"Description","value":"","type":0,"typeString":""}],"conversationFields":[{"title":"Title","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Description","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Actor","value":"0","type":5,"typeString":"CustomFieldType_Actor"},{"title":"Conversant","value":"0","type":5,"typeString":"CustomFieldType_Actor"}],"dialogueEntryFields":[{"title":"Title","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Description","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Actor","value":"","type":5,"typeString":"CustomFieldType_Actor"},{"title":"Conversant","value":"","type":5,"typeString":"CustomFieldType_Actor"},{"title":"Menu
     Text","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Dialogue

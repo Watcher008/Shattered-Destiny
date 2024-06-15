@@ -11,8 +11,6 @@ namespace SD.CommandSystem
     [CreateAssetMenu(menuName = "Command System/New Game Command")]
     public class NewGameCommand : CommandBase
     {
-        [Space]
-
         [SerializeField] private PlayerData _playerData;
         [SerializeField] private PlayerWeaponData _weaponData;
 
@@ -21,8 +19,8 @@ namespace SD.CommandSystem
         [SerializeField] private WeaponArt[] _startingArts;
 
 
-        private int[] defaultStats = { 15, 15, 15, 15 };
-        private int[] defaultXP = { 0, 0, 0, 0 };
+        private readonly int[] defaultStats = { 15, 15, 15, 15 };
+        private readonly int[] defaultXP = { 0, 0, 0, 0 };
 
         protected override bool ExecuteCommand()
         {
@@ -36,6 +34,8 @@ namespace SD.CommandSystem
         private bool StartNewGame()
         {
             DateTime.ResetTime();
+
+            // Initialize player data components
             _playerData.PlayerStats = new CharacterSheet(defaultStats, defaultXP, 5, 5, 3, 1);
             _playerData.Inventory = new Inventory(new Vector2Int(8, 10));
             _playerData.PlayerEquip = new PlayerEquipment(_playerData);

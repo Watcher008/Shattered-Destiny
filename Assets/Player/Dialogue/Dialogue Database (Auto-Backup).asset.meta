@@ -1,14 +1,5 @@
 fileFormatVersion: 2
-<<<<<<< HEAD
-<<<<<<<< HEAD:Assets/Player/Dialogue/Dialogue Database (Auto-Backup).asset.meta
-guid: 2093647c682b0a642be8fb1ccb66f50b
-NativeFormatImporter:
-========
-guid: f48e38a1694a4a94ba7bfa99b5bb8da7
-DefaultImporter:
->>>>>>>> dev:Assets/Plugins/Pixel Crushers/Dialogue System/Third Party Support/Easy Save Support.unitypackage.meta
-=======
-guid: 4b1f7784f6c92e0478c7953e41aa5fd1
+guid: a49902a609107284aaa698a2857a0b12
 NativeFormatImporter:
 >>>>>>> dev
   externalObjects: {}

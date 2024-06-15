@@ -10,11 +10,11 @@ namespace SD.Combat.WeaponArts
 
         public override void OnUse(Combatant combatant, PathNode node)
         {
-            if (CombatManager.Instance.CheckNode(node, out var target))
+            if (CombatManager.Instance.CheckNode(node, out Combatant target))
             {
                 if ((float)target.Health / target.MaxHealth <= THRESHOLD)
                 {
-                    combatant.DealDamage(int.MaxValue, target);
+                    combatant.DealDamage(int.MaxValue, target as IDamageable);
                     combatant.SpendActionPoints(_actionPointCost);
                 }
             }

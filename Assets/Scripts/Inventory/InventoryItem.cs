@@ -9,12 +9,12 @@ public class InventoryItem
     public Vector2Int Size;
     public bool IsRotated;
 
-    public InventoryItem(Item item, Vector2Int origin, Vector2Int size, int count = 1, bool isRotated = false)
+    public InventoryItem(Item item, Vector2Int origin, int count = 1, bool isRotated = false)
     {
         Item = item;
         Count = count;
+        Size = new Vector2Int(item.Width, item.Height);
         Origin = origin;
-        Size = size;
         IsRotated = isRotated;
     }
 

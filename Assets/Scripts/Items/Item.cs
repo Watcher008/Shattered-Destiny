@@ -5,4 +5,6 @@ public class Item
     public int Value;
     public int MaxStack;
     public string Sprite;
+    public int Width;
+    public int Height;
 }
